@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "check": "tsc --skipLibCheck --pretty --project tsconfig.json -w --noEmit"
   },
   "author": "",
   "license": "ISC",
@@ -42,6 +42,7 @@
     "styled-tools": "^1.7.1"
   },
   "devDependencies": {
-    "@types/react-resize-detector": "^3.1.0"
+    "@types/react-resize-detector": "^3.1.0",
+    "typescript": "^3.3.0-dev.20190126"
   }
 }

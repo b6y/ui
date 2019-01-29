@@ -1,6 +1,4 @@
-import ajv from "./ajv";
 import checkStore from "./checkStore";
-import client from "./client";
 import * as constants from "./constants";
 import formValidator from "./formValidator";
 import generateRandomList from "./generateRandomList";
@@ -19,9 +17,7 @@ import request from "./request";
 import sagaInjectors from "./sagaInjectors";
 
 export {
-  ajv,
   checkStore,
-  client,
   constants,
   formValidator,
   generateRandomList,
