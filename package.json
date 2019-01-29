@@ -29,6 +29,7 @@
     "emotion-theming": "^10.0.6",
     "eventemitter3": "^3.1.0",
     "formik": "^1.4.3",
+    "google-libphonenumber": "^3.2.2",
     "history": "^4.7.2",
     "hoist-non-react-statics": "^3.3.0",
     "immer": "^1.12.1",
@@ -50,6 +51,7 @@
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "react-select": "^2.3.0",
+    "react-virtualized": "^9.21.0",
     "reflect-metadata": "^0.1.13",
     "reselect": "^4.0.0",
     "styled-tools": "^1.7.1"
