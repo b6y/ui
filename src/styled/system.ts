@@ -1,5 +1,9 @@
+/**
+ * Based on [rebass](https://github.com/rebassjs/rebass)
+ */
+
 import PropTypes from "prop-types";
-import S from "string";
+import { titleCase } from "@b6y/commons";
 
 // utils
 const noop = (n) => n;
@@ -738,7 +742,7 @@ export const mixed = (props) =>
 export const genTypes = () => {
   // tslint:disable-next-line:forin
   for (const i in styles) {
-    const name = S(i).titleCase().s;
+    const name = titleCase(i);
     console.log(`export interface With${name} {`);
     const types = styles[i].propTypes;
     // tslint:disable-next-line:forin

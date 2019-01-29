@@ -1,8 +1,9 @@
-import { Box } from "@/components/styled";
-import * as types from "@/components/styled/types";
 import styled from "@emotion/styled";
 import { connect, FormikContext } from "formik";
 import React from "react";
+
+import { Box } from "../../styled";
+import * as types from "../../styled/types";
 
 export type FormikFormProps = Pick<
   React.FormHTMLAttributes<HTMLFormElement>,

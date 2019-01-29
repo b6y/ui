@@ -312,7 +312,9 @@ const InputWrapper = styled(StyledInputBase)`
 `;
 
 interface StyledInputProps {
-  onChange: (value?: string) => void;
+  onChange?: (value?: string) => void;
+  onBlur?: () => void;
+  onFocus?: () => void;
   placeholder: string | FormattedMessage.MessageDescriptor;
   label: string | FormattedMessage.MessageDescriptor;
   value: string;
@@ -354,18 +356,30 @@ class StyledInput extends React.Component<StyledInputProps, StyledInputState> {
 
   public onChange(value) {
     if (R.isNil(value) || R.isEmpty(value)) {
-      this.props.onChange(null);
+      if (this.props.onChange) {
+        this.props.onChange(null);
+      }
     } else {
-      this.props.onChange(value);
+      if (this.props.onChange) {
+        this.props.onChange(value);
+      }
     }
   }
 
   public onFocus() {
     this.setState({ focused: true });
+
+    if (this.props.onBlur) {
+      this.props.onBlur();
+    }
   }
 
   public onBlur() {
     this.setState({ focused: false });
+
+    if (this.props.onBlur) {
+      this.props.onBlur();
+    }
   }
 
   public render() {

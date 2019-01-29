@@ -1,9 +1,9 @@
 import styled from "@emotion/styled";
 import PropTypes from "prop-types";
 
-import { Box } from "@/components/styled";
+import { Box } from "../../styled";
 
-import { getFontSize, getSpace } from "@/components/styled/system";
+import { getFontSize, getSpace } from "../../styled/system";
 
 import { theme } from "styled-tools";
 

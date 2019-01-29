@@ -1,3 +1,8 @@
+/**
+ * Extracted from `react-router`'s NavLink
+ */
+
+
 import React from "react";
 import { Route } from "react-router";
 

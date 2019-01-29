@@ -2,9 +2,9 @@ import styled from "@emotion/styled";
 import PropTypes from "prop-types";
 import React from "react";
 
-import LoadingIndicator from "@/components/core/LoadingIndicator";
+import LoadingIndicator from "../../core/LoadingIndicator";
 
-import { ButtonTransparent, Group, Icon } from "@/components/core";
+import { ButtonTransparent, Group, Icon } from "../../core";
 
 import { DateTime } from "luxon";
 
@@ -561,7 +561,7 @@ export default function buildSearch(rootName, options = {}): BuiltSearch {
     return searchCache[rootName];
   }
 
-  const reducerName = `@/components/Search:${rootName}`;
+  const reducerName = `../../Search:${rootName}`;
 
   const builtSearch = new BuiltSearch(
     Search,

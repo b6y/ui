@@ -1,12 +1,12 @@
-import injectReducer from "@/utils/injectReducer";
+import { Formik } from "formik";
 import React from "react";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import { createStructuredSelector } from "reselect";
+
 import * as actions from "./actions";
 import reducer from "./reducer";
-
-import { Formik } from "formik";
+import injectReducer from "../../commons/injectReducer";
 
 interface Props {
   name: string;
@@ -81,20 +81,20 @@ class Channel extends React.Component<Props, State> {
 }
 
 const withReducer = injectReducer({
-  key: "@/components/formik/Channel",
+  key: "@b6y/ui/formik/Channel",
   reducer,
 });
 
 export function mapDispatchToProps(dispatch) {
   return {
-    isSubmitting: (name, state) => dispatch(actions.isSubmitting(name, state)),
-    register: (name) => dispatch(actions.register(name)),
+    isSubmitting: (name: string, state: boolean) => dispatch(actions.isSubmitting(name, state)),
+    register: (name: string) => dispatch(actions.register(name)),
   };
 }
 
 const mapStateToProps = createStructuredSelector({
   channelState(state, props) {
-    return (state["@/components/formik/Channel"] || {})[props.name];
+    return (state["@b6y/ui/formik/Channel"] || {})[props.name];
   },
 });
 

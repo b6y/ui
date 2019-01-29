@@ -5,11 +5,11 @@ import invariant from "invariant";
 import memoize from "memoize-one";
 import React from "react";
 
-import Label from "@/components/core/Label";
-import BaseTextInput from "@/components/core/TextInput";
+import Label from "../../core/Label";
+import BaseTextInput from "../../core/TextInput";
 
 import ErrorBag from "../ErrorBag";
-import { genid } from "../helpers";
+import { genid } from "../commons";
 
 interface Props extends FieldProps {
   fieldId: number;

@@ -1,6 +1,7 @@
+// TODO: types
 import styled from "@emotion/styled";
-import NavLink from "./underlyingNavLink";
 
+import NavLink from "./underlyingNavLink";
 import {
   alignSelf,
   borderColor,
@@ -12,7 +13,7 @@ import {
   order,
   space,
   width,
-} from "@/components/styled/system";
+} from "../../styled/system";
 
 const themed = (key) => (props) => props.theme[key];
 const css = (props) => props.css;

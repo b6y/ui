@@ -1,4 +1,5 @@
 import invariant from "invariant";
+// TODO: remove lodash in favor of `ramda`
 import { conformsTo, isFunction, isObject } from "lodash";
 
 /**
@@ -16,6 +17,6 @@ export default function checkStore(store) {
   };
   invariant(
     conformsTo(store, shape),
-    "(src/@/utils...) injectors: Expected a valid redux store",
+    "(@b6y/commons/checkStore...) injectors: Expected a valid redux store",
   );
 }

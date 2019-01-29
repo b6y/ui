@@ -1,68 +1,26 @@
-import BoxGroup from "./BoxGroup";
-import Button from "./Button";
-import ButtonOutline from "./ButtonOutline";
-import ButtonTransparent from "./ButtonTransparent";
-import Container from "./Container";
-import FakeTextInput from "./FakeTextInput";
 import * as Formats from "./Formats";
-import FormGroup from "./FormGroup";
-import Group from "./Group";
-import Icon from "./Icon";
-import DatePicker from "./InlineDatePickerInput";
-import Label from "./Label";
-import Loading from "./Loading";
-import LoadingIndicator from "./LoadingIndicator";
-import MutedText from "./MutedText";
-import Padding from "./Padding";
-import PhoneInput from "./PhoneInput";
-import Portal from "./Portal";
-import ProtectedRoute from "./ProtectedRoute";
-import RouterButton from "./RouterButton";
-import RouterButtonOutline from "./RouterButtonOutline";
-import RouterButtonTransparent from "./RouterButtonTransparent";
-import RouterLink from "./RouterLink";
-import Select from "./SelectInput";
-import TextAreaInput from "./TextAreaInput";
-import TextInput from "./TextInput";
-import Tooltip from "./Tooltip";
 
-import { Box, Flex, Heading, Image, Link, SpanBox, Text } from "@/components/styled";
-
+export { default as BoxGroup } from "./BoxGroup";
+export { default as Button } from "./Button";
+export { default as ButtonOutline } from "./ButtonOutline";
+export { default as ButtonTransparent } from "./ButtonTransparent";
+export { default as Container } from "./Container";
+export { default as FakeTextInput } from "./FakeTextInput";
+export { default as FormGroup } from "./FormGroup";
+export { default as Group } from "./Group";
+export { default as Icon } from "./Icon";
+export { default as DatePicker } from "./InlineDatePickerInput";
+export { default as Label } from "./Label";
+export { default as Loading } from "./Loading";
+export { default as LoadingIndicator } from "./LoadingIndicator";
+export { default as MutedText } from "./MutedText";
+export { default as Padding } from "./Padding";
+export { default as PhoneInput } from "./PhoneInput";
+export { default as Portal } from "./Portal";
+export { default as Select } from "./SelectInput";
+export { default as TextAreaInput } from "./TextAreaInput";
+export { default as TextInput } from "./TextInput";
+export { default as Tooltip } from "./Tooltip";
 export * from "./Table";
 
-export {
-  Select,
-  Flex,
-  SpanBox,
-  Box,
-  Heading,
-  Image,
-  Link,
-  Text,
-  Button,
-  Label,
-  TextInput,
-  TextAreaInput,
-  Container,
-  ProtectedRoute,
-  RouterLink,
-  FormGroup,
-  Formats,
-  ButtonTransparent,
-  ButtonOutline,
-  Icon,
-  Group,
-  BoxGroup,
-  Padding,
-  Loading,
-  LoadingIndicator,
-  MutedText,
-  RouterButtonOutline,
-  RouterButtonTransparent,
-  RouterButton,
-  PhoneInput,
-  DatePicker,
-  FakeTextInput,
-  Portal,
-  Tooltip,
-};
+export { Formats };

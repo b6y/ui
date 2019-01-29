@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
-import ButtonTransparent from "../ButtonTransparent";
+
+import ButtonTransparent from "../../core/ButtonTransparent";
 import RouterLink from "../RouterLink";
 
 const RouterButtonTransparent = styled(ButtonTransparent)();

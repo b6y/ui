@@ -1,11 +1,12 @@
-import Label from "@/components/core/Label";
-import BaseTextAreaInput from "@/components/core/TextAreaInput";
 import { FieldProps } from "formik";
 import invariant from "invariant";
 import memoize from "memoize-one";
 import React from "react";
+
 import ErrorBag from "../ErrorBag";
-import { genid } from "../helpers";
+import { genid } from "../commons";
+import Label from "../../core/Label";
+import BaseTextAreaInput from "../../core/TextAreaInput";
 
 import R from "ramda";
 import { FormattedMessage, InjectedIntl, injectIntl } from "react-intl";

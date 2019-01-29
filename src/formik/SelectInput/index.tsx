@@ -1,15 +1,15 @@
-import Label from "@/components/core/Label";
-import BaseSelectInput from "@/components/core/SelectInput";
+import { FormattedMessage, InjectedIntl, injectIntl } from "react-intl";
 import { FieldProps } from "formik";
 import invariant from "invariant";
 import memoize from "memoize-one";
 import R from "ramda";
 import React from "react";
-import ErrorBag from "../ErrorBag";
-import { genid } from "../helpers";
 
-import * as types from "@/components/styled/types";
-import { FormattedMessage, InjectedIntl, injectIntl } from "react-intl";
+import Label from "../../core/Label";
+import BaseSelectInput from "../../core/SelectInput";
+import ErrorBag from "../ErrorBag";
+import { genid } from "../commons";
+import * as types from "../../styled/types";
 
 interface Props extends types.Box, FieldProps {
   fieldId: number;

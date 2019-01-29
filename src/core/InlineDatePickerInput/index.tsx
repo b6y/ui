@@ -346,6 +346,17 @@ class DatePicker extends React.Component<Props, State> {
     onPick: null,
   };
 
+  // public static getDerivedStateFromProps(props: Props, state: State) {
+  //   if (props.value !== state.reference) {
+  //     return {
+  //       ...state,
+  //       months: getMonths(props.value, TODAY, props.visibleMonths),
+  //     };
+  //   }
+  //
+  //   return { ...state };
+  // }
+
   public state: State = {
     today: TODAY,
     reference: this.props.value,

@@ -1,11 +1,12 @@
-import BaseInput from "@/components/core/InlineDatePickerInput";
-import Label from "@/components/core/Label";
 import { FieldProps } from "formik";
 import invariant from "invariant";
 import memoize from "memoize-one";
 import React from "react";
+
+import BaseInput from "../../core/InlineDatePickerInput";
+import Label from "../../core/Label";
 import ErrorBag from "../ErrorBag";
-import { genid } from "../helpers";
+import { genid } from "../commons";
 
 import R from "ramda";
 import { FormattedMessage, InjectedIntl, injectIntl } from "react-intl";
@@ -23,10 +24,23 @@ interface State {}
 class TextInput extends React.PureComponent<Props, State> {
   public id = memoize((actualId) => genid("inline-date-picker-input", actualId));
 
-  public render() {
-    const { fieldId, debugId, intl, ...props } = this.props;
+  constructor(props) {
+    super(props);
 
-    invariant(props.field, "Must be on Formik <Field/> or <FastField/>");
+    this.changed = this.changed.bind(this);
+  }
+
+  public changed(value) {
+    const { name } = this.props.field;
+    const { setFieldValue } = this.props.form;
+
+    setFieldValue(name, value);
+  }
+
+  public render() {
+    const { fieldId, debugId, intl, field, ...props } = this.props;
+
+    invariant(field, "Must be on Formik <Field/> or <FastField/>");
 
     const id = this.id(fieldId);
 
@@ -58,8 +72,8 @@ class TextInput extends React.PureComponent<Props, State> {
     return (
       <div>
         {labelComponent}
-        <BaseInput id={id} {...newProps.field} {...newProps} />
-        <ErrorBag mt={1} field={props.field.name} />
+        <BaseInput id={id} onChange={this.changed} value={field.value} {...newProps} />
+        <ErrorBag mt={1} field={field.name} />
       </div>
     );
   }

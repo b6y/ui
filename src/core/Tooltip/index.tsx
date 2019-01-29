@@ -4,7 +4,7 @@ import ReactDOM from "react-dom";
 
 import * as R from "ramda";
 
-import { Box } from "@/components/styled";
+import { Box } from "../../styled";
 
 import { Props, State } from "./types";
 

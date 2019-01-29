@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
-import ButtonOutline from "../ButtonOutline";
+
+import ButtonOutline from "../../core/ButtonOutline";
 import RouterLink from "../RouterLink";
 
 const ButtonLinkOutline = styled(ButtonOutline)();

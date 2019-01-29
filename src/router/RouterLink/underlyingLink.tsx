@@ -1,3 +1,7 @@
+/**
+ * Extracted from `react-router`'s Link
+ */
+
 import styled from "@emotion/styled";
 import { createLocation } from "history";
 import invariant from "invariant";

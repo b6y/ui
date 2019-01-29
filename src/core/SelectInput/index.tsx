@@ -1,4 +1,4 @@
-import { getValue, translateSize } from "@/components/styled/system";
+import { getValue, translateSize } from "../../styled/system";
 import { Theme } from "@/theme";
 import { withTheme } from "emotion-theming";
 import { FieldProps } from "formik";

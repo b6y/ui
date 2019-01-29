@@ -1,6 +1,6 @@
 import { StyledComponent } from "@emotion/styled";
 import { DetailedHTMLProps, HTMLAttributes } from "react";
-import * as gentypes from "./generated-types";
+import * as gentypes from "./generatedTypes";
 
 export interface Styled<BaseProps, Element> extends StyledComponent<DetailedHTMLProps<HTMLAttributes<Element>, Element> & BaseProps, any, any> {}
 
