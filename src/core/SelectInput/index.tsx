@@ -1,5 +1,5 @@
 import { getValue, translateSize } from "../../styled/system";
-import { Theme } from "@/theme";
+import Theme from "../../types/theme";
 import { withTheme } from "emotion-theming";
 import { FieldProps } from "formik";
 import R from "ramda";
