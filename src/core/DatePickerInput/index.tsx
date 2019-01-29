@@ -140,6 +140,8 @@ StyledTextInputBase.defaultProps = {
 };
 
 interface Props extends InjectedIntlProps {
+  onChange?: (value: string | null) => void;
+  visibleMonths?: number;
   placeholder: string | FormattedMessage.MessageDescriptor;
   label: string | FormattedMessage.MessageDescriptor;
   value: string;
@@ -156,6 +158,7 @@ class StyledTextInput extends React.Component<Props, State> {
     state: "default",
     size: "md",
     borderRadius: 2,
+    visibleMonths: 2,
   };
 
   public portal = React.createRef<PortalRefType>();
@@ -168,6 +171,7 @@ class StyledTextInput extends React.Component<Props, State> {
   constructor(props, context) {
     super(props, context);
 
+    this.changed = this.changed.bind(this);
     this.blurred = this.blurred.bind(this);
     this.focused = this.focused.bind(this);
     this.focusStolen = this.focusStolen.bind(this);
@@ -183,6 +187,14 @@ class StyledTextInput extends React.Component<Props, State> {
 
   public toggleDropdown() {
     this.setState({ visible: !this.state.visible });
+  }
+
+  public changed(value: string) {
+    if (this.props.onChange) {
+      this.props.onChange(value);
+    }
+
+    this.hideDropdown();
   }
 
   public blurred(evt: React.SyntheticEvent) {
@@ -230,7 +242,7 @@ class StyledTextInput extends React.Component<Props, State> {
       <StyledTextInputBase
         readOnly
         ref={this.input}
-        value={props.value ? this.props.intl.formatDate(props.value) : ""}
+        value={props.value ? this.props.intl.formatDate(props.value, { timeZone: "UTC" }) : ""}
         onFocus={this.focused}
         onClick={() => this.showDropdown()}
         {...newFilteredProps} />
@@ -241,7 +253,10 @@ class StyledTextInput extends React.Component<Props, State> {
     if (this.state.visible) {
       portalContent = (
         <Box p={3} width={600} bg="white" boxShadow={2}>
-          <InlineDatePickerInput onPick={() => this.hideDropdown()} {...fieldProps} />
+          <InlineDatePickerInput
+            value={props.value}
+            visibleMonths={props.visibleMonths}
+            onChange={this.changed} />
         </Box>
       );
     }
