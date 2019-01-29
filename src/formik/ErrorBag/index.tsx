@@ -3,9 +3,9 @@ import { connect as formikConnect, FormikContext } from "formik";
 import React from "react";
 import { InjectedIntlProps, injectIntl } from "react-intl";
 
+import errorMessages from "../../messages/errors";
 import { Box } from "../../styled";
 import * as types from "../../styled/types";
-import errorMessages from "../../messages/errors";
 
 interface Props extends types.Box, InjectedIntlProps {
   field?: string;

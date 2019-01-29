@@ -495,7 +495,6 @@ class DatePicker extends React.Component<Props, State> {
         </Flex>
       </div>
     );
-    return <b>{JSON.stringify(this.state.months)}</b>;
   }
 }
 
