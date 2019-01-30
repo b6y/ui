@@ -13,6 +13,7 @@
     "@emotion/core": "^10.0.6",
     "@emotion/provider": "^0.11.2",
     "@emotion/styled": "^10.0.6",
+    "@types/react-resize-detector": "^3.1.0",
     "@types/invariant": "^2.2.29",
     "@types/lodash": "^4.14.120",
     "@types/luxon": "^1.10.2",
@@ -57,7 +58,6 @@
     "styled-tools": "^1.7.1"
   },
   "devDependencies": {
-    "@types/react-resize-detector": "^3.1.0",
     "typescript": "^3.3.0-dev.20190126"
   }
 }
