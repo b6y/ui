@@ -1,47 +1,25 @@
 {
   "compilerOptions": {
-    "jsx": "react",
-    "resolveJsonModule": true,
-    "module": "esNext",
-    "allowSyntheticDefaultImports": true,
-    "target": "es6",
-    "moduleResolution": "node",
-    "sourceMap": true,
-    "outDir": "./dist",
+    "target": "es5",
     "lib": [
-      "es5",
-      "es6",
       "dom",
-      "es2015.core",
-      "es2015.collection",
-      "es2015.generator",
-      "es2015.iterable",
-      "es2015.promise",
-      "es2015.proxy",
-      "es2015.reflect",
-      "es2015.symbol",
-      "es2015.symbol.wellknown",
-      "esnext.asynciterable",
-      "esnext.symbol",
-      "esnext.intl",
+      "dom.iterable",
       "esnext"
     ],
-    "rootDir": "./src",
-    "declaration": false,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "typeRoots": [
-      "../node_modules/@types",
-      "./src/types"
-    ],
-    "types": [
-      "reflect-metadata",
-      "node",
-      "@emotion/core"
-    ],
-    "noUnusedLocals": true
-  },
-  "include": [
-    "./src/**/*"
-  ]
+    "declaration": true,
+    "jsx": "react",
+    "rootDir": "./src",
+    "outDir": "./lib"
+  }
 }

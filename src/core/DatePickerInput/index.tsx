@@ -1,15 +1,21 @@
+import "react-dates/initialize";
+import "react-dates/lib/css/_datepicker.css";
+
 import styled from "@emotion/styled";
-import R from "ramda";
+import * as R from "ramda";
 import React from "react";
-import { FormattedMessage, InjectedIntlProps, injectIntl } from "react-intl";
+import { injectIntl, MessageDescriptor, WithIntlProps } from "react-intl";
 import { theme } from "styled-tools";
 
-import { FocusStealEvent } from "../../core/FocusSteal/types";
+import { DateRangePicker, DayPickerRangeController, DayPickerSingleDateController } from "react-dates";
 import { Box } from "../../styled";
 import { translateSize } from "../../styled/system";
 import FocusSteal from "../FocusSteal";
-import InlineDatePickerInput, { Props as InlineDatePickerInputProps } from "../InlineDatePickerInput";
+import { FocusStealEvent } from "../FocusSteal/types";
+import InlineDatePickerInput/*, { Props as InlineDatePickerInputProps }*/ from "../InlineDatePickerInput";
+import Popper from "../Popper";
 import Portal, { PortalRefType } from "../Portal";
+import moment, { Moment } from "moment";
 
 export const defaultState = {
   defaultColor: "black",
@@ -139,11 +145,11 @@ StyledTextInputBase.defaultProps = {
   borderColor: "gray",
 };
 
-interface Props extends InjectedIntlProps {
+interface Props extends WithIntlProps<Props> {
   onChange?: (value: string | null) => void;
   visibleMonths?: number;
-  placeholder: string | FormattedMessage.MessageDescriptor;
-  label: string | FormattedMessage.MessageDescriptor;
+  placeholder: string | MessageDescriptor;
+  label: string | MessageDescriptor;
   value: string;
   size: string;
   state: string;
@@ -151,6 +157,7 @@ interface Props extends InjectedIntlProps {
 
 interface State {
   visible: boolean;
+  value: Moment | null;
 }
 
 class StyledTextInput extends React.Component<Props, State> {
@@ -166,6 +173,7 @@ class StyledTextInput extends React.Component<Props, State> {
 
   public state = {
     visible: false,
+    value: null,
   };
 
   constructor(props, context) {
@@ -175,21 +183,46 @@ class StyledTextInput extends React.Component<Props, State> {
     this.blurred = this.blurred.bind(this);
     this.focused = this.focused.bind(this);
     this.focusStolen = this.focusStolen.bind(this);
+    this.pickerChanged = this.pickerChanged.bind(this);
+    this.pickerFocusChanged = this.pickerFocusChanged.bind(this);
+  }
+
+  public componentDidMount() {
+    if (this.props.value !== null) {
+      this.setState({ value: moment(this.props.value) });
+    }
+  }
+
+  public componentDidUpdate(prevProps: Props, prevState: State) {
+    if (this.props.value !== prevProps.value) {
+      this.setState({ value: moment(this.props.value) });
+    }
   }
 
   public showDropdown() {
+    if (this.state.visible) {
+      return;
+    }
+    // console.error("showDropdown");
+
     this.setState({ visible: true });
   }
 
   public hideDropdown() {
+    // console.error("hideDropdown");
+
     this.setState({ visible: false });
   }
 
   public toggleDropdown() {
+    // console.error("toggleDropdown");
+
     this.setState({ visible: !this.state.visible });
   }
 
   public changed(value: string) {
+    // console.error("changed");
+
     if (this.props.onChange) {
       this.props.onChange(value);
     }
@@ -198,14 +231,18 @@ class StyledTextInput extends React.Component<Props, State> {
   }
 
   public blurred(evt: React.SyntheticEvent) {
+    // console.error("blurred");
     this.hideDropdown();
   }
 
   public focused(evt: React.SyntheticEvent) {
+    evt.persist();
+    // console.error("focused", evt);
     this.showDropdown();
   }
 
   public focusStolen(evt: FocusStealEvent) {
+    // console.error("focusStolen");
     if (this.portal.current && this.input.current) {
       if (this.input.current !== evt.target &&
         !this.portal.current.contains(evt.target)) {
@@ -214,7 +251,18 @@ class StyledTextInput extends React.Component<Props, State> {
     }
   }
 
+  public pickerChanged(value: Moment | null) {
+    if (this.props.onChange && value !== null) {
+      this.props.onChange(value.format("YYYY-MM-DD HH:mm:ss"));
+    }
+  }
+
+  public pickerFocusChanged(arg: { focused: boolean | null }) {
+    console.log({ arg })
+  }
+
   public render() {
+    // console.error("!!!!!!!!!!!!!!///", this.state.visible);
     const { props } = this;
 
     const filteredProps = R.omit([
@@ -229,11 +277,11 @@ class StyledTextInput extends React.Component<Props, State> {
       "children",
     ], props);
 
-    const fieldProps = {
-      ...R.omit<Props, string>([], props),
-      visibleMonths: 2,
-      value: props.value || "",
-    } as InlineDatePickerInputProps;
+    // const fieldProps = {
+    //   ...R.omit<Props, string>([], props),
+    //   visibleMonths: 2,
+    //   value: props.value || "",
+    // } as InlineDatePickerInputProps;
 
     const state = states[props.state || "default"];
     const newFilteredProps = { ...state, ...filteredProps };
@@ -252,24 +300,28 @@ class StyledTextInput extends React.Component<Props, State> {
 
     if (this.state.visible) {
       portalContent = (
-        <Box p={3} width={600} bg="white" boxShadow={2}>
-          <InlineDatePickerInput
-            value={props.value}
-            visibleMonths={props.visibleMonths}
-            onChange={this.changed} />
+        <Box mt={1} boxShadow={2}>
+          <DayPickerSingleDateController
+            onDateChange={this.pickerChanged}
+            onFocusChange={this.pickerFocusChanged}
+            focused={this.state.visible}
+            hideKeyboardShortcutsPanel={true}
+            numberOfMonths={3}
+            date={this.state.value}
+          />
         </Box>
       );
     }
 
     return (
       <FocusSteal enabled={this.state.visible} onSteal={this.focusStolen}>
-        <Portal
+        {input}
+        <Popper
+          placement="bottom-start"
+          anchorEl={this.input}
           ref={this.portal}
-          span={8}
-          onHide={() => this.hideDropdown()}
-          visible={this.state.visible}
-          reference={input}
-          content={portalContent}/>
+          open={this.state.visible}
+          children={portalContent}/>
       </FocusSteal>
     );
   }

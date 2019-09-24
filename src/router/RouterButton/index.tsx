@@ -1,14 +1,26 @@
 import styled from "@emotion/styled";
 
 import Button from "../../core/Button";
-import RouterLink from "../RouterLink";
+import { BaseRouterLink, RouterLinkProps } from "../RouterLink";
 
-const ButtonLinkOutline = styled(Button)();
+import {
+  ButtonBoxProps,
+  Color,
+  WithStyled,
+} from "../../styled";
 
-ButtonLinkOutline.defaultProps = {
-  as: RouterLink,
-  textDecoration: "none",
-  type: null,
+export type RouterButtonProps = ButtonBoxProps & RouterLinkProps & WithStyled & {
+  state: Color,
+  size: string,
 };
 
-export default ButtonLinkOutline;
+const RouterButton = styled(Button.withComponent(BaseRouterLink))<RouterButtonProps>();
+
+RouterButton.defaultProps = {
+  textDecoration: "none",
+  type: undefined,
+  size: "md",
+  borderRadius: 2,
+};
+
+export default RouterButton;

@@ -1,17 +1,12 @@
 import React from "react";
+import { PopperPlacement } from "../Popper";
 
 export interface Props {
   children: React.ReactNode;
-  position: string;
+  placement?: PopperPlacement;
   text: React.ReactNode;
 }
 
 export interface State {
   visible: boolean;
-  elTop: string | number;
-  elLeft: string | number;
-  translateTop: boolean;
-  translateBottom: boolean;
-  translateLeft: boolean;
-  translateRight: boolean;
 }

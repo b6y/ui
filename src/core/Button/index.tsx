@@ -1,207 +1,106 @@
 import styled from "@emotion/styled";
-import { lighten } from "polished";
-import R from "ramda";
-import React from "react";
+import * as R from "ramda";
 
-import { theme } from "styled-tools";
-import { Box } from "../../styled";
-import { getSize, translateSize } from "../../styled/system";
-import * as types from "../../styled/types";
+import {
+  Box,
+  ButtonBoxProps,
+  Color,
+  getBgColor,
+  getBorderColor,
+  getFgColor,
+  getOutlineColor,
+  getSize,
+  Padding,
+  themed,
+  translateSize,
+} from "../../styled";
 
 import { SvgIcon } from "../Icon";
 
+type ButtonProps = ButtonBoxProps & {
+  state: Color,
+  size: string,
+};
+
 const defaultSize = R.defaultTo(2);
 const iconMargin = getSize(1);
+const getRectangularPaddings = themed<ButtonProps, Padding[]>("rectangularPaddings");
+const getFontSizes = themed<ButtonProps, number[]>("fontSizes");
 
-const defaultState = {
-  color: "black",
-  bg: "gray",
-  hover: {
-    color: "black",
-    bg: "grayer",
-    outline: "alphacyan",
-  },
-  focus: {
-    color: "black",
-    bg: "grayer",
-    outline: "alphacyan",
-  },
-};
-
-const states = {
-  default: defaultState,
-  primary: {
-    color: "white",
-    bg: "blue",
-    hover: {
-      color: "white",
-      bg: "darkblue",
-      outline: "alphacyan",
-    },
-    focus: {
-      color: "white",
-      bg: "darkblue",
-      outline: "alphacyan",
-    },
-  },
-  secondary: {
-    color: "white",
-    bg: "darker",
-    hover: {
-      color: "white",
-      bg: "black",
-      outline: "alphacyan",
-    },
-    focus: {
-      color: "white",
-      bg: "black",
-      outline: "alphacyan",
-    },
-  },
-  success: {
-    color: "white",
-    bg: "green",
-    hover: {
-      color: "white",
-      bg: "darkgreen",
-      outline: "alphacyan",
-    },
-    focus: {
-      color: "white",
-      bg: "darkgreen",
-      outline: "alphacyan",
-    },
-  },
-  danger: {
-    color: "white",
-    bg: "red",
-    hover: {
-      color: "white",
-      bg: "darkred",
-      outline: "alphacyan",
-    },
-    focus: {
-      color: "white",
-      bg: "darkred",
-      outline: "alphacyan",
-    },
-  },
-  warning: {
-    color: "black",
-    bg: "yellow",
-    hover: {
-      color: "black",
-      bg: "darkyellow",
-      outline: "alphacyan",
-    },
-    focus: {
-      color: "black",
-      bg: "darkyellow",
-      outline: "alphacyan",
-    },
-  },
-  info: {
-    color: "white",
-    bg: "fuchsia",
-    hover: {
-      color: "white",
-      bg: "darkfuchsia",
-      outline: "alphacyan",
-    },
-    focus: {
-      color: "white",
-      bg: "darkfuchsia",
-      outline: "alphacyan",
-    },
-  },
-};
-
-const themeHeight = (props) => {
+const themeHeight = (props: ButtonProps) => {
   const size = translateSize(defaultSize(props.size));
 
-  const padding: any = theme("rectangularPaddings")(props)[size];
-  const fontSize: any = theme("fontSizes")(props)[size];
+  const paddings = getRectangularPaddings(props);
+  const fontSizes = getFontSizes(props);
 
-  return {
-    fontSize: `${fontSize}rem`,
-    lineHeight: `1.5`,
-    padding: `${padding.y}rem ${padding.x}rem`,
-  };
+  if (paddings && fontSizes) {
+    const padding: Padding = paddings[size];
+    const fontSize: number = fontSizes[size];
+
+    return {
+      fontSize: `${fontSize}rem`,
+      // TODO: ???
+      lineHeight: `1.5`,
+      padding: `${padding.y}rem ${padding.x}rem`,
+    };
+  } else {
+    return {
+      // TODO: ???
+      lineHeight: `1.5`,
+    };
+  }
 };
 
-interface Props extends types.Box {}
-
-const Button: types.Styled<Props, HTMLButtonElement> = styled(Box.withComponent("button"))(
+const Button = styled(Box.withComponent("button"))<ButtonProps>(
   (props) => ({
     appearance: "none",
-    display: "inline-block",
-    backgroundColor: theme(`colors.${props.bg}`, props.bg)(props),
+    backgroundColor: getBgColor(props.state)(props),
+
     cursor: "pointer",
+    display: "inline-flex",
+    alignItems: "center",
+
     outline: "none",
-    border: `1px solid ${theme(`colors.${props.bg}`, props.bg)(props)}`,
-    color: theme(`colors.${props.color}`, props.color)(props),
+    border: `1px solid ${getBorderColor(props.state)(props)}`,
+    color: getFgColor(props.state)(props),
   }),
   themeHeight,
-  (props) => ({
-    "&[disabled]": {
-      cursor: "not-allowed",
-      backgroundColor: lighten(
-        0.2,
-        theme(`colors.${props.bg}`, props.bg)(props),
-      ),
-    },
-    "&:hover": {
-      border: `1px solid ${theme(`colors.${props.hover.bg}`, props.hover.bg)(
-        props,
-      )}`,
-      color: theme(`colors.${props.hover.color}`, props.hover.color)(props),
-      backgroundColor: theme(`colors.${props.hover.bg}`, props.hover.bg)(props),
-      boxShadow: `0px 0px 0px 3px ${theme(
-        `colors.${props.hover.outline}`,
-        props.hover.outline,
-      )(props)}`,
-    },
-    "&:focus": {
-      border: `1px solid ${theme(`colors.${props.focus.bg}`, props.focus.bg)(
-        props,
-      )}`,
-      color: theme(`colors.${props.focus.color}`, props.focus.color)(props),
-      backgroundColor: theme(`colors.${props.focus.bg}`, props.focus.bg)(props),
-      boxShadow: `0px 0px 0px 3px ${theme(
-        `colors.${props.focus.outline}`,
-        props.focus.outline,
-      )(props)}`,
-    },
-    "&[disabled]:hover": {
-      backgroundColor: lighten(
-        0.2,
-        theme(`colors.${props.hover.bg}`, props.hover.bg)(props),
-      ),
-    },
-    "&[disabled]:focus": {
-      backgroundColor: lighten(
-        0.2,
-        theme(`colors.${props.focus.bg}`, props.focus.bg)(props),
-      ),
-    },
-    [`& ${SvgIcon} + *`]: {
-      marginLeft: iconMargin(props),
-    },
-  }),
+  (props) => {
+    return {
+      "&[disabled]": {
+        cursor: "not-allowed",
+        backgroundColor: getBgColor(props.state, "alpha")(props),
+      },
+      "&:hover": {
+        color: getFgColor(props.state, "dark")(props),
+        backgroundColor: getBgColor(props.state, "dark")(props),
+        border: `1px solid ${getBorderColor(props.state, "dark")(props)}`,
+        boxShadow: `0px 0px 0px 3px ${getOutlineColor(props.state, "alpha")(props)}`,
+      },
+      "&:focus": {
+        color: getFgColor(props.state, "dark")(props),
+        backgroundColor: getBgColor(props.state, "dark")(props),
+        border: `1px solid ${getBorderColor(props.state, "dark")(props)}`,
+        boxShadow: `0px 0px 0px 3px ${getOutlineColor(props.state, "alphadark")(props)}`,
+      },
+      "&[disabled]:hover": {
+        backgroundColor: getBgColor(props.state, "alphadark")(props),
+      },
+      "&[disabled]:focus": {
+        backgroundColor: getBgColor(props.state, "alphadark")(props),
+      },
+      [`& ${SvgIcon} + *`]: {
+        marginLeft: iconMargin(props),
+      },
+    };
+  },
 );
 
 Button.defaultProps = {
+  state: "default",
   type: "button",
   size: "md",
   borderRadius: 2,
-  ...defaultState,
 };
 
-const ButtonState = (props) => {
-  const state = states[props.state || "default"];
-  const newProps = { ...state, ...props };
-
-  return <Button {...newProps} />;
-};
-
-export default ButtonState;
+export default Button;

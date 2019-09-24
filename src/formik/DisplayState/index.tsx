@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { connect as formikConnect } from "formik";
-import R from "ramda";
+import * as R from "ramda";
 import React from "react";
 
 const DisplayFormikState = (props) => (

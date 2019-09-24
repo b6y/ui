@@ -2,28 +2,24 @@ import produce from "immer";
 
 import { BuiltSearch } from "./index";
 
-import { get } from "@/utils";
+import { get } from "@b6y/commons";
 import { View } from "./types";
 
 const defaultView = (): View => ({
   env: {},
-  sort: {},
+  sort: [],
   defaultSearch: {},
   search: {},
   name: "default",
-  field: null,
-  extraArgs: [],
   fields: [],
-  requestType: null,
-  auth: null,
   limit: 10,
   isLoading: false,
   current: null,
 });
 
-const initialState: View = defaultView();
+const initialState: { [key: string]: View } = {};
 
-const reducerBuilder = (builtSearch: BuiltSearch) => (state: View = initialState, action) =>
+const reducerBuilder = (builtSearch: BuiltSearch) => (state: { [key: string]: View } = initialState, action) =>
   produce(state, (draft) => {
     const { SET_CURRENT, SET_LOADING, REGISTER } = builtSearch.constants;
     const { data, type } = action;
@@ -32,19 +28,16 @@ const reducerBuilder = (builtSearch: BuiltSearch) => (state: View = initialState
       case REGISTER:
         draft[data.name] = {
           env: data.env || {},
-          sort: data.sort || {},
+          sort: data.sort || [],
           defaultSearch: data.defaultSearch || {},
           search: data.search || {},
           name: data.name || "default",
           extraArgs: data.extraArgs || [],
           fields: data.fields || [],
-          extraFields: data.extraFields || [],
-          field: data.field || null,
-          requestType: data.requestType || null,
-          auth: data.auth || null,
           limit: data.limit || 10,
           isLoading: data.isLoading || false,
           current: {
+            scrollId: get("current.scrollId", data, 0),
             total: get("current.total", data, 0),
             totalUnfiltered: get("current.totalUnfiltered", data, 0),
             remaining: get("current.remaining", data, 0),
@@ -57,7 +50,7 @@ const reducerBuilder = (builtSearch: BuiltSearch) => (state: View = initialState
             hasMore: get("current.hasMore", data, false),
             items: get("current.items", data, []),
           },
-        };
+        } as View;
         return;
       case SET_LOADING:
         draft[data.name].isLoading = data.state;

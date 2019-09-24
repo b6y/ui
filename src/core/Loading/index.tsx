@@ -1,20 +1,25 @@
 import React from "react";
 
-import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { compose } from "redux";
 
 import LoadingIndicator from "../../core/LoadingIndicator";
-import injectReducer from "../../utils/injectReducer";
+import injectReducer from "../../redux/injectReducer";
 import * as actions from "./actions";
 import reducer from "./reducer";
 
-const Loading = (props) => {
+interface LoadingProps {
+  loading?: any;
+  name: string;
+  children: () => React.ReactElement;
+}
+
+const Loading = (props: LoadingProps) => {
   const { loading, name, children } = props;
 
-  let state = loading[name];
+  let state = loading && loading[name];
 
-  if (state === undefined) {
+  if (loading === null || state === undefined) {
     state = true;
   }
 
@@ -23,11 +28,6 @@ const Loading = (props) => {
   }
 
   return children();
-};
-
-Loading.propTypes = {
-  name: PropTypes.string,
-  children: PropTypes.func,
 };
 
 const withReducer = injectReducer({ key: "@b6y/components/core/Loading", reducer });
@@ -40,7 +40,7 @@ export function mapDispatchToProps(dispatch) {
 
 const mapStateToProps = (state) => {
   return ({
-    loading: state["@b6y/components/core/Loading"] || {},
+    loading: state["@b6y/components/core/Loading"] || null,
   });
 };
 
@@ -49,7 +49,7 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-export default compose(
+export default compose<typeof Loading>(
   withReducer,
   withConnect,
 )(Loading);

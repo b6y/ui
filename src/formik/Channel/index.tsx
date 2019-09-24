@@ -4,26 +4,26 @@ import { connect } from "react-redux";
 import { compose } from "redux";
 import { createStructuredSelector } from "reselect";
 
+import injectReducer from "../../redux/injectReducer";
 import * as actions from "./actions";
 import reducer from "./reducer";
-import injectReducer from "../../commons/injectReducer";
 
 interface Props {
   name: string;
-  isSubmitting: Function;
-  register: Function;
-  children: React.ReactNode;
-  channelState: {
+  isSubmitting?: (name: string, state: boolean) => void;
+  register?: (name: string) => void;
+  children?: React.ReactNode;
+  channelState?: {
     isSubmitting: boolean,
   };
 }
 
 interface State {}
 
-class Channel extends React.Component<Props, State> {
-  public formRef = React.createRef<Formik>();
+class Channel extends React.PureComponent<Props, State> {
 
   public static actions = actions;
+  public formRef = React.createRef<Formik>();
 
   constructor(props) {
     super(props);
@@ -80,7 +80,7 @@ class Channel extends React.Component<Props, State> {
   }
 }
 
-const withReducer = injectReducer({
+const withReducer = injectReducer<Props>({
   key: "@b6y/ui/formik/Channel",
   reducer,
 });

@@ -4,7 +4,28 @@ import Context from "./context";
 
 import { FocusStealEvent, Props, State } from "./types";
 
-class FocusStealConsumer extends React.Component<Props, State> {
+export function notContains<R1 extends HTMLElement, R2 extends HTMLElement>(
+  containerRef: React.RefObject<HTMLElement>,
+  containsRef: React.RefObject<HTMLElement>,
+  valid: () => void
+) {
+  return function NotContainsEvent(evt: FocusStealEvent) {
+    if (containerRef.current && containsRef.current) {
+      const container = containerRef.current;
+      const contains = containsRef.current;
+      if (
+        container !== null &&
+        contains !== null &&
+        contains !== evt.target &&
+        !container.contains(evt.target)
+      ) {
+        valid();
+      }
+    }
+  };
+}
+
+class FocusStealConsumer extends React.PureComponent<Props, State> {
   public static contextType = Context;
 
   public static defaultProps = {

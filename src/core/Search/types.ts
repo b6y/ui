@@ -1,5 +1,6 @@
 import React from "react";
-import { FormattedMessage } from "react-intl";
+
+import { Field, Result, SortedField } from "@b6y/ui/search";
 
 export interface BaseCellElementProps {
   env?: any;
@@ -9,23 +10,7 @@ export interface BaseCellElementProps {
 }
 
 export interface TypesMap {
-  [key: string]: React.ReactNode;
-}
-
-export interface SearchExtraArg {
-  type: string;
-  value: any;
-  name: string;
-}
-
-export interface SearchField {
-  id?: string;
-  name?: string | FormattedMessage.MessageDescriptor;
-  width?: number;
-  type?: string;
-  virtual?: boolean;
-  query?: string;
-  path?: string;
+  [key: string]: React.ComponentType<any>;
 }
 
 export interface InnerProps {
@@ -37,58 +22,38 @@ export interface InnerProps {
   registerAndSearch: (...args: any[]) => void;
 }
 
-export interface OuterProps {
-  name?: string;
-  extraArgs?: SearchExtraArg[];
+export interface OuterProps<AdapterContext> {
+  adapterContext?: AdapterContext;
+  fields: Field[];
   defaultSearch?: any;
+  name?: string;
   env?: any;
-  fontSize?: number;
   controls?: (env: any, data: any) => any;
   controlsWidth?: number;
   field?: string;
   requestType?: string;
-  fields: SearchField[];
-  extraFields?: string[];
   limit?: number;
 }
 
-export interface Props extends InnerProps, OuterProps {}
+export interface Props<AdapterContext> extends InnerProps, OuterProps<AdapterContext> {}
 
-export interface State {}
+export interface State {
+  hovering: number | null;
+}
 
 export interface BuiltSearchMeta {
   id: string;
   name: string;
 }
 
-export interface CurrentView {
-  total: number;
-  totalUnfiltered: number;
-  remaining: number;
-  fromOffset: number;
-  toOffset: number;
-  totalOnPage: number;
-  totalOfPages: number;
-  currentPage: number;
-  itemsPerPage: number;
-  hasMore: boolean;
-  items: any[];
-}
-
 export interface View {
+  name: string;
   env: any;
-  sort: any;
   defaultSearch: any;
   search: any;
-  name: string;
-  field: string;
-  extraArgs: string[];
-  fields: SearchField[];
-  requestType: string;
-  auth: {
-    token: string;
-  };
+  fields: Field[];
+  sort: SortedField[];
   limit: number;
   isLoading: boolean;
-  current: CurrentView;
+  current: Result;
 }

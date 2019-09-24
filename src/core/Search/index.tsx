@@ -1,52 +1,45 @@
 import styled from "@emotion/styled";
-import PropTypes from "prop-types";
-import React from "react";
-
-import LoadingIndicator from "../../core/LoadingIndicator";
-
-import { ButtonTransparent, Group, Icon } from "../../core";
-
+import * as libphonenumber from "google-libphonenumber";
 import { DateTime } from "luxon";
-
-import R from "ramda";
-
+import PropTypes from "prop-types";
+import * as R from "ramda";
+import React from "react";
+import { FormattedMessage } from "react-intl";
 import { connect } from "react-redux";
-
+import { AutoSizer, Column, Table } from "react-virtualized";
 import { compose } from "redux";
-
 import { createStructuredSelector } from "reselect";
 
-import injectReducer from "@/utils/injectReducer";
+import injectReducer from "@b6y/ui/redux/injectReducer";
+import injectSaga from "@b6y/ui/redux/injectSaga";
+import { Adapter } from "@b6y/ui/search";
 
-import injectSaga from "@/utils/injectSaga";
-
-import { makeSelectAuth } from "@/root/selectors";
-
-import { AutoSizer, Column, Table } from "react-virtualized";
-
-import { FormattedMessage } from "react-intl";
-
-import { theme } from "styled-tools";
+import { ButtonTransparent, Group, Icon } from "../../core";
+import LoadingIndicator from "../../core/LoadingIndicator";
+import { getBgColor } from "../../styled/system";
+import { Box } from "../../styled";
+import Tooltip from "../Tooltip";
 import actionsBuilder from "./actionsBuilder";
 import constantsBuilder from "./constantsBuilder";
 import styles from "./index.css";
+import messages from "./messages";
 import reducerBuilder from "./reducerBuilder";
 import sagaBuilder from "./sagaBuilder";
-
-import { BaseCellElementProps, BuiltSearchMeta, OuterProps, Props, State, TypesMap } from "./types";
-
-import messages from "./messages";
-
-import { get } from "@/utils";
-
-import * as libphonenumber from "google-libphonenumber";
+import {
+  BaseCellElementProps,
+  BuiltSearchMeta,
+  OuterProps,
+  Props,
+  State,
+  TypesMap,
+} from "./types";
 
 const PNF = libphonenumber.PhoneNumberFormat;
 const phoneUtil = libphonenumber.PhoneNumberUtil.getInstance();
 
 const BaseRow = styled.div`
   &:focus {
-    box-shadow: inset 4px 0 0 0 ${theme("defaults.bg.primary")};
+    box-shadow: inset 4px 0 0 0 ${getBgColor("primary")};
     outline: 0;
   }
 `;
@@ -79,7 +72,7 @@ const DatetimeField = ({ value }) => {
   let formatted = null;
 
   if (value) {
-    formatted = DateTime.fromSQL(value, { zone: "UTC" })
+    formatted = DateTime.fromISO(value, { zone: "UTC" })
       .setZone("local")
       .toLocaleString(DateTime.DATETIME_SHORT);
   }
@@ -120,17 +113,14 @@ const Types = {
   phone: PhoneField,
 };
 
-class Search extends React.Component<Props, State> {
+class Search<AdapterContext> extends React.PureComponent<Props<AdapterContext>, State> {
   public static defaultProps = {
     name: "default",
-    extraArgs: [],
     defaultSearch: {},
     controlsWidth: 150,
-    fontSize: 14,
     limit: 10,
     env: {},
     searchStore: null,
-    extraFields: null,
     $options: {},
   };
 
@@ -159,8 +149,7 @@ class Search extends React.Component<Props, State> {
       return this.$types;
     }
 
-    const customTypes = get("constructor.options.types", this, {});
-    const actualTypes = { ...Types, ...customTypes };
+    const actualTypes = { ...Types };
 
     this.$types = actualTypes;
 
@@ -168,32 +157,22 @@ class Search extends React.Component<Props, State> {
   }
 
   public registerAndNavigate() {
-    const extraFields =
-      this.props.extraFields || get("constructor.options.extraFields", this, []);
-
     const {
       name,
-      extraArgs,
       defaultSearch,
       env,
       field,
-      requestType,
       fields,
-      auth,
       limit,
     } = this.props;
 
     this.props.registerAndSearch(
       {
         name,
-        extraArgs,
         defaultSearch,
         env,
         field,
-        requestType,
         fields,
-        extraFields,
-        auth,
         limit,
       },
       {},
@@ -203,27 +182,60 @@ class Search extends React.Component<Props, State> {
 
   public goTo(page) {
     return () => {
-      this.navigate(page);
+      this.navigate(page, true);
     };
   }
 
-  public navigate(page = null) {
+  public navigate(page = null, scrolling = false) {
     const { search, name } = this.props;
 
-    search(name, null, { page });
+    search(name, null, { page, scrolling });
   }
 
   public noRowsRenderer() {
     return <div className={styles.noRows}>Nenhum item encontrado...</div>;
   }
 
-  public headerRenderer(env, name) {
-    return () => {
-      if (name instanceof String) {
-        return <b>{name}</b>;
-      }
+  public helpRenderer(env, f) {
+    if (!f.help) {
+      return null;
+    }
 
-      return <FormattedMessage {...name} />;
+    let title = null;
+
+    if (f.help instanceof String) {
+      title = <b>f.help</b>;
+    } else {
+      title = <FormattedMessage {...f.help} />;
+    }
+
+    return (
+      <Tooltip position="bottom" text={title}>
+        <Icon name="info-circle" style={{ marginLeft: 5 }} />
+      </Tooltip>
+    );
+  }
+
+  public headerTitleRenderer(env, f) {
+    if (!f.name) {
+      return null;
+    }
+
+    if (f.name instanceof String) {
+      return <b>{f.name}</b>;
+    }
+
+    return <FormattedMessage {...f.name} />;
+  }
+
+  public headerRenderer(env, f) {
+    return () => {
+      return (
+        <div>
+          {this.headerTitleRenderer(env, f)}
+          {this.helpRenderer(env, f)}
+        </div>
+      );
     };
   }
 
@@ -244,7 +256,7 @@ class Search extends React.Component<Props, State> {
   }
 
   public cellRenderer(env, field) {
-    let Element = BaseCellElement;
+    let Element: React.ComponentType<any> = BaseCellElement;
 
     const types = this.types();
 
@@ -332,7 +344,7 @@ class Search extends React.Component<Props, State> {
   }
 
   public render() {
-    const { controlsWidth, controls, fontSize, searchStore } = this.props;
+    const { controlsWidth, controls, searchStore } = this.props;
 
     if (!searchStore || searchStore.isLoading) {
       return (
@@ -388,7 +400,7 @@ class Search extends React.Component<Props, State> {
         <ButtonTransparent
           key={`page-${x}`}
           onClick={this.goTo(x)}
-          state={x === current.currentPage ? "primary" : null}
+          state={x === current.currentPage ? "primary" : "default"}
         >
           {x}
         </ButtonTransparent>
@@ -420,9 +432,10 @@ class Search extends React.Component<Props, State> {
 
     return (
       <div style={{ height: "100%" }}>
+        <Box m={2} fontSize={1}>Aproximadamente <b>{current.total}</b> resultados foram encontrados</Box>
         <AutoSizer disableHeight>
           {({ width }) => (
-            <div style={{ fontSize }}>
+            <Box fontSize={1}>
               <Table
                 headerHeight={40}
                 height={Math.min(500, current.totalOnPage * 40) + 55}
@@ -440,7 +453,7 @@ class Search extends React.Component<Props, State> {
                     dataKey={f.id}
                     key={f.id}
                     width={f.width}
-                    headerRenderer={this.headerRenderer(env, f.name)}
+                    headerRenderer={this.headerRenderer(env, f)}
                     className={styles.rowColumn}
                     cellRenderer={this.cellRenderer(env, f)}
                     flexGrow={1}
@@ -457,7 +470,7 @@ class Search extends React.Component<Props, State> {
               </Table>
               <div style={{ clear: "both" }} />
               {footer(width)}
-            </div>
+            </Box>
           )}
         </AutoSizer>
       </div>
@@ -465,22 +478,26 @@ class Search extends React.Component<Props, State> {
   }
 }
 
-export class BuiltSearch {
+export class BuiltSearch<AdapterContext> {
+
+  get Component(): new(...args) => React.Component<OuterProps<AdapterContext>, State> {
+    return this.component;
+  }
+
+  public adapter: Adapter<AdapterContext>;
   public component: typeof Search;
   public meta: BuiltSearchMeta;
   public constants: any;
   public actions: any;
   public options: any;
 
-  get Component(): new(...args) => React.Component<OuterProps, State> {
-    return this.component;
-  }
-
   constructor(
-    component: typeof Search,
+    component: React.ComponentClass<OuterProps<AdapterContext>, State>,
+    adapter: Adapter<AdapterContext>,
     meta: BuiltSearchMeta,
     options: any,
   ) {
+    this.adapter = adapter;
     this.meta = meta;
     this.options = options;
 
@@ -502,26 +519,29 @@ export class BuiltSearch {
     };
   }
 
-  private build(component: typeof Search) {
+  private build(component: React.ComponentClass<OuterProps<AdapterContext>, State>) {
     const { actions, meta } = this;
     const { id } = meta;
 
-    const mapDispatchToProps = (dispatch) => ({
-      setLoading: (name, state) =>
-        dispatch(actions.setLoading(name, state)),
-      setCurrent: (name, current) =>
-        dispatch(actions.setCurrent(name, current)),
-      register: (data) => dispatch(actions.register(data)),
-      registerAndSearch: (componentToRegister, search, params) =>
-        dispatch(
-          actions.registerAndSearch(componentToRegister, search, params),
-        ),
-      search: (name, search, params) =>
-        dispatch(actions.search(name, search, params)),
-    });
+    const mapDispatchToProps = (dispatch, props) => {
+      return {
+        setLoading: (name, state) =>
+          dispatch(actions.setLoading(name, state)),
+        setCurrent: (name, current) =>
+          dispatch(actions.setCurrent(name, current)),
+        register: (data) => dispatch(actions.register(data)),
+        registerAndSearch: (componentToRegister, search, params) => {
+          return dispatch(
+            actions.registerAndSearch(componentToRegister, props.adapterContext, search, params),
+          );
+        },
+        search: (name, search, params) => {
+          dispatch(actions.search(name, props.adapterContext, search, params))
+        },
+      };
+    };
 
     const mapStateToProps = createStructuredSelector({
-      auth: makeSelectAuth(),
       searchStore: this.propsSelector(),
       reducerName: () => id,
     });
@@ -541,19 +561,25 @@ export class BuiltSearch {
       saga: sagaBuilder(this),
     });
 
-    this.component = compose(
+    const newComponent = compose<typeof Search>(
       withReducer,
       withSaga,
       withConnect,
     )(component);
 
-    this.component.defaultProps = Search.defaultProps;
+    newComponent.defaultProps = Search.defaultProps;
+
+    this.component = newComponent;
   }
 }
 
 const searchCache = {};
 
-export default function buildSearch(rootName, options = {}): BuiltSearch {
+export default function buildSearch<AdapterContext>(
+  rootName: string,
+  adapter: Adapter<AdapterContext>,
+  options = {},
+): BuiltSearch<AdapterContext> {
   if (
     process.env.NODE_ENV === "production" &&
     searchCache.hasOwnProperty(rootName)
@@ -561,10 +587,11 @@ export default function buildSearch(rootName, options = {}): BuiltSearch {
     return searchCache[rootName];
   }
 
-  const reducerName = `../../Search:${rootName}`;
+  const reducerName = `@b6y/ui/core/Search:${rootName}`;
 
-  const builtSearch = new BuiltSearch(
+  const builtSearch = new BuiltSearch<AdapterContext>(
     Search,
+    adapter,
     { id: reducerName, name: rootName },
     options,
   );

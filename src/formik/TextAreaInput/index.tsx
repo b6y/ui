@@ -2,14 +2,13 @@ import { FieldProps } from "formik";
 import invariant from "invariant";
 import memoize from "memoize-one";
 import React from "react";
+import * as R from "ramda";
+import { FormattedMessage, InjectedIntl, injectIntl } from "react-intl";
 
-import ErrorBag from "../ErrorBag";
-import { genid } from "../commons";
 import Label from "../../core/Label";
 import BaseTextAreaInput from "../../core/TextAreaInput";
-
-import R from "ramda";
-import { FormattedMessage, InjectedIntl, injectIntl } from "react-intl";
+import { genid } from "../commons";
+import ErrorBag from "../ErrorBag";
 
 interface Props extends FieldProps {
   fieldId: number;
@@ -55,6 +54,8 @@ class TextAreaInput extends React.PureComponent<Props, State> {
     }
 
     const newProps = { ...props, label, placeholder, id };
+
+    newProps.field.value = R.isNil(newProps.field.value) ? "" : String(newProps.field.value);
 
     return (
       <div>

@@ -8,7 +8,7 @@ import Label from "../../core/Label";
 import ErrorBag from "../ErrorBag";
 import { genid } from "../commons";
 
-import R from "ramda";
+import * as R from "ramda";
 import { FormattedMessage, InjectedIntl, injectIntl } from "react-intl";
 
 interface Props extends FieldProps {

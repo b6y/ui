@@ -1,38 +1,12 @@
-import { client } from "@/utils";
-import gql from "graphql-tag";
-import { call, put, select, takeEvery } from "redux-saga/effects";
+import { put, select, takeEvery } from "redux-saga/effects";
 
 import { BuiltSearch } from "./index";
 
-const querySearch = ({
-  argsHeader,
-  argsRefs,
-  field,
-  graphqlFields,
-  variables,
-}) =>
-  client.query({
-    query: gql`
-        query (${argsHeader}) {
-          ${field} (${argsRefs}) {
-            total
-            totalUnfiltered
-            remaining
-            fromOffset
-            toOffset
-            totalOnPage
-            totalOfPages
-            currentPage
-            itemsPerPage
-            hasMore
-            items { ${graphqlFields} }
-          }
-        }
-      `,
-    variables,
-  });
+import { View } from "./types";
 
-export default (builtSearch: BuiltSearch) => {
+import { Query } from "../../search";
+
+export default <AdapterContext>(builtSearch: BuiltSearch<AdapterContext>) => {
   const {
     DO_SEARCH,
     DO_REGISTER,
@@ -42,84 +16,67 @@ export default (builtSearch: BuiltSearch) => {
   const { setLoading, setCurrent } = builtSearch.actions;
 
   function* doSearch({
-    data: {
-      params: { page: newPage },
-      search: newSearch,
-      name,
-    },
-  }) {
-    const state = yield select(builtSearch.selector(name));
+                       data: {
+                         adapterContext,
+                         params: { page: newPage, scrolling },
+                         search: newSearch,
+                         name,
+                       },
+                     }) {
+    const globalState = yield select();
+    const state: View = yield select(builtSearch.selector(name));
 
     const {
+      env,
       current,
-      requestType,
       defaultSearch,
-      extraArgs,
-      field,
-      search: oldSearch,
+      fields,
+      search: previousSearch,
+      sort,
     } = state;
 
-    const search = newSearch || oldSearch;
+    const currentSearch = newSearch || previousSearch;
 
     const page = newPage || current.currentPage;
-    const limit = Math.min(Math.max(current.itemsPerPage, 1), 50);
+    const limit = Math.min(Math.max(state.limit, 1), 50);
+
+    let scrollId = null;
+    if (scrolling) {
+      scrollId = state.current.scrollId;
+    }
 
     yield put(setLoading(name, true));
 
-    const graphqlFields = [
-      "id",
-      state.fields
-        .filter((f) => !f.virtual)
-        .map((f) => f.query || f.id)
-        .join(", "),
-      state.extraFields.join(", "),
-    ];
+    const runParams = {
+      scrollId,
+      fields,
+      sort,
+      limit,
+      page,
+      search: { ...defaultSearch, ...currentSearch },
+      previousSearch,
+    } as Query;
 
-    const args = [
-      {
-        name: "request",
-        type: `${requestType}!`,
-        value: {
-          page,
-          limit,
-          sort: {},
-          search: {
-            ...defaultSearch,
-            ...search,
-          },
-        },
-      },
-      ...extraArgs,
-    ];
-
-    const argsHeader = args.map((arg) => `$${arg.name}: ${arg.type}`).join(", ");
-    const argsRefs = args.map((arg) => `${arg.name}: $${arg.name}`).join(", ");
-    const variables = args.reduce(
-      (variables, arg) => ({ ...variables, [arg.name]: arg.value }),
-      {},
+    const result = yield builtSearch.adapter.run(
+      runParams,
+      adapterContext as AdapterContext,
+      globalState,
+      env,
     );
 
-    const response = yield call(querySearch, {
-      argsHeader,
-      argsRefs,
-      field,
-      graphqlFields,
-      variables,
-    });
-
-    yield put(setCurrent(name, response.data[field], search));
+    yield put(setCurrent(name, result, runParams.search));
   }
 
   function* doRegister({ data }) {
     yield put({ type: REGISTER, data });
   }
 
-  function* doRegisterAndSearch({ data: { component, search, params } }) {
+  function* doRegisterAndSearch({ data: { adapterContext, component, search, params } }) {
     yield put({ type: REGISTER, data: component });
 
     yield put({
       type: DO_SEARCH,
-      data: { search, params, name: component.name },
+      data: { adapterContext, search, params, name: component.name },
     });
   }
 

@@ -1,6 +1,6 @@
 import { translateSize } from "../../styled/system";
 import PropTypes from "prop-types";
-import R from "ramda";
+import * as R from "ramda";
 import React from "react";
 import { theme } from "styled-tools";
 

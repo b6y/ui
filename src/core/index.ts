@@ -18,9 +18,11 @@ export { default as Padding } from "./Padding";
 export { default as PhoneInput } from "./PhoneInput";
 export { default as Portal } from "./Portal";
 export { default as Select } from "./SelectInput";
+export { default as MultiSelect } from "./MultiSelectInput";
 export { default as TextAreaInput } from "./TextAreaInput";
 export { default as TextInput } from "./TextInput";
 export { default as Tooltip } from "./Tooltip";
+export { default as Modal } from "./Modal";
 export * from "./Table";
 
 export { Formats };

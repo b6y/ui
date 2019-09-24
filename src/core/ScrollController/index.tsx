@@ -3,7 +3,7 @@ import EventEmitter from "eventemitter3";
 import hoistNonReactStatic from "hoist-non-react-statics";
 import { debounce } from "lodash";
 import nanoid from "nanoid";
-import R from "ramda";
+import * as R from "ramda";
 import React from "react";
 import ReactDOM from "react-dom";
 import ReactResizeDetector from "react-resize-detector";
@@ -85,7 +85,7 @@ export const Context = React.createContext<ScrollContext>({
 export const listenToScroll = <P, S>(
   WrappedComponent: React.ComponentType<P & { children?: React.ReactNode } & InjectedScrollProps>,
 ): React.ComponentClass<Pick<P, Exclude<keyof P, keyof InjectedScrollProps>>> => {
-  class Listener extends React.Component<P & ListenerProps, ListenerState> {
+  class Listener extends React.PureComponent<P & ListenerProps, ListenerState> {
     public static contextType = Context;
 
     public context!: React.ContextType<typeof Context>;
@@ -162,13 +162,14 @@ export const listenToScroll = <P, S>(
   return hoistNonReactStatic(Enhance, WrappedComponent);
 };
 
-class ContextualizedScrollController extends React.Component<Props & PropsWithContext, State> {
+class ContextualizedScrollController extends React.PureComponent<Props & PropsWithContext, State> {
   public containerRef = React.createRef();
 
   constructor(props) {
     super(props);
 
-    this.scrolled = debounce(this.scrolled.bind(this), 50);
+    this.scrolled = debounce(this.scrolled.bind(this), 5);
+    // this.scrolled = this.scrolled.bind(this);
     this.resized = this.resized.bind(this);
     this.getMyInfo = this.getMyInfo.bind(this);
     this.getRect = this.getRect.bind(this);
@@ -279,7 +280,7 @@ class ContextualizedScrollController extends React.Component<Props & PropsWithCo
   }
 }
 
-class ScrollController extends React.Component<Props, State> {
+class ScrollController extends React.PureComponent<Props, State> {
   public static defaultProps = {
     enabled: true,
     x: true,
@@ -307,7 +308,7 @@ class ScrollController extends React.Component<Props, State> {
 
 interface RootProps {}
 
-export class RootScrollController extends React.Component<RootProps> {
+export class RootScrollController extends React.PureComponent<RootProps> {
   public render() {
     return <ScrollController name="root" x={true} y={true} root={true} {...this.props} />;
   }

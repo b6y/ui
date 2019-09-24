@@ -1,12 +1,26 @@
-/**
- * Based on [rebass](https://github.com/rebassjs/rebass)
- */
-
 import PropTypes from "prop-types";
-import { titleCase } from "@b6y/commons";
+import * as R from "ramda";
+
+import * as gentypes from "./generatedTypes";
+import * as types from "./types";
+
+type EnsureWithTheme = {
+  theme: types.Theme;
+}
 
 // utils
-const noop = (n) => n;
+const titleCase = (value: string): string | null => {
+  if (R.isNil(value)) {
+    return null;
+  }
+
+  return value.replace(
+    /(^[a-z]| [a-z]|-[a-z]|_[a-z])/g,
+    ($1) => $1.toUpperCase(),
+  );
+};
+
+const noop = <T>(n: T) => n;
 
 export const sizeAliases = ["xs", "sm", "md", "lg", "xlg", "xxlg", "xxxlg"];
 
@@ -19,23 +33,22 @@ export const propTypes = {
   ]),
 };
 
-export const defaultBreakpoints = [40, 52, 64].map((n) => `${n}em`);
-export const is = (n) => n !== undefined && n !== null;
-export const num = (n) => typeof n === "number" && !isNaN(n);
-export const px = (n) => (num(n) ? `${n}px` : n);
-export const em = (n) => (num(n) ? `${n}em` : n);
-export const rem = (n) => (num(n) ? `${n}rem` : n);
+export const defaultBreakpoints = [32, 48, 64, 80].map((n) => `${n}rem`);
 
-export const units = { px, em, rem };
+export const is = (n: any) => n !== undefined && n !== null;
 
-export const get = (obj, ...paths) =>
-  paths
-    .join(".")
-    .split(".")
-    .reduce((a, b) => (a && a[b] ? a[b] : null), obj);
+export const num = (n: any) => typeof n === "number" && !isNaN(n);
 
-export const themeGet = (paths, fallback) => (props) =>
-  get(props.theme, paths) || fallback;
+export const px = (n: any): string | undefined => is(n) ? (num(n) ? `${n}px` : String(n)) : undefined;
+export const em = (n: any): string | undefined => is(n) ? (num(n) ? `${n}em` : String(n)) : undefined;
+export const rem = (n: any): string | undefined => is(n) ? (num(n) ? `${n}rem` : String(n)) : undefined;
+
+export const units: { [key: string]: (value: any) => string | undefined } = { px, em, rem };
+
+export const get = <T>(obj: any, ...paths: string[]): T | null => R.pathOr<T | null>(null, paths, obj);
+
+export const themeGet = <T>(paths: string[], fallback: T | null) => (props: EnsureWithTheme): T | null =>
+  get<T>(props.theme, ...paths) || fallback;
 
 export const translateSize = <T>(size: string | number, defaultValue = 2) => {
   if (typeof size === "number") {
@@ -51,7 +64,7 @@ export const translateSize = <T>(size: string | number, defaultValue = 2) => {
   return pos;
 };
 
-export const merge = (a, b) =>
+export const merge = (a: any, b: any): any =>
   Object.assign(
     {},
     a,
@@ -68,21 +81,21 @@ export const merge = (a, b) =>
     ),
   );
 
-export const compose = (...funcs) => {
-  const fn = (props) =>
+export const compose = (...funcs: any) => {
+  const fn = (props: any) =>
     funcs
-      .map((fn) => fn(props))
+      .map((fn: any) => fn(props))
       .filter(Boolean)
       .reduce(merge, {});
 
-  fn.propTypes = funcs.map((fn) => fn.propTypes).reduce(merge, {});
+  fn.propTypes = funcs.map((fn: any) => fn.propTypes).reduce(merge, {});
   return fn;
 };
 
-export const createMediaQuery = (n) => `@media screen and (min-width: ${px(n)})`;
+export const createMediaQuery = (n: any) => `@media screen and (min-width: ${px(n)})`;
 
 interface StyleParams {
-  prop?: string;
+  prop: string;
   cssProperty?: string;
   key?: string;
   getter?: (_: any) => any;
@@ -93,12 +106,12 @@ interface StyleParams {
 export const style = ({ cssProperty, prop, getter, transformValue, key, scale: defaultScale }: StyleParams) => {
   const css = cssProperty || prop;
   const transform = transformValue || getter || noop;
-  const fn = (props) => {
+  const fn = (props: any) => {
     const val = props[prop];
     if (!is(val)) { return null; }
 
-    const scale = get(props.theme, key) || defaultScale;
-    const style = (n) =>
+    const scale = key !== undefined ? get(props.theme, key) : defaultScale;
+    const style = (n: any) =>
       is(n)
         ? {
           [css]: transform(get(scale, n) || n),
@@ -112,12 +125,12 @@ export const style = ({ cssProperty, prop, getter, transformValue, key, scale: d
     // how to hoist this up??
     const breakpoints = [
       null,
-      ...(get(props.theme, "breakpoints") || defaultBreakpoints).map(
+      ...(get<string[]>(props.theme, "breakpoints") || defaultBreakpoints).map(
         createMediaQuery,
       ),
     ];
 
-    let styles = {};
+    let styles: { [key: string]: any } = {};
 
     for (let i = 0; i < val.length; i++) {
       const media = breakpoints[i];
@@ -138,7 +151,7 @@ export const style = ({ cssProperty, prop, getter, transformValue, key, scale: d
   return fn;
 };
 
-export const getWidth = (n) => (!num(n) || n > 1 ? px(n) : `${n * 100}%`);
+export const getWidth = (n: any) => (!num(n) || n > 1 ? px(n) : `${n * 100}%`);
 
 export const util = {
   propTypes,
@@ -155,13 +168,13 @@ export const util = {
 };
 
 // space
-const isNegative = (n) => n < 0;
+const isNegative = (n: any) => n < 0;
 const REG = /^[mp][trblxy]?$/;
-const properties = {
+const properties: { [key: string]: string } = {
   m: "margin",
   p: "padding",
 };
-const directions = {
+const directions: { [key: string]: string | string[] } = {
   t: "Top",
   r: "Right",
   b: "Bottom",
@@ -170,7 +183,7 @@ const directions = {
   y: ["Top", "Bottom"],
 };
 
-const getProperties = (key) => {
+const getProperties = (key: string) => {
   const [a, b] = key.split("");
   const property = properties[a];
   const direction = directions[b] || "";
@@ -179,7 +192,7 @@ const getProperties = (key) => {
     : [property + direction];
 };
 
-export const getValue = (scale, unit = "rem") => (n) => {
+export const getValue = (scale: number[], unit = "rem") => (n: any): string | number | undefined => {
   if (!num(n)) {
     return units[unit](scale[n] || n);
   }
@@ -198,41 +211,130 @@ const defaultSizes = [0, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56];
 
 const defaultFontSizes = [0.8, 1, 1.2, 1.4, 1.6, 1.8, 2, 2.2, 2.4, 2.6];
 
-export const getSpace = (n) => (props) => {
-  const scale = get(props.theme, "space") || defaultScale;
+const defaultRadii = [0, .15, .3];
+
+export const getColor = (color: string) => (props: any): string | null => {
+  const colors = get(props.theme, "colors") || {};
+  return get<string>(colors, color);
+};
+
+export const getBgColor = (color: types.Color, modifier?: types.Modifier) => (props: EnsureWithTheme): string | undefined => {
+  if (props && props.theme) {
+    const colors = props.theme.colors;
+    const targetColor = props.theme.defaults.bg[color];
+
+    if (modifier) {
+      return colors[modifier + targetColor] || undefined;
+    }
+
+    return colors[targetColor];
+  } else {
+    return undefined;
+  }
+};
+
+export const getBorderColor = (color: types.Color, modifier?: types.Modifier) => <P>(props: P & EnsureWithTheme): string | undefined => {
+  if (props && props.theme) {
+    const colors = props.theme.colors;
+    const targetColor = props.theme.defaults.border[color];
+
+    if (modifier) {
+      return colors[modifier + targetColor] || undefined;
+    }
+
+    return colors[targetColor];
+  } else {
+    return undefined;
+  }
+};
+
+export const getOutlineColor = (color: types.Color, modifier?: types.Modifier) => (props: EnsureWithTheme): string | undefined => {
+  if (props && props.theme) {
+    const colors = props.theme.colors;
+    const targetColor = props.theme.defaults.outline[color];
+
+    if (modifier) {
+      return colors[modifier + targetColor] || undefined;
+    }
+
+    return colors[targetColor];
+  } else {
+    return undefined;
+  }
+};
+
+export const getFgColor = (color: types.Color, modifier?: types.Modifier) => (props: EnsureWithTheme): string | undefined => {
+  if (props && props.theme) {
+    const colors = props.theme.colors;
+    const targetColor = props.theme.defaults.fg[color];
+
+    if (modifier) {
+      return colors[modifier + targetColor] || undefined;
+    }
+
+    return colors[targetColor];
+  } else {
+    return undefined;
+  }
+};
+
+export const getFontColor = (color: types.Color, modifier?: types.Modifier) => (props: EnsureWithTheme): string | undefined => {
+  if (props && props.theme) {
+    const colors = props.theme.colors;
+    const targetColor = props.theme.defaults.font[color];
+
+    if (modifier) {
+      return colors[modifier + targetColor] || undefined;
+    }
+
+    return colors[targetColor];
+  } else {
+    return undefined;
+  }
+};
+
+export const getSpace = (n: any) => (props: EnsureWithTheme) => {
+  const scale = props.theme ? (get<number[]>(props.theme, "space") || defaultScale) : defaultScale;
   const getStyle = getValue(scale, "rem");
 
   return getStyle(n);
 };
 
-export const getSize = (n) => (props) => {
-  const scale = get(props.theme, "sizes") || defaultSizes;
+export const getRadii = (n: any) => (props: EnsureWithTheme) => {
+  const scale = props.theme ? (get<number[]>(props.theme, "radii") || defaultRadii) : defaultRadii;
+  const getStyle = getValue(scale, "rem");
+
+  return getStyle(n);
+};
+
+export const getSize = (n: any) => (props: EnsureWithTheme) => {
+  const scale = props.theme ? (get<number[]>(props.theme, "sizes") || defaultSizes) : defaultSizes;
 
   const getStyle = getValue(scale, "rem");
 
   return getStyle(n);
 };
 
-export const getFontSize = (n) => (props) => {
-  const scale = get(props.theme, "fontSizes") || defaultFontSizes;
+export const getFontSize = (n: any) => (props: EnsureWithTheme) => {
+  const scale = props.theme ? (get<number[]>(props.theme, "fontSizes") || defaultFontSizes) : defaultFontSizes;
   const getStyle = getValue(scale, "rem");
 
   return getStyle(n);
 };
 
-export const space = (props) => {
+export const space = <P>(props: P & EnsureWithTheme & gentypes.WithSpace): any => {
   const keys = Object.keys(props)
     .filter((key) => REG.test(key))
-    .sort();
-  const scale = get(props.theme, "space") || defaultScale;
+    .sort() as Array<keyof gentypes.WithSpace>;
+  const scale = props.theme ? (get<number[]>(props.theme, "space") || defaultScale) : defaultScale;
   const getStyle = getValue(scale);
 
   return keys
-    .map((key) => {
+    .map((key: keyof gentypes.WithSpace) => {
       const value = props[key];
       const properties = getProperties(key);
 
-      const style = (n) =>
+      const style = (n: any) =>
         is(n)
           ? properties.reduce(
           (a, prop) => ({
@@ -249,12 +351,12 @@ export const space = (props) => {
 
       const breakpoints = [
         null,
-        ...(get(props.theme, "breakpoints") || defaultBreakpoints).map(
+        ...(get<string[]>(props.theme, "breakpoints") || defaultBreakpoints).map(
           createMediaQuery,
         ),
       ];
 
-      let styles = {};
+      let styles: { [key: string]: any } = {};
 
       for (let i = 0; i < value.length; i++) {
         const media = breakpoints[i];
@@ -405,13 +507,17 @@ export const size = compose(
   sizeWidth,
 );
 
+interface RatioProps {
+  ratio: number;
+}
+
 export const ratioPadding = style({
   prop: "ratio",
   cssProperty: "paddingBottom",
   transformValue: (n) => `${n * 100}%`,
 });
 
-export const ratio = (props) =>
+export const ratio = (props: RatioProps) =>
   props.ratio
     ? {
       height: 0,
@@ -528,7 +634,7 @@ export const gridArea = style({
 });
 
 // borders
-const getBorder = (n) => (num(n) && n > 0 ? `${n}px solid` : n);
+const getBorder = (n: any) => (num(n) && n > 0 ? `${n}px solid` : n);
 
 export const border = style({
   prop: "border",
@@ -642,7 +748,7 @@ export const left = style({
   transformValue: rem,
 });
 
-export const styles = {
+export const styles: { [key: string]: ((props: EnsureWithTheme) => any) & { propTypes: any } } = {
   space,
   width,
   fontSize,
@@ -665,7 +771,6 @@ export const styles = {
   sizeHeight,
   size,
   ratioPadding,
-  ratio,
   verticalAlign,
   alignItems,
   alignContent,
@@ -717,8 +822,8 @@ export const styles = {
 };
 
 // mixed
-const omit = (obj, blacklist) => {
-  const next = {};
+const omit = (obj: { [key: string]: any }, blacklist: string[]) => {
+  const next: { [key: string]: any } = {};
   for (const key in obj) {
     if (blacklist.indexOf(key) > -1) { continue; }
     next[key] = obj[key];
@@ -735,7 +840,21 @@ const blacklist = funcs.reduce(
   ["theme"],
 );
 
-export const mixed = (props) =>
+export function ifTrue<P, Success, Fail>(
+  test: (props: P) => boolean,
+  ok: (props: P) => Success,
+  notOk: (props: P) => Fail | null = (props: P) => null,
+) {
+  return function ifTrueApply(props: P): any {
+    if (test(props)) {
+      return ok(props);
+    } else {
+      return notOk(props);
+    }
+  }
+}
+
+export const mixed = (props: EnsureWithTheme) =>
   funcs.map((fn) => fn(props)).reduce(merge, omit(props, blacklist));
 
 // @ts-ignore
@@ -760,3 +879,6 @@ export const genTypes = () => {
     console.log("}");
   }
 };
+
+
+export * from "./types";

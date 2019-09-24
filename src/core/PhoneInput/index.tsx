@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import PropTypes from "prop-types";
-import R from "ramda";
+import * as R from "ramda";
 import React from "react";
 import { FormattedMessage } from "react-intl";
 import Phone from "react-phone-number-input/max";
@@ -324,7 +324,7 @@ interface StyledInputState {
   focused: boolean;
 }
 
-class StyledInput extends React.Component<StyledInputProps, StyledInputState> {
+class StyledInput extends React.PureComponent<StyledInputProps, StyledInputState> {
   public static propTypes = {
     placeholder: PropTypes.oneOfType([
       PropTypes.string,

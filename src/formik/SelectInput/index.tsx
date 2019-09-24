@@ -2,7 +2,7 @@ import { FormattedMessage, InjectedIntl, injectIntl } from "react-intl";
 import { FieldProps } from "formik";
 import invariant from "invariant";
 import memoize from "memoize-one";
-import R from "ramda";
+import * as R from "ramda";
 import React from "react";
 
 import Label from "../../core/Label";

@@ -8,7 +8,6 @@ export const Label = styled(Box.withComponent("label"))`
 `;
 
 Label.defaultProps = {
-  fontSize: 1,
   mb: 1,
 };
 

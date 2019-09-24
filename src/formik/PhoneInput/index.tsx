@@ -8,7 +8,7 @@ import { genid } from "../commons";
 import Label from "../../core/Label";
 import BasePhoneInput from "../../core/PhoneInput";
 
-import R from "ramda";
+import * as R from "ramda";
 import { FormattedMessage, InjectedIntl, injectIntl } from "react-intl";
 
 interface Props extends FieldProps {

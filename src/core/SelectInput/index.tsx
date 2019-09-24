@@ -1,15 +1,14 @@
-import { getValue, translateSize } from "../../styled/system";
-import Theme from "../../types/theme";
 import { withTheme } from "emotion-theming";
 import { FieldProps } from "formik";
-import R from "ramda";
+import * as R from "ramda";
 import React from "react";
-import AsyncSelect from "react-select/lib/Async";
+import AsyncSelect from "react-select/async";
+import { getValue, translateSize } from "../../styled/system";
+import Theme from "../../types/theme";
 import { Adapter } from "./adapter";
 
-import * as emotion from "emotion";
-
-import { Styles as ReactSelectStyles } from "react-select/lib/styles";
+import * as emotion from "@emotion/core";
+import { Styles as ReactSelectStyles } from "react-select/src/styles";
 
 const defaultSize = R.defaultTo(2);
 
@@ -137,6 +136,10 @@ const customStyles = (size, theme: Theme): ReactSelectStyles => ({
   singleValue: (base) => ({
     ...base,
     label: "singleValue",
+    top: undefined,
+    transform: undefined,
+    webkitTransform: undefined,
+    position: undefined,
   }),
   valueContainer: (base) => ({
     ...base,
@@ -223,7 +226,7 @@ const MenuList = (props) => {
   );
 };
 
-class SelectInput extends React.Component<Props, State> {
+class SelectInput extends React.PureComponent<Props, State> {
   // HAHA.
   public isMounted: boolean;
 
@@ -246,12 +249,12 @@ class SelectInput extends React.Component<Props, State> {
 
       const { options } = this.props;
 
-      return options.single(value, this.props).then((res) => {
+      return options.byIds([value], this.props).then((res) => {
         if (this.isMounted) {
-          this.setState({ value, option: res, loading: false });
+          this.setState({ value, option: res[0], loading: false });
         }
 
-        return res;
+        return res[0];
       });
     } else {
       this.setState({ loading: false, option: null, value: null });
@@ -275,13 +278,27 @@ class SelectInput extends React.Component<Props, State> {
     this.isMounted = false;
   }
 
-  public componentWillReceiveProps(a) {
-    const { field } = a;
+  public componentDidUpdate(prevProps: Props) {
+    const { field } = this.props;
+    const { field: oldField } = prevProps;
 
-    if (R.isNil(field) || R.isNil(field.value)) {
-      this.setOption(null);
-    } else {
-      this.setOption(field.value);
+    let oldValue = null;
+    let value = null;
+
+    if (!R.isNil(field) && !R.isNil(field.value)) {
+      value = field.value;
+    }
+
+    if (!R.isNil(oldField) && !R.isNil(oldField.value)) {
+      oldValue = oldField.value;
+    }
+
+    if (oldValue !== value) {
+      if (!value) {
+        this.setOption(null);
+      } else {
+        this.setOption(value);
+      }
     }
   }
 

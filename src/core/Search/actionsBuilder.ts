@@ -1,16 +1,16 @@
 import { BuiltSearch } from "./index";
 
-export default (buildSearch: BuiltSearch) => ({
+export default <AdapterContext>(buildSearch: BuiltSearch<AdapterContext>) => ({
   register(data) {
     return {
       type: buildSearch.constants.DO_REGISTER,
       data,
     };
   },
-  search(name, search = {}, params = { page: 1 }) {
+  search(name, adapterContext, search = {}, params = { page: 1, scrolling: false }) {
     return {
       type: buildSearch.constants.DO_SEARCH,
-      data: { name, search, params },
+      data: { adapterContext, name, search, params },
     };
   },
   setCurrent(name, current, search: any = {}) {
@@ -25,10 +25,10 @@ export default (buildSearch: BuiltSearch) => ({
       data: { name, state },
     };
   },
-  registerAndSearch(component, search, params) {
+  registerAndSearch(component, adapterContext, search, params) {
     return {
       type: buildSearch.constants.DO_REGISTER_AND_SEARCH,
-      data: { component, search, params },
+      data: { adapterContext, component, search, params },
     };
   },
 });

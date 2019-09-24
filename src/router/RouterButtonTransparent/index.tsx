@@ -1,14 +1,18 @@
 import styled from "@emotion/styled";
 
-import ButtonTransparent from "../../core/ButtonTransparent";
-import RouterLink from "../RouterLink";
+import ButtonTransparent, { ButtonTransparentProps } from "../../core/ButtonTransparent";
+import { BaseRouterLink } from "../RouterLink";
+import { Styled } from "../../styled"
 
-const RouterButtonTransparent = styled(ButtonTransparent)();
+type RouterButtonTransparentProps = ButtonTransparentProps
+
+const RouterButtonTransparent = styled(ButtonTransparent.withComponent(BaseRouterLink))<RouterButtonTransparentProps>();
 
 RouterButtonTransparent.defaultProps = {
-  as: RouterLink,
   textDecoration: "none",
-  type: null,
+  type: undefined,
+  size: "md",
+  borderRadius: 2,
 };
 
 export default RouterButtonTransparent;

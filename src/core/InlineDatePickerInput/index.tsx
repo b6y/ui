@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import * as Luxon from "luxon";
-import R from "ramda";
+import * as R from "ramda";
 import React from "react";
 import { FormattedMessage } from "react-intl";
 import { theme } from "styled-tools";

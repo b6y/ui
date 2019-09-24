@@ -5,11 +5,11 @@ import { InjectedScrollProps, listenToScroll } from "../ScrollController";
 interface Props {
   onHide?: () => void;
   visible?: boolean;
-  reference: React.ReactElement<any>;
   content: React.ReactNode;
   span?: number;
   left?: number;
   top?: number;
+  zIndex?: number;
 }
 
 interface InnerProps extends Props, InjectedScrollProps {}
@@ -108,13 +108,15 @@ class Portal extends PortalImpl<InnerProps> {
   }
 
   public render() {
+    console.error("Portal::render", this.props.visible);
     let portal = null;
 
     if (this.props.scrollIsEnabled && this.props.visible) {
       portal = ReactDOM.createPortal(
         <div ref={this.portal} style={{
           position: "absolute",
-          zIndex: 9999,
+          width: "fit-content",
+          zIndex: this.props.zIndex ? this.props.zIndex : 9999,
           top: this.state.top + this.props.span,
           left: this.state.left,
         }}>
@@ -126,7 +128,7 @@ class Portal extends PortalImpl<InnerProps> {
 
     return (
       <React.Fragment>
-        {this.props.reference}
+        <span data-info="portal-placeholder" />
         {portal}
       </React.Fragment>
     );

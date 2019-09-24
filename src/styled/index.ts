@@ -4,9 +4,11 @@ import {
   alignContent,
   alignItems,
   alignSelf,
+  bgColor,
   borderColor,
   borderRadius,
-  borders, boxShadow,
+  borders,
+  boxShadow,
   color,
   flex,
   flexBasis,
@@ -27,16 +29,32 @@ import {
   textDecoration,
   verticalAlign,
   width,
+  WithCSS,
+  WithTheme,
 } from "./system";
 
 import * as types from "./types";
 
-import { theme } from "styled-tools";
+import {
+  theme,
+} from "styled-tools";
 
-const css = (props) => props.css;
-const themed = (key) => (props) => props.theme[key];
+export function css<P>(props: P & WithCSS) {
+  return (props).css;
+}
 
-export const Box: types.Styled<HTMLDivElement, types.Box> = styled("div")(
+export function themed<Props, Result>(key: string) {
+  return function themedApply<ApplyProps = Props, ApplyResult = Result>(props: ApplyProps & WithTheme<types.Theme>): ApplyResult | undefined  {
+    if (props.theme !== undefined) {
+      return props.theme[key] as ApplyResult || undefined;
+    }
+
+    return undefined;
+  };
+}
+
+export type BoxComponent = types.StyledHTML<"div", types.BoxProps>;
+export const Box: BoxComponent = styled.div<types.BoxProps>(
   space,
   width,
   height,
@@ -50,6 +68,7 @@ export const Box: types.Styled<HTMLDivElement, types.Box> = styled("div")(
   borderRadius,
   borders,
   borderColor,
+  bgColor,
   textDecoration,
   verticalAlign,
   boxShadow,
@@ -57,31 +76,54 @@ export const Box: types.Styled<HTMLDivElement, types.Box> = styled("div")(
   css,
 );
 
-Box.propTypes = {
-  ...space.propTypes,
-  ...width.propTypes,
-  ...fontSize.propTypes,
-  ...color.propTypes,
-  ...flex.propTypes,
-  ...order.propTypes,
-  ...alignSelf.propTypes,
-  ...justifySelf.propTypes,
-  ...borderRadius.propTypes,
-  ...borders.propTypes,
-  ...borderColor.propTypes,
-  ...verticalAlign.propTypes,
-  ...boxShadow.propTypes,
-};
-
-export const SpanBox = styled(Box.withComponent("span"))(
+export type SpanBoxComponent = types.StyledHTML<"span", types.SpanBoxProps>;
+export const SpanBox: SpanBoxComponent = styled.span(
+  space,
+  width,
+  height,
+  fontSize,
+  lineHeight,
+  color,
+  flex,
+  order,
+  alignSelf,
+  justifySelf,
+  borderRadius,
+  borders,
+  borderColor,
+  bgColor,
+  textDecoration,
+  verticalAlign,
+  boxShadow,
   themed("SpanBox"),
+  css,
 );
 
-SpanBox.propTypes = {
-  ...Box.propTypes,
-};
+export type ButtonBoxComponent = types.StyledHTML<"button", types.ButtonBoxProps>;
+export const ButtonBox: ButtonBoxComponent =
+  styled.button(
+    space,
+    width,
+    height,
+    fontSize,
+    lineHeight,
+    color,
+    flex,
+    order,
+    alignSelf,
+    justifySelf,
+    borderRadius,
+    borders,
+    borderColor,
+    textDecoration,
+    verticalAlign,
+    boxShadow,
+    themed("Box"),
+    css,
+  );
 
-export const Flex = styled(Box)(
+export type FlexComponent = types.Styled<types.BoxProps, types.FlexProps>;
+export const Flex: FlexComponent = styled(Box)(
   {
     display: "flex",
   },
@@ -95,18 +137,8 @@ export const Flex = styled(Box)(
   themed("Flex"),
 );
 
-Flex.propTypes = {
-  ...Box.propTypes,
-  ...flexWrap.propTypes,
-  ...flexDirection.propTypes,
-  ...alignItems.propTypes,
-  ...justifyContent.propTypes,
-  ...flexBasis.propTypes,
-  ...alignContent.propTypes,
-  ...justifyItems.propTypes,
-};
-
-export const Text = styled(Box)(
+export type TextComponent = types.Styled<types.BoxProps, types.TextProps>;
+export const Text: TextComponent = styled(Box.withComponent("p"))(
   fontFamily,
   fontWeight,
   textAlign,
@@ -115,16 +147,8 @@ export const Text = styled(Box)(
   themed("Text"),
 );
 
-Text.propTypes = {
-  ...Box.propTypes,
-  ...fontFamily.propTypes,
-  ...fontWeight.propTypes,
-  ...textAlign.propTypes,
-  ...lineHeight.propTypes,
-  ...letterSpacing.propTypes,
-};
-
-export const Heading = styled(Text)(
+type HeadingComponent = types.Styled<types.BoxProps, types.HeadingProps>;
+export const Heading: HeadingComponent = styled(Text.withComponent("h2"))(
   (props) => ({
     borderBottom: `1px solid ${theme("colors.light")(props)}`,
   }),
@@ -132,42 +156,32 @@ export const Heading = styled(Text)(
 );
 
 Heading.defaultProps = {
-  as: "h2",
   m: 0,
   p: 2,
   mb: 2,
-  fontSize: 3,
+  fontSize: 4,
   fontWeight: "400",
 };
 
-Heading.propTypes = {
-  ...Text.propTypes,
-};
-
-export const Link = styled(Box)(themed("Link"));
+export type LinkComponent = types.Styled<types.BoxProps, types.LinkProps>;
+export const Link: LinkComponent = styled(Box.withComponent("a"))(themed("Link"));
 
 Link.defaultProps = {
-  as: "a",
   color: "blue",
 };
 
-export const Image = styled(Box)(
+export type ImageComponent = types.StyledHTML<"img", types.ImageProps>;
+export const Image: ImageComponent = styled.img(
   {
     maxWidth: "100%",
     height: "auto",
   },
-  height,
   borderRadius,
   themed("Image"),
 );
 
-Image.propTypes = {
-  ...Box.propTypes,
-  ...height.propTypes,
-  ...borderRadius.propTypes,
-};
-
 Image.defaultProps = {
-  as: "img",
   m: 0,
 };
+
+export * from "./system";

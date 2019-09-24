@@ -31,8 +31,10 @@ export interface WithTextColor {
 export interface WithBgColor {
   bg?: ResponsiveProp;
 }
-export interface WithColor extends WithTextColor, WithBgColor {}
-
+export interface WithColor {
+  color?: ResponsiveProp;
+  bg?: ResponsiveProp;
+}
 export interface WithFontFamily {
   fontFamily?: ResponsiveProp;
 }
@@ -79,9 +81,6 @@ export interface WithSize {
   size?: ResponsiveProp;
 }
 export interface WithRatioPadding {
-  ratio?: ResponsiveProp;
-}
-export interface WithRatio {
   ratio?: ResponsiveProp;
 }
 export interface WithVerticalAlign {
@@ -225,4 +224,7 @@ export interface WithBottom {
 }
 export interface WithLeft {
   left?: ResponsiveProp;
+}
+export interface WithTextDecoration {
+  textDecoration?: ResponsiveProp;
 }
