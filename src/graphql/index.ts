@@ -83,7 +83,7 @@ export default function createGraphQL(params: CreateGraphQLParams): GraphQLMetho
       .catch((ex) => {
         return {
           errors: upgradeErrors(resultKey, R.pathOr([], ["networkError", "result", "errors"], ex)),
-          result: null,
+          result: undefined,
           successful: false,
         } as Response<TResponse>;
       })
@@ -92,7 +92,7 @@ export default function createGraphQL(params: CreateGraphQLParams): GraphQLMetho
 
         return {
           errors,
-          result: R.pathOr(null, ["data", resultKey], res),
+          result: R.pathOr(undefined, ["data", resultKey], res),
           successful: errors.length < 1,
         } as Response<TResponse>;
       });

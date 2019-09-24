@@ -240,6 +240,25 @@ export type BoxProps<BaseProps = React.HTMLAttributes<HTMLDivElement>> =
   & gentypes.WithBoxShadow
   & WithStyled;
 
+export type FormBoxProps<BaseProps = React.HTMLAttributes<HTMLFormElement>> =
+  & BaseProps
+  & gentypes.WithFontWeight
+  & gentypes.WithSpace
+  & gentypes.WithHeight
+  & gentypes.WithWidth
+  & gentypes.WithFontSize
+  & gentypes.WithColor
+  & gentypes.WithFlex
+  & gentypes.WithOrder
+  & gentypes.WithAlignSelf
+  & gentypes.WithJustifySelf
+  & gentypes.WithBorderRadius
+  & gentypes.WithBorders
+  & gentypes.WithBorderColor
+  & gentypes.WithVerticalAlign
+  & gentypes.WithBoxShadow
+  & WithStyled;
+
 export type SpanBoxProps = BoxProps<React.HTMLAttributes<HTMLSpanElement>> & gentypes.WithTextDecoration;
 
 export type ButtonBoxProps = BoxProps<React.HTMLAttributes<HTMLButtonElement>> & gentypes.WithTextDecoration;

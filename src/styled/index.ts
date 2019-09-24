@@ -76,6 +76,29 @@ export const Box: BoxComponent = styled.div<types.BoxProps>(
   css,
 );
 
+export type FormBoxComponent = types.StyledHTML<"form", types.FormBoxProps>;
+export const FormBox: FormBoxComponent = styled.form<types.FormBoxProps>(
+  space,
+  width,
+  height,
+  fontSize,
+  lineHeight,
+  color,
+  flex,
+  order,
+  alignSelf,
+  justifySelf,
+  borderRadius,
+  borders,
+  borderColor,
+  bgColor,
+  textDecoration,
+  verticalAlign,
+  boxShadow,
+  themed("FormBox"),
+  css,
+);
+
 export type SpanBoxComponent = types.StyledHTML<"span", types.SpanBoxProps>;
 export const SpanBox: SpanBoxComponent = styled.span(
   space,

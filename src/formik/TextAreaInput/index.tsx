@@ -1,26 +1,26 @@
 import { FieldProps } from "formik";
 import invariant from "invariant";
 import memoize from "memoize-one";
-import React from "react";
 import * as R from "ramda";
-import { FormattedMessage, InjectedIntl, injectIntl } from "react-intl";
+import React from "react";
+import { injectIntl, MessageDescriptor, WrappedComponentProps } from "react-intl";
 
 import Label from "../../core/Label";
 import BaseTextAreaInput from "../../core/TextAreaInput";
 import { genid } from "../commons";
 import ErrorBag from "../ErrorBag";
 
-interface Props extends FieldProps {
+export type TextAreaInputProps = FieldProps & WrappedComponentProps & {
   fieldId: number;
   debugId: boolean;
-  label: string | FormattedMessage.MessageDescriptor;
-  placeholder: string | FormattedMessage.MessageDescriptor;
-  intl: InjectedIntl;
-}
+  label: string | MessageDescriptor;
+  placeholder: string | MessageDescriptor;
+};
+
 interface State {}
 
 // eslint-disable-next-line react/prefer-stateless-function
-class TextAreaInput extends React.PureComponent<Props, State> {
+class TextAreaInput extends React.PureComponent<TextAreaInputProps, State> {
   public id = memoize((actualId) => genid("text-area-input", actualId));
 
   public render() {
@@ -33,7 +33,7 @@ class TextAreaInput extends React.PureComponent<Props, State> {
     let { placeholder, label } = props;
 
     if (!React.isValidElement(label) && R.is(Object, label)) {
-      label = intl.formatMessage(label as FormattedMessage.MessageDescriptor);
+      label = intl.formatMessage(label as MessageDescriptor);
     }
 
     if (label && !placeholder && typeof label === "string") {
@@ -41,7 +41,7 @@ class TextAreaInput extends React.PureComponent<Props, State> {
     }
 
     if (R.is(Object, placeholder)) {
-      placeholder = intl.formatMessage(placeholder as FormattedMessage.MessageDescriptor);
+      placeholder = intl.formatMessage(placeholder as MessageDescriptor);
     }
 
     let labelComponent = null;

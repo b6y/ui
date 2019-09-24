@@ -3,7 +3,7 @@ import invariant from "invariant";
 import memoize from "memoize-one";
 import * as R from "ramda";
 import React from "react";
-import { FormattedMessage, InjectedIntl, injectIntl } from "react-intl";
+import { injectIntl, MessageDescriptor, WrappedComponentProps } from "react-intl";
 
 import Label from "../../core/Label";
 import BaseMultiSelectInput from "../../core/MultiSelectInput";
@@ -11,17 +11,17 @@ import * as types from "../../styled/types";
 import { genid } from "../commons";
 import ErrorBag from "../ErrorBag";
 
-interface Props extends types.Box, FieldProps {
+export type MultiSelectInputProps = types.BoxProps & FieldProps & WrappedComponentProps & {
   fieldId: number;
   debugId: boolean;
   isClearable: boolean;
-  label: string | FormattedMessage.MessageDescriptor;
-  placeholder: string | FormattedMessage.MessageDescriptor;
-  intl: InjectedIntl;
-}
+  label: string | MessageDescriptor;
+  placeholder: string | MessageDescriptor;
+};
+
 interface State {}
 
-class MultiSelectInput extends React.PureComponent<Props, State> {
+class MultiSelectInput extends React.PureComponent<MultiSelectInputProps, State> {
   public static defaultProps = {
     isClearable: true,
   };
@@ -38,7 +38,7 @@ class MultiSelectInput extends React.PureComponent<Props, State> {
     let { placeholder, label } = props;
 
     if (!React.isValidElement(label) && R.is(Object, label)) {
-      label = intl.formatMessage(label as FormattedMessage.MessageDescriptor);
+      label = intl.formatMessage(label as MessageDescriptor);
     }
 
     if (label && !placeholder && typeof label === "string") {
@@ -46,7 +46,7 @@ class MultiSelectInput extends React.PureComponent<Props, State> {
     }
 
     if (R.is(Object, placeholder)) {
-      placeholder = intl.formatMessage(placeholder as FormattedMessage.MessageDescriptor);
+      placeholder = intl.formatMessage(placeholder as MessageDescriptor);
     }
 
     let labelComponent = null;

@@ -65,7 +65,7 @@ export class GraphQLAdapterOptions {
   public searchQuery: (a: GraphQLAdapterOptionsSearch) => GraphQLAdapterOptionsSearchQuery;
   public byIdsQuery: (a: GraphQLAdapterOptionsByIds) => GraphQLAdapterOptionsByIdsQuery;
   public limit: number = 150;
-  public headers: (Definition) => { [key: string]: string };
+  public headers: (ctx: Definition) => { [key: string]: string };
 
   constructor(
     endpoint: string,
@@ -145,7 +145,7 @@ export class GraphQLAdapter extends Adapter {
     }).then((res) => {
       const newRes = transformResponse(res);
 
-      return newRes.items.map((item) => query.transform(item, newRes));
+      return newRes.items.map((item: any) => query.transform(item, newRes));
     });
   }
 
@@ -175,17 +175,17 @@ export class GraphQLAdapter extends Adapter {
     }).then((res) => {
       const newRes = transformResponse(res);
 
-      return newRes.items.map((item) => query.transform(item, newRes));
+      return newRes.items.map((item: any) => query.transform(item, newRes));
     });
   }
 }
 
 export const withGraphQLAdapter = <K extends string, P, S>(
   key: K,
-  WrappedComponent: React.ComponentType<P & { children?: React.ReactNode } & { [P in K]: GraphQLAdapter }>,
+  WrappedComponent: React.ComponentType<P & { children?: React.ReactNode } & Record<K, GraphQLAdapter>>,
   options: GraphQLAdapterOptions,
-): React.ComponentClass<Pick<P, Exclude<keyof P, keyof { [P in K]: GraphQLAdapter }>>> => {
-  class Enhance extends React.PureComponent<P> {
+): React.ComponentClass<Pick<P, Exclude<keyof P, K>>> => {
+  class Enhance extends React.PureComponent<Pick<P, Exclude<keyof P, K>>> {
     public static contextType = ApplicationContext;
 
     public context!: React.ContextType<typeof ApplicationContext>;
@@ -196,9 +196,9 @@ export const withGraphQLAdapter = <K extends string, P, S>(
         headers: options.headers(this.context),
       }));
 
-      const props = {
-        ...this.props,
-        [key]: adapter,
+      const props: P & { children?: React.ReactNode } & Record<K, GraphQLAdapter> = {
+        ...(this.props as any),
+        [key as K]: adapter,
       };
 
       return <WrappedComponent {...props} />;

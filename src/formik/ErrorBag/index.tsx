@@ -1,29 +1,29 @@
 import styled from "@emotion/styled";
 import { connect as formikConnect, FormikContext } from "formik";
 import React from "react";
-import { InjectedIntlProps, injectIntl } from "react-intl";
+import { injectIntl, MessageDescriptor, WrappedComponentProps } from "react-intl";
 
 import errorMessages from "../../messages/errors";
 import { Box } from "../../styled";
 import * as types from "../../styled/types";
 
-interface Props extends types.Box, InjectedIntlProps {
+export type ErrorBagProps = types.BoxProps & WrappedComponentProps & {
   field?: string;
 }
 
 interface State {}
 
-class ErrorBagBase extends React.PureComponent<Props & { formik: FormikContext<any> }, State> {
+class ErrorBagBase extends React.PureComponent<ErrorBagProps & { formik: FormikContext<any> }, State> {
   public static defaultProps = {
     field: "$",
   };
 
-  public static cache = {};
+  public static cache: { [key: string]: any } = {};
 
   public render() {
     const { formik, field, children, ...props } = this.props;
 
-    if (formik.errors && formik.errors[field]) {
+    if (field && formik.errors && formik.errors[field]) {
       const originalError = formik.errors[field];
       let error = originalError;
 
@@ -36,7 +36,10 @@ class ErrorBagBase extends React.PureComponent<Props & { formik: FormikContext<a
             const errorKey = error.slice(1);
 
             if (errorMessages.hasOwnProperty(errorKey)) {
-              error = this.props.intl.formatMessage(errorMessages[errorKey]);
+              error = this.props.intl.formatMessage(
+                // TODO: !!!
+                (errorMessages as any)[errorKey],
+              );
             } else {
               error = this.props.intl.formatMessage({
                 id: `errors.${error.slice(1)}`,
@@ -64,4 +67,4 @@ class ErrorBagBase extends React.PureComponent<Props & { formik: FormikContext<a
   }
 }
 
-export default styled(injectIntl(formikConnect<Props>(ErrorBagBase)))();
+export default styled(injectIntl(formikConnect<ErrorBagProps>(ErrorBagBase)))();

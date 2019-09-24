@@ -1,37 +1,36 @@
 import { FieldProps } from "formik";
 import invariant from "invariant";
 import memoize from "memoize-one";
+import * as R from "ramda";
 import React from "react";
+import { injectIntl, MessageDescriptor, WrappedComponentProps } from "react-intl";
 
-import ErrorBag from "../ErrorBag";
-import { genid } from "../commons";
 import Label from "../../core/Label";
 import BasePhoneInput from "../../core/PhoneInput";
+import { genid } from "../commons";
+import ErrorBag from "../ErrorBag";
 
-import * as R from "ramda";
-import { FormattedMessage, InjectedIntl, injectIntl } from "react-intl";
-
-interface Props extends FieldProps {
+export type PhoneInputProps = FieldProps & WrappedComponentProps & {
   fieldId: number;
   debugId: boolean;
-  label: string | FormattedMessage.MessageDescriptor;
-  placeholder: string | FormattedMessage.MessageDescriptor;
-  intl: InjectedIntl;
-}
+  label: string | MessageDescriptor;
+  placeholder: string | MessageDescriptor;
+};
+
 interface State {}
 
 // eslint-disable-next-line react/prefer-stateless-function
-class PhoneInput extends React.PureComponent<Props, State> {
+class PhoneInput extends React.PureComponent<PhoneInputProps, State> {
   public id = memoize((actualId) => genid("text-input", actualId));
 
-  constructor(props) {
+  constructor(props: PhoneInputProps) {
     super(props);
 
     this.changed = this.changed.bind(this);
     this.blurred = this.blurred.bind(this);
   }
 
-  public changed(value) {
+  public changed(value: any) {
     const { name } = this.props.field;
     const { setFieldValue } = this.props.form;
 
@@ -55,7 +54,7 @@ class PhoneInput extends React.PureComponent<Props, State> {
     let { placeholder, label } = props;
 
     if (!React.isValidElement(label) && R.is(Object, label)) {
-      label = intl.formatMessage(label as FormattedMessage.MessageDescriptor);
+      label = intl.formatMessage(label as MessageDescriptor);
     }
 
     if (label && !placeholder && typeof label === "string") {
@@ -63,7 +62,7 @@ class PhoneInput extends React.PureComponent<Props, State> {
     }
 
     if (R.is(Object, placeholder)) {
-      placeholder = intl.formatMessage(placeholder as FormattedMessage.MessageDescriptor);
+      placeholder = intl.formatMessage(placeholder as MessageDescriptor);
     }
 
     let labelComponent = null;

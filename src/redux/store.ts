@@ -2,11 +2,11 @@ import { History } from "history";
 import { Reducer, Store as ReduxStore } from "redux";
 import { Saga, Task } from "redux-saga";
 
-import { Modes } from "./constants";
+import { Mode } from "./constants";
 
 export interface SagaDescriptor {
     saga?: Saga;
-    mode?: keyof Modes;
+    mode?: Mode;
     task?: Task;
 }
 
