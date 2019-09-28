@@ -3,7 +3,7 @@ import invariant from "invariant";
 import memoize from "memoize-one";
 import * as R from "ramda";
 import React from "react";
-import { FormattedMessage, InjectedIntl, injectIntl } from "react-intl";
+import { injectIntl, MessageDescriptor, WrappedComponentProps } from "react-intl";
 
 import Label from "../../core/Label";
 import BaseAceInput from "../../ace/index";
@@ -11,19 +11,19 @@ import * as types from "../../styled/types";
 import { genid } from "../commons";
 import ErrorBag from "../ErrorBag";
 
-interface Props extends types.Box, FieldProps {
+export type AceInputProps = FieldProps & types.BoxProps & WrappedComponentProps & {
   extraLibs?: { [name: string]: string };
   mode: string;
   fieldId: number;
   debugId: boolean;
   isClearable: boolean;
-  label: string | FormattedMessage.MessageDescriptor;
-  placeholder: string | FormattedMessage.MessageDescriptor;
-  intl: InjectedIntl;
-}
+  label: string | MessageDescriptor;
+  placeholder: string | MessageDescriptor;
+};
+
 interface State {}
 
-class AceInput extends React.PureComponent<Props, State> {
+class AceInput extends React.PureComponent<AceInputProps, State> {
   public static defaultProps = {
     isClearable: true,
   };
@@ -40,7 +40,7 @@ class AceInput extends React.PureComponent<Props, State> {
     let { placeholder, label } = props;
 
     if (!React.isValidElement(label) && R.is(Object, label)) {
-      label = intl.formatMessage(label as FormattedMessage.MessageDescriptor);
+      label = intl.formatMessage(label as MessageDescriptor);
     }
 
     if (label && !placeholder && typeof label === "string") {
@@ -48,7 +48,7 @@ class AceInput extends React.PureComponent<Props, State> {
     }
 
     if (R.is(Object, placeholder)) {
-      placeholder = intl.formatMessage(placeholder as FormattedMessage.MessageDescriptor);
+      placeholder = intl.formatMessage(placeholder as MessageDescriptor);
     }
 
     let labelComponent = null;

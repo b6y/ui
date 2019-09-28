@@ -1,5 +1,5 @@
 import PopperJS from 'popper.js';
-import React from 'react';
+import React, { MutableRefObject } from 'react';
 import ReactDOM from 'react-dom';
 
 import FocusSteal from "../FocusSteal";
@@ -18,7 +18,7 @@ export type PopperPlacement = | "bottom-end"
                               | "top";
 
 export interface Props<TContentProps, TRef> {
-  anchorEl: React.RefObject<HTMLElement>;
+  anchorEl: React.RefObject<HTMLElement | undefined>;
   children: React.ReactElement<TContentProps>;
   open: boolean;
   placement: PopperPlacement;
@@ -30,7 +30,7 @@ export interface Props<TContentProps, TRef> {
  */
 const Popper = React.forwardRef(function Popper<TContentProps, TRef>(
   props: Props<TContentProps, TRef>,
-  ref,
+  ref: any,
 ) {
   const {
     anchorEl,
@@ -41,7 +41,7 @@ const Popper = React.forwardRef(function Popper<TContentProps, TRef>(
     ...other
   } = props;
 
-  const popperRef = React.useRef(null)
+  const popperRef: MutableRefObject<PopperJS | undefined> = React.useRef();
   const portalRef = React.createRef<HTMLDivElement>();
 
   const handleOpen = React.useCallback(() => {
@@ -56,22 +56,24 @@ const Popper = React.forwardRef(function Popper<TContentProps, TRef>(
       // handlePopperRefRef.current(null);
     }
 
-    const popper = new PopperJS(anchorEl.current, popperNode, {
-      placement,
-      modifiers: {
-        flip: {
-          enabled: flip,
+    if (anchorEl.current) {
+      const popper = new PopperJS(anchorEl.current, popperNode, {
+        placement,
+        modifiers: {
+          flip: {
+            enabled: flip,
+          },
+          preventOverflow: {
+            boundariesElement: "window",
+          },
         },
-        preventOverflow: {
-          boundariesElement: "window",
-        },
-      },
-      // We could have been using a custom modifier like react-popper is doing.
-      // But it seems this is the best public API for this use case.
-      // onUpdate: createChainedFunction(handlePopperUpdate, popperOptions.onUpdate),
-    });
+        // We could have been using a custom modifier like react-popper is doing.
+        // But it seems this is the best public API for this use case.
+        // onUpdate: createChainedFunction(handlePopperUpdate, popperOptions.onUpdate),
+      });
 
-    popperRef.current = popper;
+      popperRef.current = popper;
+    }
   }, [anchorEl, open, placement]);
 
   const handleClose = () => {

@@ -3,34 +3,34 @@ import invariant from "invariant";
 import memoize from "memoize-one";
 import * as R from "ramda";
 import React from "react";
-import { FormattedMessage, InjectedIntl, injectIntl } from "react-intl";
+import { injectIntl, MessageDescriptor, WrappedComponentProps } from "react-intl";
 
 import BaseInput from "../../core/DatePickerInput";
 import Label from "../../core/Label";
 import { genid } from "../commons";
 import ErrorBag from "../ErrorBag";
 
-interface Props extends FieldProps {
+export type DatePickerInputProps = FieldProps & WrappedComponentProps & {
   fieldId: number;
   debugId: boolean;
-  label: string | FormattedMessage.MessageDescriptor;
-  placeholder: string | FormattedMessage.MessageDescriptor;
-  intl: InjectedIntl;
-}
+  label: string | MessageDescriptor;
+  placeholder: string | MessageDescriptor;
+};
+
 interface State {}
 
 // eslint-disable-next-line react/prefer-stateless-function
-class TextInput extends React.PureComponent<Props, State> {
+class DatePickerInput extends React.PureComponent<DatePickerInputProps, State> {
   public id = memoize((actualId) => genid("inline-date-picker-input", actualId));
 
-  constructor(props) {
+  constructor(props: DatePickerInputProps) {
     super(props);
 
     this.changed = this.changed.bind(this);
     this.blurred = this.blurred.bind(this);
   }
 
-  public changed(value) {
+  public changed(value: any) {
     const { name } = this.props.field;
     const { setFieldValue } = this.props.form;
 
@@ -54,7 +54,7 @@ class TextInput extends React.PureComponent<Props, State> {
     let { placeholder, label } = props;
 
     if (!React.isValidElement(label) && R.is(Object, label)) {
-      label = intl.formatMessage(label as FormattedMessage.MessageDescriptor);
+      label = intl.formatMessage(label as MessageDescriptor);
     }
 
     if (label && !placeholder && typeof label === "string") {
@@ -62,7 +62,7 @@ class TextInput extends React.PureComponent<Props, State> {
     }
 
     if (R.is(Object, placeholder)) {
-      placeholder = intl.formatMessage(placeholder as FormattedMessage.MessageDescriptor);
+      placeholder = intl.formatMessage(placeholder as MessageDescriptor);
     }
 
     let labelComponent = null;
@@ -86,4 +86,4 @@ class TextInput extends React.PureComponent<Props, State> {
   }
 }
 
-export default injectIntl(TextInput);
+export default injectIntl(DatePickerInput);

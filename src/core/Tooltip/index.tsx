@@ -29,7 +29,7 @@ const TooltipElement = styled((props) => {
 `;
 
 export default React.forwardRef(function Tooltip(props: Props, ref) {
-  const anchorRef: React.MutableRefObject<HTMLElement> = React.useRef();
+  const anchorRef: React.MutableRefObject<HTMLElement | undefined> = React.useRef();
   const [visible, setVisible] = React.useState(false);
 
   const { children, text, placement = "bottom" } = props;

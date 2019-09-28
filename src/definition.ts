@@ -2,11 +2,12 @@ import { History } from "history";
 import { AnyAction, Reducer, Store } from "redux";
 
 import configureStore from "./redux/configureStore";
-import Theme from "./types/theme";
+import { Theme } from "./styled";
 
 export const initialState = {};
 
-const storeFactory = (history: History, reducers: { [key: string]: Reducer }) => configureStore(initialState, history, reducers);
+const storeFactory = (history: History, reducers: { [key: string]: Reducer }) =>
+  configureStore(initialState, history, reducers);
 
 export interface DefinitionParams {
   reducerCreator?: (injectedReducers: any) => Reducer<any, AnyAction>;

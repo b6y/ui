@@ -3,7 +3,7 @@ import { connect as formikConnect } from "formik";
 import * as R from "ramda";
 import React from "react";
 
-const DisplayFormikState = (props) => (
+const DisplayFormikState = (props: any) => (
   <div style={{ margin: "1rem 0" }}>
     <h3 style={{ fontFamily: "monospace" }} />
     <pre
