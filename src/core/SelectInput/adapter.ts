@@ -1,10 +1,10 @@
 import { latinise } from "@b6y/commons";
 import * as R from "ramda";
 import React from "react";
-import { FormattedMessage, InjectedIntl } from "react-intl";
+import { injectIntl, IntlShape, MessageDescriptor, WrappedComponentProps } from "react-intl";
 
 export interface OptionType {
-  label: string | FormattedMessage.MessageDescriptor;
+  label: string | MessageDescriptor;
   value: any;
   option?: React.ReactNode;
 }
@@ -29,20 +29,22 @@ export class ArrayAdapter extends Adapter {
 
     this.options = options.map((o) => {
       if (!R.is(Object, o.label)) {
-        return { ...o, text: latinise(o.label as string) };
+        const label = o.label as string;
+        return { ...o, text: latinise(label) || label };
       } else {
         return { ...o, text: "NOT_TRANSLATED" };
       }
     });
   }
 
-  public intl(intl: InjectedIntl) {
+  public intl(intl: IntlShape) {
     const translatedOptions = this.options.map((o) => {
       if (!R.is(Object, o.label)) {
-        return { ...o, text: latinise(o.label as string) };
+        const label = o.label as string;
+        return { ...o, text: latinise(label) || label };
       } else {
-        const label = intl.formatMessage(o.label as FormattedMessage.MessageDescriptor);
-        return { ...o, label, text: latinise(label) };
+        const label = intl.formatMessage(o.label as MessageDescriptor);
+        return { ...o, label, text: latinise(label) || label };
       }
     });
     return new ArrayAdapter(translatedOptions);
@@ -53,7 +55,7 @@ export class ArrayAdapter extends Adapter {
       if (R.isNil(input) || input === "") {
         resolve(this.options);
       } else {
-        const text = latinise(input);
+        const text = latinise(input) || input;
         resolve(
           this.options.filter((o) => o.text.includes(text)),
         );

@@ -1,7 +1,6 @@
 import hoistNonReactStatics from "hoist-non-react-statics";
 import React from "react";
 import { ReactReduxContext } from "react-redux";
-import { Context } from "../core/ScrollController";
 
 import getInjectors from "./reducerInjectors";
 import { Reducer } from "./store";
@@ -22,7 +21,7 @@ export default ({ key, reducer }: InjectReducer) =>
       WrappedComponent.displayName || WrappedComponent.name || "Component"
     })`;
 
-    public context!: React.ContextType<typeof Context>;
+    public context!: React.ContextType<typeof ReactReduxContext>;
 
     constructor(props: TProps, context: any) {
       super(props, context);

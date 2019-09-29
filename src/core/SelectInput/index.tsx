@@ -3,16 +3,19 @@ import { FieldProps } from "formik";
 import * as R from "ramda";
 import React from "react";
 import AsyncSelect from "react-select/async";
+import { Theme } from "../../styled";
 import { getValue, translateSize } from "../../styled/system";
-import Theme from "../../types/theme";
 import { Adapter } from "./adapter";
 
 import * as emotion from "@emotion/core";
+import { MenuListComponentProps, MenuListProps } from "react-select/src/components/Menu";
+import { OptionProps } from "react-select/src/components/Option";
+import { SingleValueProps } from "react-select/src/components/SingleValue";
 import { Styles as ReactSelectStyles } from "react-select/src/styles";
 
 const defaultSize = R.defaultTo(2);
 
-const height = (size, theme) => {
+const height = (size: any, theme: Theme) => {
   const translatedSize = translateSize(defaultSize(size));
 
   const padding: any = theme.rectangularPaddings[translatedSize];
@@ -28,7 +31,7 @@ const height = (size, theme) => {
   };
 };
 
-const customStyles = (size, theme: Theme): ReactSelectStyles => ({
+const customStyles = (size: any, theme: Theme): ReactSelectStyles => ({
   input: (base) => ({
     ...base,
     label: "input",
@@ -153,7 +156,7 @@ const customStyles = (size, theme: Theme): ReactSelectStyles => ({
   }),
 });
 
-interface Props extends FieldProps {
+export interface SelectInputProps extends FieldProps {
   options: Adapter;
   theme: Theme;
   id: any;
@@ -166,13 +169,13 @@ interface State {
   value?: any;
 }
 
-const CustomOption = (props) => {
+const CustomOption = (props: OptionProps<any>) => {
   const { children, className, cx, getStyles, isDisabled, isFocused, isSelected, innerRef, innerProps } = props;
   return (
     <div
       ref={innerRef}
       className={cx(
-        emotion.css(getStyles("option", props)),
+        emotion.css(getStyles("option", props)).styles,
         {
           "option": true,
           "option--is-disabled": isDisabled,
@@ -180,7 +183,7 @@ const CustomOption = (props) => {
           "option--is-selected": isSelected,
         },
         className,
-      )}
+      ) as string}
       {...innerProps}
     >
       {children}
@@ -188,18 +191,18 @@ const CustomOption = (props) => {
   );
 };
 
-const CustomDisplayOption = (props) => {
+const CustomDisplayOption = (props: SingleValueProps<any>) => {
   const { children, className, cx, getStyles, isDisabled, innerProps } = props;
   return (
     <div
       className={cx(
-        emotion.css(getStyles("singleValue", props)),
+        emotion.css(getStyles("singleValue", props)).styles,
         {
           "single-value": true,
           "single-value--is-disabled": isDisabled,
         },
         className,
-      )}
+      ) as string}
       {...innerProps}
     >
       {children}
@@ -207,12 +210,12 @@ const CustomDisplayOption = (props) => {
   );
 };
 
-const MenuList = (props) => {
+const MenuList = (props: MenuListComponentProps<any>) => {
   const { children, className, cx, getStyles, isMulti, innerRef } = props;
   return (
     <div
       className={cx(
-        emotion.css(getStyles("menuList", props)),
+        emotion.css(getStyles("menuList", props)).styles,
         {
           "menu-list": true,
           "menu-list--is-multi": isMulti,
@@ -226,11 +229,11 @@ const MenuList = (props) => {
   );
 };
 
-class SelectInput extends React.PureComponent<Props, State> {
+class SelectInput extends React.PureComponent<SelectInputProps, State> {
   // HAHA.
-  public isMounted: boolean;
+  public isMounted: boolean = false;
 
-  constructor(props, context) {
+  constructor(props: SelectInputProps, context: any) {
     super(props, context);
 
     this.state = {
@@ -243,7 +246,7 @@ class SelectInput extends React.PureComponent<Props, State> {
     this.onBlur = this.onBlur.bind(this);
   }
 
-  public setOption(value) {
+  public setOption(value: any) {
     if (value !== null) {
       this.setState({ loading: true });
 
@@ -278,7 +281,7 @@ class SelectInput extends React.PureComponent<Props, State> {
     this.isMounted = false;
   }
 
-  public componentDidUpdate(prevProps: Props) {
+  public componentDidUpdate(prevProps: SelectInputProps) {
     const { field } = this.props;
     const { field: oldField } = prevProps;
 
@@ -302,7 +305,7 @@ class SelectInput extends React.PureComponent<Props, State> {
     }
   }
 
-  public onChange(value) {
+  public onChange(value: any) {
     const { field, form } = this.props;
 
     this.setState({ value });
@@ -331,7 +334,7 @@ class SelectInput extends React.PureComponent<Props, State> {
       <div>
         <AsyncSelect
           components={{ Option: CustomOption, SingleValue: CustomDisplayOption, MenuList }}
-          loadOptions={(text) => options.search(text, this.props)}
+          loadOptions={(text: any) => options.search(text, this.props)}
           defaultOptions={true}
           cacheOptions
           styles={customStyles(2, theme)}
@@ -352,8 +355,4 @@ class SelectInput extends React.PureComponent<Props, State> {
   }
 }
 
-const ConfiguredSelectInput = withTheme(SelectInput);
-
-const WrappedSelectInput = (props) => <ConfiguredSelectInput {...props} />;
-
-export default WrappedSelectInput;
+export default withTheme(SelectInput);

@@ -1,22 +1,21 @@
 import styled from "@emotion/styled";
 import EventEmitter from "eventemitter3";
 import hoistNonReactStatic from "hoist-non-react-statics";
-import { debounce } from "lodash";
+import debounce from "lodash/debounce";
 import nanoid from "nanoid";
 import * as R from "ramda";
 import React from "react";
 import ReactDOM from "react-dom";
 import ReactResizeDetector from "react-resize-detector";
 
-import { Box } from "../../styled";
-import { Box as BoxType } from "../../styled/types";
+import { Box, BoxProps } from "../../styled";
 
 interface ScrollContext {
   enabled: boolean;
-  name: string;
-  bus: EventEmitter;
+  name?: string;
+  bus?: EventEmitter;
   path: any[];
-  getMyInfo?(): ScrollContainerInfo;
+  getMyInfo?(): ScrollContainerInfo | null;
   getRect?(el: HTMLElement): ElementRect;
 }
 
@@ -27,7 +26,7 @@ interface ScrollEvent {
 interface State {
 }
 
-interface Props extends BoxType {
+interface Props extends BoxProps {
   enabled: boolean;
   name: string;
   root: boolean;
@@ -51,23 +50,28 @@ interface ScrollContainerInfo extends ElementRect {
   scrollLeft: number;
 }
 
-interface ListenerProps {
+export interface ListenerProps {
   forwardedRef: React.Ref<any>;
 }
 
-interface ListenerState {
-  id: string;
-  rect: ElementRect;
+export interface ListenerState {
+  id?: string;
+  rect?: ElementRect;
 }
 
 export interface InjectedScrollProps {
   scrollId: string;
   scrollIsEnabled: boolean;
   containerRect: ElementRect;
-  getRect(el: HTMLElement): ElementRect;
+  getRect(el: HTMLElement): ElementRect | undefined;
 }
 
-const StyledScrollController = styled(Box)<Props>`
+interface StyledScrollControllerProps extends BoxProps {
+  x: boolean;
+  y: boolean;
+}
+
+const StyledScrollController = styled(Box)<StyledScrollControllerProps>`
 position: relative;
 overflow-x: ${(props) => props.x ? "auto" : "visible"};
 overflow-y: ${(props) => props.y ? "auto" : "visible"};
@@ -77,25 +81,20 @@ const omit = R.omit<string>(["name", "x", "y", "ctx", "children"]);
 
 export const Context = React.createContext<ScrollContext>({
   enabled: true,
-  name: null,
-  bus: null,
   path: [],
 });
 
 export const listenToScroll = <P, S>(
   WrappedComponent: React.ComponentType<P & { children?: React.ReactNode } & InjectedScrollProps>,
-): React.ComponentClass<Pick<P, Exclude<keyof P, keyof InjectedScrollProps>>> => {
-  class Listener extends React.PureComponent<P & ListenerProps, ListenerState> {
+) => {
+  const Listener = class extends React.PureComponent<P & ListenerProps, ListenerState> {
     public static contextType = Context;
 
     public context!: React.ContextType<typeof Context>;
 
-    public state = {
-      rect: null,
-      id: null,
-    };
+    public state: ListenerState = {};
 
-    constructor(props) {
+    constructor(props: P & ListenerProps) {
       super(props);
 
       this.getRect = this.getRect.bind(this);
@@ -107,13 +106,17 @@ export const listenToScroll = <P, S>(
     }
 
     public componentDidMount(): void {
-      this.context.bus.addListener("scroll", this.scrolled);
+      if (this.context.bus) {
+        this.context.bus.addListener("scroll", this.scrolled);
+      }
 
       this.updateContainerRect();
     }
 
     public componentWillUnmount(): void {
-      this.context.bus.removeListener("scroll", this.scrolled);
+      if (this.context.bus) {
+        this.context.bus.removeListener("scroll", this.scrolled);
+      }
     }
 
     public updateContainerRect() {
@@ -123,22 +126,29 @@ export const listenToScroll = <P, S>(
         return;
       }
 
-      const rect = ctx.getMyInfo();
+      let rect = null;
+      if (ctx.getMyInfo) {
+        rect = ctx.getMyInfo();
 
-      // tslint:disable-next-line:max-line-length
-      const id = `${nanoid()}-${rect.left}x${rect.top}:${rect.width}x${rect.height}:${rect.scrollLeft}x${rect.scrollTop}`;
+        if (rect) {
+          // tslint:disable-next-line:max-line-length
+          const id = `${nanoid()}-${rect.left}x${rect.top}:${rect.width}x${rect.height}:${rect.scrollLeft}x${rect.scrollTop}`;
 
-      this.setState({ rect, id });
+          this.setState({ rect, id });
+        }
+      }
     }
 
-    public getRect(el: HTMLElement): ElementRect {
-      return this.context.getRect(el);
+    public getRect(el: HTMLElement): ElementRect | undefined {
+      if (this.context.getRect) {
+        return this.context.getRect(el);
+      }
     }
 
     public render() {
       const ctx = this.context;
 
-      if (this.state.rect) {
+      if (this.state.rect && this.state.id) {
         return (
           <WrappedComponent
             ref={this.props.forwardedRef}
@@ -153,19 +163,19 @@ export const listenToScroll = <P, S>(
         return null;
       }
     }
-  }
+  };
 
-  const Enhance = React.forwardRef((props: P, ref) => {
-    return <Listener forwardedRef={ref} {...props} />;
+  const Hoisted = hoistNonReactStatic(Listener, WrappedComponent);
+
+  return React.forwardRef((props: P & ListenerProps, ref) => {
+    return <Hoisted forwardedRef={ref} {...props} />;
   });
-
-  return hoistNonReactStatic(Enhance, WrappedComponent);
 };
 
 class ContextualizedScrollController extends React.PureComponent<Props & PropsWithContext, State> {
-  public containerRef = React.createRef();
+  public containerRef: React.RefObject<HTMLDivElement> = React.createRef();
 
-  constructor(props) {
+  constructor(props: Props & PropsWithContext) {
     super(props);
 
     this.scrolled = debounce(this.scrolled.bind(this), 5);
@@ -228,14 +238,27 @@ class ContextualizedScrollController extends React.PureComponent<Props & PropsWi
     const { ctx } = this.props;
     const { bus } = ctx;
 
-    bus.emit("scroll", { ctx });
+    if (bus) {
+      bus.emit("scroll", { ctx });
+    }
+  }
+
+  public domScrolled(event: Event) {
+    const { ctx } = this.props;
+    const { bus } = ctx;
+
+    if (bus) {
+      bus.emit("scroll", { ctx });
+    }
   }
 
   public resized() {
     const { ctx } = this.props;
     const { bus } = ctx;
 
-    bus.emit("scroll", { ctx });
+    if (bus) {
+      bus.emit("scroll", { ctx });
+    }
   }
 
   public render() {
@@ -247,7 +270,7 @@ class ContextualizedScrollController extends React.PureComponent<Props & PropsWi
         getMyInfo: this.getMyInfo,
         getRect: this.getRect,
       }}>
-        <StyledScrollController ref={this.containerRef} {...safeProps}>
+        <StyledScrollController ref={this.containerRef} x={this.props.x} y={this.props.y} {...safeProps}>
           {this.props.children}
           <ReactResizeDetector handleWidth handleHeight onResize={this.resized} />
         </StyledScrollController>
@@ -257,24 +280,24 @@ class ContextualizedScrollController extends React.PureComponent<Props & PropsWi
 
   private attach(): void {
     if (this.props.root) {
-      window.addEventListener("scroll", this.scrolled);
-      window.addEventListener("resize", this.scrolled);
+      window.addEventListener("scroll", this.domScrolled);
+      window.addEventListener("resize", this.domScrolled);
     } else {
       const { current } = this.containerRef;
       if (current !== null && current instanceof HTMLElement) {
-        current.addEventListener("scroll", this.scrolled);
+        current.addEventListener("scroll", this.domScrolled);
       }
     }
   }
 
   private detach(): void {
     if (this.props.root) {
-      window.removeEventListener("scroll", this.scrolled);
-      window.removeEventListener("resize", this.scrolled);
+      window.removeEventListener("scroll", this.domScrolled);
+      window.removeEventListener("resize", this.domScrolled);
     } else {
       const { current } = this.containerRef;
       if (current !== null && current instanceof HTMLElement) {
-        current.removeEventListener("scroll", this.scrolled);
+        current.removeEventListener("scroll", this.domScrolled);
       }
     }
   }
@@ -306,7 +329,7 @@ class ScrollController extends React.PureComponent<Props, State> {
   }
 }
 
-interface RootProps {}
+interface RootProps { }
 
 export class RootScrollController extends React.PureComponent<RootProps> {
   public render() {

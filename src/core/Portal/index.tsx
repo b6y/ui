@@ -29,39 +29,35 @@ export type PortalRefType = PortalImpl<InnerProps>;
 
 class Portal extends PortalImpl<InnerProps> {
   public static defaultProps = {
-    visible: null,
     span: 0,
   };
 
   public portal = React.createRef<HTMLDivElement>();
 
-  public state = {
-    visible: null,
-    top: null,
-    left: null,
-    id: null,
-  };
+  public state: State = {};
 
   public componentDidMount(): void {
     const node = ReactDOM.findDOMNode(this);
     if (node instanceof HTMLElement) {
       const rect = this.props.getRect(node);
 
-      const newTop = rect.top + rect.height;
-      const newLeft = rect.left;
+      if (rect) {
+        const newTop = rect.top + rect.height;
+        const newLeft = rect.left;
 
-      let visible = null;
+        let visible = false;
 
-      if (this.props.visible !== null) {
-        visible = this.props.visible;
+        if (this.props.visible !== null) {
+          visible = this.props.visible || false;
+        }
+
+        this.setState({
+          top: newTop,
+          left: newLeft,
+          id: this.props.scrollId,
+          visible,
+        });
       }
-
-      this.setState({
-        top: newTop,
-        left: newLeft,
-        id: this.props.scrollId,
-        visible,
-      });
     }
   }
 
@@ -81,20 +77,23 @@ class Portal extends PortalImpl<InnerProps> {
 
       if (oldId !== newId) {
         const rect = this.props.getRect(node);
-        const newTop = rect.top + rect.height;
-        const newLeft = rect.left;
 
-        let visible = this.props.visible;
+        if (rect !== undefined) {
+          const newTop = rect.top + rect.height;
+          const newLeft = rect.left;
 
-        if (this.props.visible === null) {
-          visible = false;
-        }
+          let visible = this.props.visible;
 
-        this.setState({ top: newTop, left: newLeft, id: newId, visible }, () => {
-          if (this.props.onHide) {
-            this.props.onHide();
+          if (this.props.visible === null) {
+            visible = false;
           }
-        });
+
+          this.setState({ top: newTop, left: newLeft, id: newId, visible }, () => {
+            if (this.props.onHide) {
+              this.props.onHide();
+            }
+          });
+        }
       }
     }
   }
@@ -117,12 +116,12 @@ class Portal extends PortalImpl<InnerProps> {
           position: "absolute",
           width: "fit-content",
           zIndex: this.props.zIndex ? this.props.zIndex : 9999,
-          top: this.state.top + this.props.span,
+          top: (this.state.top || 0) + (this.props.span || 0),
           left: this.state.left,
         }}>
           { this.props.content }
         </div>,
-        document.getElementById("portal-target"),
+        document.getElementById("portal-target")!,
       );
     }
 

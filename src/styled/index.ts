@@ -44,7 +44,9 @@ export function css<P>(props: P & WithCSS) {
 }
 
 export function themed<Props, Result>(key: string) {
-  return function themedApply<ApplyProps = Props, ApplyResult = Result>(props: ApplyProps & WithTheme<types.Theme>): ApplyResult | undefined  {
+  return function themedApply<ApplyProps = Props, ApplyResult = Result>(
+    props: ApplyProps & WithTheme<types.Theme>,
+  ): ApplyResult | undefined  {
     if (props.theme !== undefined) {
       return props.theme[key] as ApplyResult || undefined;
     }
@@ -52,6 +54,52 @@ export function themed<Props, Result>(key: string) {
     return undefined;
   };
 }
+
+export type InputComponent = types.StyledHTML<"input", types.InputProps>;
+export const Input: InputComponent = styled.input<types.InputProps>(
+  space,
+  width,
+  height,
+  fontSize,
+  lineHeight,
+  color,
+  flex,
+  order,
+  alignSelf,
+  justifySelf,
+  borderRadius,
+  borders,
+  borderColor,
+  bgColor,
+  textDecoration,
+  verticalAlign,
+  boxShadow,
+  themed("Input"),
+  css,
+);
+
+export type TextAreaComponent = types.StyledHTML<"textarea", types.TextAreaProps>;
+export const TextArea: TextAreaComponent = styled.textarea<types.TextAreaProps>(
+  space,
+  width,
+  height,
+  fontSize,
+  lineHeight,
+  color,
+  flex,
+  order,
+  alignSelf,
+  justifySelf,
+  borderRadius,
+  borders,
+  borderColor,
+  bgColor,
+  textDecoration,
+  verticalAlign,
+  boxShadow,
+  themed("TextArea"),
+  css,
+);
 
 export type BoxComponent = types.StyledHTML<"div", types.BoxProps>;
 export const Box: BoxComponent = styled.div<types.BoxProps>(

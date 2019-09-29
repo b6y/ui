@@ -6,12 +6,11 @@ import React from "react";
 import { injectIntl, MessageDescriptor, WrappedComponentProps } from "react-intl";
 
 import Label from "../../core/Label";
-import BaseSelectInput from "../../core/SelectInput";
-import * as types from "../../styled/types";
+import BaseSelectInput, { SelectInputProps as BaseSelectInputProps } from "../../core/SelectInput";
 import { genid } from "../commons";
 import ErrorBag from "../ErrorBag";
 
-export type SelectInputProps = types.BoxProps & FieldProps & WrappedComponentProps & {
+export type SelectInputProps = BaseSelectInputProps & FieldProps & WrappedComponentProps & {
   fieldId: number;
   debugId: boolean;
   isClearable: boolean;

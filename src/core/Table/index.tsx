@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import PropTypes from "prop-types";
 
-import { Box } from "../../styled";
+import { Box, BoxProps } from "../../styled";
 
 import { getSpace } from "../../styled/system";
 
@@ -27,18 +27,13 @@ padding: ${getSpace(2)};
 text-align: left;
 `;
 
-const Table = styled(Box.withComponent("table"))`
+const Table = styled(Box.withComponent("table"))<BoxProps<React.HTMLAttributes<HTMLTableElement>>>`
   & > * > ${TableRow}:first-of-type > ${TableColumn} {
     border-top: none;
   }
 `;
 
-Table.propTypes = {
-  spacing: PropTypes.oneOfType([PropTypes.number]),
-};
-
 Table.defaultProps = {
-  spacing: 2,
   width: 1,
   mb: 3,
 };

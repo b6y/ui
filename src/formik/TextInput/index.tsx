@@ -6,7 +6,7 @@ import React from "react";
 import { injectIntl, MessageDescriptor, WrappedComponentProps } from "react-intl";
 
 import Label from "../../core/Label";
-import BaseTextInput from "../../core/TextInput";
+import BaseTextInput, { TextInputProps as BaseTextInputProps } from "../../core/TextInput";
 
 import { genid } from "../commons";
 import ErrorBag from "../ErrorBag";
@@ -18,6 +18,7 @@ export type TextInputProps = FieldProps & WrappedComponentProps & {
   label: string | MessageDescriptor;
   placeholder: string | MessageDescriptor;
   disabledValue: string | MessageDescriptor;
+  inputProps?: BaseTextInputProps;
 };
 
 interface State {}
@@ -77,7 +78,7 @@ class TextInput extends React.PureComponent<TextInputProps, State> {
     return (
       <div>
         {labelComponent}
-        <BaseTextInput id={id} type="text" {...newProps.field} {...newProps} />
+        <BaseTextInput id={id} type="text" {...newProps.field} {...(newProps.inputProps || {})} />
         <ErrorBag mt={1} field={props.field.name} />
       </div>
     );
