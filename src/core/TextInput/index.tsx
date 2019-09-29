@@ -1,94 +1,55 @@
-import { translateSize } from "../../styled/system";
-import PropTypes from "prop-types";
-import * as R from "ramda";
 import React from "react";
-import { theme } from "styled-tools";
-
-import { Box } from "../../styled";
-
 import styled from "@emotion/styled";
+import * as R from "ramda";
 
-export const defaultState = {
-  defaultColor: "black",
-  defaultBorderColor: "gray",
-  hoverBorderColor: "cyan",
-  hoverColor: "black",
-  focusColor: "black",
-  focusBorderColor: "cyan",
-  focusShadowColor: "alphacyan",
-};
+import {
+  Box,
+  BoxProps,
+  Color,
+  getBgColor,
+  getBorderColor,
+  getFgColor,
+  getOutlineColor,
+  getSize,
+  Padding,
+  themed,
+  translateSize,
+} from "../../styled";
 
-export const states = {
-  default: defaultState,
-  primary: {
-    defaultColor: "black",
-    defaultBorderColor: "blue",
-    hoverBorderColor: "blue",
-    hoverColor: "black",
-    focusColor: "black",
-    focusBorderColor: "blue",
-    focusShadowColor: "alphablue",
-  },
-  secondary: {
-    defaultColor: "black",
-    defaultBorderColor: "darker",
-    hoverBorderColor: "darker",
-    hoverColor: "black",
-    focusColor: "black",
-    focusBorderColor: "darker",
-    focusShadowColor: "alphadarker",
-  },
-  success: {
-    defaultColor: "black",
-    defaultBorderColor: "green",
-    hoverBorderColor: "green",
-    hoverColor: "black",
-    focusColor: "black",
-    focusBorderColor: "green",
-    focusShadowColor: "alphagreen",
-  },
-  danger: {
-    defaultColor: "black",
-    defaultBorderColor: "red",
-    hoverBorderColor: "red",
-    hoverColor: "black",
-    focusColor: "black",
-    focusBorderColor: "red",
-    focusShadowColor: "alphared",
-  },
-  warning: {
-    defaultColor: "black",
-    defaultBorderColor: "yellow",
-    hoverBorderColor: "yellow",
-    hoverColor: "black",
-    focusColor: "black",
-    focusBorderColor: "yellow",
-    focusShadowColor: "alphayellow",
-  },
-  info: {
-    defaultColor: "black",
-    defaultBorderColor: "pink",
-    hoverBorderColor: "pink",
-    hoverColor: "black",
-    focusColor: "black",
-    focusBorderColor: "pink",
-    focusShadowColor: "alphapink",
-  },
+import { SvgIcon } from "../Icon";
+
+type TextInputProps = BoxProps & {
+  state: Color,
+  size: string,
 };
 
 const defaultSize = R.defaultTo(2);
+const iconMargin = getSize(1);
+const getRectangularPaddings = themed<TextInputProps, Padding[]>("rectangularPaddings");
+const getFontSizes = themed<TextInputProps, number[]>("fontSizes");
 
-const themeIt = (props) => {
+const themeHeight = (props: TextInputProps) => {
   const size = translateSize(defaultSize(props.size));
 
-  const padding: any = theme("rectangularPaddings")(props)[size];
-  const fontSize: any = theme("fontSizes")(props)[size];
+  const paddings = getRectangularPaddings(props);
+  const fontSizes = getFontSizes(props);
 
-  return {
-    fontSize: `${fontSize}rem`,
-    lineHeight: `1.5`,
-    padding: `${padding.y}rem ${padding.x}rem`,
-  };
+  if (paddings && fontSizes) {
+    const padding: Padding = paddings[size];
+    const fontSize: number = fontSizes[size];
+
+    return {
+      fontSize: `${fontSize}rem`,
+      // TODO: ???
+      lineHeight: `1.5`,
+      padding: `${padding.y}rem ${padding.x}rem`,
+    };
+  } else {
+    return {
+      // TODO: ???
+      lineHeight: `1.5`,
+    };
+  }
 };
 
 const DefaultStyledTextInput = Box.withComponent("input");
