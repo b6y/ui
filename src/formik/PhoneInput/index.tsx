@@ -13,8 +13,8 @@ import ErrorBag from "../ErrorBag";
 export type PhoneInputProps = FieldProps & WrappedComponentProps & {
   fieldId: number;
   debugId: boolean;
-  label: string | MessageDescriptor;
-  placeholder: string | MessageDescriptor;
+  label?: string | MessageDescriptor;
+  placeholder?: string | MessageDescriptor;
 };
 
 interface State {}
@@ -51,35 +51,43 @@ class PhoneInput extends React.PureComponent<PhoneInputProps, State> {
 
     const id = this.id(fieldId);
 
-    let { placeholder, label } = props;
+    const { placeholder, label, ...otherProps } = props;
+    let newLabel: string | undefined;
+    let newPlaceholer: string | undefined;
 
     if (!React.isValidElement(label) && R.is(Object, label)) {
-      label = intl.formatMessage(label as MessageDescriptor);
+      newLabel = intl.formatMessage(label as MessageDescriptor);
     }
 
     if (label && !placeholder && typeof label === "string") {
-      placeholder = label;
+      newPlaceholer = label;
     }
 
     if (R.is(Object, placeholder)) {
-      placeholder = intl.formatMessage(placeholder as MessageDescriptor);
+      newPlaceholer = intl.formatMessage(placeholder as MessageDescriptor);
     }
 
     let labelComponent = null;
-    if (label) {
+    if (newLabel) {
       labelComponent = (
         <Label htmlFor={id}>
-          {label} {debugId ? <b>id: {id}</b> : null}
+          {newLabel} {debugId ? <b>id: {id}</b> : null}
         </Label>
       );
     }
 
-    const newProps = { ...props, label, placeholder, id };
+    const newProps = { ...otherProps, id };
 
     return (
       <div>
         {labelComponent}
-        <BasePhoneInput id={id} onBlur={this.blurred} onChange={this.changed} value={field.value} {...newProps} />
+        <BasePhoneInput
+          id={id}
+          onChange={this.changed}
+          value={field.value}
+          placeholder={newPlaceholer}
+          {...newProps}
+        />
         <ErrorBag mt={1} field={field.name} />
       </div>
     );

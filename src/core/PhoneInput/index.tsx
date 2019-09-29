@@ -2,12 +2,10 @@ import styled from "@emotion/styled";
 import PropTypes from "prop-types";
 import * as R from "ramda";
 import React from "react";
-import { FormattedMessage } from "react-intl";
+import { MessageDescriptor } from "react-intl";
 import Phone from "react-phone-number-input/max";
-import { theme } from "styled-tools";
 
-import { Box } from "../../styled";
-import { translateSize } from "../../styled/system";
+import { Box, BoxProps, Padding, themed, translateSize } from "../../styled";
 
 export const defaultState = {
   defaultColor: "black",
@@ -18,6 +16,20 @@ export const defaultState = {
   focusBorderColor: "cyan",
   focusShadowColor: "alphacyan",
 };
+
+type StyledInputProps = BoxProps & {
+  onChange?: (value?: string) => void;
+  onBlur?: () => void;
+  onFocus?: () => void;
+  value?: string;
+  state?: keyof PhoneInputStates;
+  size?: string;
+  disabled?: boolean;
+};
+
+interface StyledInputState {
+  focused: boolean;
+}
 
 interface PhoneInputStateValues {
   [key: string]: any;
@@ -91,21 +103,34 @@ export const states: PhoneInputStates = {
 };
 
 const defaultSize = R.defaultTo(2);
+const getRectangularPaddings = themed<BoxProps, Padding[]>("rectangularPaddings");
+const getFontSizes = themed<BoxProps, number[]>("fontSizes");
 
-const themeIt = (props) => {
+const themeIt = (props: StyledInputProps) => {
   const size = translateSize(defaultSize(props.size));
 
-  const padding: any = theme("rectangularPaddings")(props)[size];
-  const fontSize: any = theme("fontSizes")(props)[size];
+  const paddings = getRectangularPaddings(props);
+  const fontSizes = getFontSizes(props);
 
-  return {
-    fontSize: `${fontSize}rem`,
-    lineHeight: `1.5`,
-    padding: `${padding.y}rem ${padding.x}rem`,
-  };
+  if (paddings && fontSizes) {
+    const padding: Padding = paddings[size];
+    const fontSize: number = fontSizes[size];
+
+    return {
+      fontSize: `${fontSize}rem`,
+      // TODO: ???
+      lineHeight: `1.5`,
+      padding: `${padding.y}rem ${padding.x}rem`,
+    };
+  } else {
+    return {
+      // TODO: ???
+      lineHeight: `1.5`,
+    };
+  }
 };
 
-const StyledInputBase = styled(Box)(
+const StyledInputBase = styled(Box)<StyledInputProps>(
   {
     color: "black",
     appearance: "none",
@@ -114,32 +139,32 @@ const StyledInputBase = styled(Box)(
     display: "block",
   },
   themeIt,
-  (props) => ({
-    "background": props.disabled ? theme("colors.light")(props) : theme("colors.white")(props),
-    "color": theme(`colors.${props.defaultColor}`, props.defaultColor)(props),
-    "border": `1px solid ${theme(
-      `colors.${props.defaultBorderColor}`,
-      props.defaultBorderColor,
-    )(props)}`,
-    "&:hover": {
-      border: `1px solid ${theme(
-        `colors.${props.hoverBorderColor}`,
-        props.hoverBorderColor,
-      )(props)}`,
-      color: theme(`colors.${props.hoverColor}`, props.hoverColor)(props),
-    },
-    "&:focus, &.focused": {
-      color: theme(`colors.${props.focusColor}`, props.focusColor)(props),
-      border: `1px solid ${theme(
-        `colors.${props.focusBorderColor}`,
-        props.focusBorderColor,
-      )(props)}`,
-      boxShadow: `0px 0px 0px 3px ${theme(
-        `colors.${props.focusShadowColor}`,
-        props.focusShadowColor,
-      )(props)}`,
-    },
-  }),
+  // (props) => ({
+  //   "background": props.disabled ? theme("colors.light")(props) : theme("colors.white")(props),
+  //   "color": theme(`colors.${props.defaultColor}`, props.defaultColor)(props),
+  //   "border": `1px solid ${theme(
+  //     `colors.${props.defaultBorderColor}`,
+  //     props.defaultBorderColor,
+  //   )(props)}`,
+  //   "&:hover": {
+  //     border: `1px solid ${theme(
+  //       `colors.${props.hoverBorderColor}`,
+  //       props.hoverBorderColor,
+  //     )(props)}`,
+  //     color: theme(`colors.${props.hoverColor}`, props.hoverColor)(props),
+  //   },
+  //   "&:focus, &.focused": {
+  //     color: theme(`colors.${props.focusColor}`, props.focusColor)(props),
+  //     border: `1px solid ${theme(
+  //       `colors.${props.focusBorderColor}`,
+  //       props.focusBorderColor,
+  //     )(props)}`,
+  //     boxShadow: `0px 0px 0px 3px ${theme(
+  //       `colors.${props.focusShadowColor}`,
+  //       props.focusShadowColor,
+  //     )(props)}`,
+  //   },
+  // }),
 );
 
 StyledInputBase.defaultProps = {
@@ -311,28 +336,8 @@ const InputWrapper = styled(StyledInputBase)`
   }
 `;
 
-interface StyledInputProps {
-  onChange?: (value?: string) => void;
-  onBlur?: () => void;
-  onFocus?: () => void;
-  placeholder: string | FormattedMessage.MessageDescriptor;
-  label: string | FormattedMessage.MessageDescriptor;
-  value: string;
-  state: keyof PhoneInputStates;
-}
-interface StyledInputState {
-  focused: boolean;
-}
-
 class StyledInput extends React.PureComponent<StyledInputProps, StyledInputState> {
   public static propTypes = {
-    placeholder: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.shape({
-        id: PropTypes.string,
-        defaultMessage: PropTypes.string,
-      }),
-    ]),
     size: PropTypes.string,
     state: PropTypes.string,
   };
@@ -342,8 +347,8 @@ class StyledInput extends React.PureComponent<StyledInputProps, StyledInputState
     size: "md",
   };
 
-  constructor(a) {
-    super(a);
+  constructor(props: StyledInputProps) {
+    super(props);
 
     this.onChange = this.onChange.bind(this);
     this.onFocus = this.onFocus.bind(this);
@@ -354,10 +359,10 @@ class StyledInput extends React.PureComponent<StyledInputProps, StyledInputState
     };
   }
 
-  public onChange(value) {
+  public onChange(value: any) {
     if (R.isNil(value) || R.isEmpty(value)) {
       if (this.props.onChange) {
-        this.props.onChange(null);
+        this.props.onChange(undefined);
       }
     } else {
       if (this.props.onChange) {
@@ -388,15 +393,20 @@ class StyledInput extends React.PureComponent<StyledInputProps, StyledInputState
     const filteredProps = R.omit(["state", "field", "onBlur", "onChange", "form"], this.props);
 
     const state = states[this.props.state || "default"];
-    const newFilteredProps = { ...state, ...filteredProps };
+    const newFilteredProps = { state: this.props.state, ...state, ...filteredProps };
+
+    let className: string | undefined;
+    if (focused) {
+      className = "focused";
+    }
 
     return (
-      <InputWrapper {...newFilteredProps} className={focused && "focused"}>
+      <InputWrapper {...newFilteredProps} className={className}>
         <Phone {...filteredProps}
-               onFocus={this.onFocus}
-               onBlur={this.onBlur}
+               // onFocus={this.onFocus}
+               // onBlur={this.onBlur}
                onChange={this.onChange}
-               value={value} />
+               value={value || ""} />
       </InputWrapper>
     );
   }
