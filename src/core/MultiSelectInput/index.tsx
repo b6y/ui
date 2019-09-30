@@ -3,17 +3,19 @@ import { FieldProps } from "formik";
 import * as R from "ramda";
 import React from "react";
 import AsyncSelect from "react-select/async";
-import { getValue, translateSize } from "../../styled/system";
-import Theme from "../../types/theme";
+import { getValue, translateSize, Theme } from "../../styled";
 import { Adapter } from "../SelectInput/adapter";
 
 import * as emotion from "@emotion/core";
 
 import { Styles as ReactSelectStyles } from "react-select/src/styles";
+import { OptionProps } from "react-select/src/components/Option";
+import { MenuListComponentProps } from "react-select/src/components/Menu";
+import { SingleValueProps } from "react-select/src/components/SingleValue";
 
 const defaultSize = R.defaultTo(2);
 
-const height = (size, theme) => {
+const height = (size: any, theme: Theme) => {
   const translatedSize = translateSize(defaultSize(size));
 
   const padding: any = theme.rectangularPaddings[translatedSize];
@@ -29,7 +31,7 @@ const height = (size, theme) => {
   };
 };
 
-const customStyles = (size, theme: Theme): ReactSelectStyles => ({
+const customStyles = (size: any, theme: Theme): ReactSelectStyles => ({
   input: (base) => ({
     ...base,
     label: "input",
@@ -154,26 +156,26 @@ const customStyles = (size, theme: Theme): ReactSelectStyles => ({
   }),
 });
 
-interface Props extends FieldProps {
+export interface MultiSelectInputProps extends FieldProps {
   options: Adapter;
   theme: Theme;
   id: any;
   isClearable: boolean;
 }
 
-interface State {
+export interface MultiSelectInputState {
   options: any[];
   loading: boolean;
   value?: any[];
 }
 
-const CustomOption = (props) => {
+const CustomOption = (props: OptionProps<any>) => {
   const { children, className, cx, getStyles, isDisabled, isFocused, isSelected, innerRef, innerProps } = props;
   return (
     <div
       ref={innerRef}
       className={cx(
-        emotion.css(getStyles("option", props)),
+        emotion.css(getStyles("option", props)).styles,
         {
           "option": true,
           "option--is-disabled": isDisabled,
@@ -181,7 +183,7 @@ const CustomOption = (props) => {
           "option--is-selected": isSelected,
         },
         className,
-      )}
+      ) as string}
       {...innerProps}
     >
       {children}
@@ -189,18 +191,18 @@ const CustomOption = (props) => {
   );
 };
 
-const CustomDisplayOption = (props) => {
+const CustomDisplayOption = (props: SingleValueProps<any>) => {
   const { children, className, cx, getStyles, isDisabled, innerProps } = props;
   return (
     <div
       className={cx(
-        emotion.css(getStyles("singleValue", props)),
+        emotion.css(getStyles("singleValue", props)).styles,
         {
           "single-value": true,
           "single-value--is-disabled": isDisabled,
         },
         className,
-      )}
+      ) as string}
       {...innerProps}
     >
       {children}
@@ -208,12 +210,12 @@ const CustomDisplayOption = (props) => {
   );
 };
 
-const MenuList = (props) => {
+const MenuList = (props: MenuListComponentProps<any>) => {
   const { children, className, cx, getStyles, isMulti, innerRef } = props;
   return (
     <div
       className={cx(
-        emotion.css(getStyles("menuList", props)),
+        emotion.css(getStyles("menuList", props)).styles,
         {
           "menu-list": true,
           "menu-list--is-multi": isMulti,
@@ -227,16 +229,15 @@ const MenuList = (props) => {
   );
 };
 
-class MultiSelectInput extends React.PureComponent<Props, State> {
+class MultiSelectInput extends React.PureComponent<MultiSelectInputProps, MultiSelectInputState> {
   // HAHA.
-  public isMounted: boolean;
+  public isMounted: boolean = false;
 
-  constructor(props, context) {
+  constructor(props: MultiSelectInputProps, context: any) {
     super(props, context);
 
     this.state = {
       options: [],
-      value: null,
       loading: true,
     };
 
@@ -244,7 +245,7 @@ class MultiSelectInput extends React.PureComponent<Props, State> {
     this.onBlur = this.onBlur.bind(this);
   }
 
-  public setOption(value) {
+  public setOption(value: any) {
     if (value !== null && Array.isArray(value) && value.length > 0) {
       this.setState({ loading: true });
 
@@ -279,7 +280,7 @@ class MultiSelectInput extends React.PureComponent<Props, State> {
     this.isMounted = false;
   }
 
-  public componentDidUpdate(prevProps: Props) {
+  public componentDidUpdate(prevProps: MultiSelectInputProps) {
     const { field } = this.props;
     const { field: oldField } = prevProps;
 
@@ -303,7 +304,7 @@ class MultiSelectInput extends React.PureComponent<Props, State> {
     }
   }
 
-  public onChange(value) {
+  public onChange(value: any) {
     let values = [];
     if (value !== null && Array.isArray(value) && value.length > 0) {
       values = value.map((o) => o.value);
@@ -355,8 +356,4 @@ class MultiSelectInput extends React.PureComponent<Props, State> {
   }
 }
 
-const ConfiguredMultiSelectInput = withTheme(MultiSelectInput);
-
-const WrappedMultiSelectInput = (props) => <ConfiguredMultiSelectInput {...props} />;
-
-export default WrappedMultiSelectInput;
+export default MultiSelectInput;

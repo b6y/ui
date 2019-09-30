@@ -1,9 +1,16 @@
+import { AnyAction } from "redux";
+
 import { SET_STATE } from "./constants";
 
 // The initial state of the App
 const initialState = {};
 
-function loadingComponentReducer(state = initialState, action) {
+interface Action extends AnyAction {
+  type: string;
+  data?: any;
+}
+
+function loadingComponentReducer(state = initialState, action: Action) {
   switch (action.type) {
     case SET_STATE:
       return {

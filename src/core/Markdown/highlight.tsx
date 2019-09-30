@@ -23,15 +23,10 @@ class Highlight extends React.PureComponent<Props> {
 
   public codeEl: any;
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
 
     this.codeEl = null;
-    this.setRef = this.setRef.bind(this);
-  }
-
-  public setRef(el) {
-    this.codeEl = el;
   }
 
   public componentDidMount() {
@@ -40,7 +35,7 @@ class Highlight extends React.PureComponent<Props> {
   public componentDidUpdate() {
   }
 
-  public highlightCode(code) {
+  public highlightCode(code: string) {
     if (this.props.language) {
       return Prism.highlight(code, Prism.languages[this.props.language], this.props.language);
     } else {

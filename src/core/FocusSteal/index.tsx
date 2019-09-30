@@ -2,7 +2,7 @@ import React from "react";
 
 import Context from "./context";
 
-import { FocusStealEvent, Props, State } from "./types";
+import { FocusStealEvent, FocusStealProps, State } from "./types";
 
 export function notContains<R1 extends HTMLElement, R2 extends HTMLElement>(
   containerRef: React.RefObject<HTMLElement>,
@@ -25,7 +25,7 @@ export function notContains<R1 extends HTMLElement, R2 extends HTMLElement>(
   };
 }
 
-class FocusStealConsumer extends React.PureComponent<Props, State> {
+class FocusStealConsumer extends React.PureComponent<FocusStealProps, State> {
   public static contextType = Context;
 
   public static defaultProps = {
@@ -34,7 +34,7 @@ class FocusStealConsumer extends React.PureComponent<Props, State> {
 
   public context!: React.ContextType<typeof Context>;
 
-  constructor(props) {
+  constructor(props: FocusStealProps) {
     super(props);
 
     this.stolen = this.stolen.bind(this);
@@ -47,11 +47,15 @@ class FocusStealConsumer extends React.PureComponent<Props, State> {
   }
 
   public componentDidMount() {
-    this.context.bus.addListener("stolen", this.stolen);
+    if (this.context.bus) {
+      this.context.bus.addListener("stolen", this.stolen);
+    }
   }
 
   public componentWillUnmount() {
-    this.context.bus.removeListener("stolen", this.stolen);
+    if (this.context.bus) {
+      this.context.bus.removeListener("stolen", this.stolen);
+    }
   }
 
   public render() {

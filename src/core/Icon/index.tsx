@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
 import React from "react";
-import { getColor, getFgColor, getBgColor, Color } from "../../styled/system";
+import { Color, getBgColor, getColor, getFgColor, WithStyled } from "../../styled";
 
-interface ISvgIconProps extends React.SVGProps<SVGSVGElement> {
+type SvgIconProps = WithStyled & {
   mr?: number;
   ml?: number;
   /**
@@ -11,13 +11,14 @@ interface ISvgIconProps extends React.SVGProps<SVGSVGElement> {
   nm?: boolean;
   color?: string;
 }
-const SvgIcon = styled.svg<ISvgIconProps>(
-  `
-    margin-right: ${({ mr }) => `${mr}px`};
-    margin-left: ${({ ml }) => `${ml}px`};
-    shape-rendering: geometricPrecision;
-    margin-bottom: ${({nm}) => nm ? "0" : ".125rem"};
-  `,
+
+const SvgIcon = styled("svg")<SvgIconProps>(
+  (props) => ({
+    marginLeft: `${props.ml}px`,
+    marginRight: `${props.mr}px`,
+    shapeRendering: "geometricPrecision",
+    marginBottom: props.nm ? "0" : ".125rem",
+  }),
   (props) => {
     if (props.color) {
       return { color: getBgColor(props.color as Color)(props) };
@@ -27,20 +28,20 @@ const SvgIcon = styled.svg<ISvgIconProps>(
   },
 );
 
-interface IProps extends React.SVGProps<SVGSVGElement> {
+export type IconProps = React.SVGProps<SVGSVGElement> & WithStyled & {
   name: string;
   size?: number;
   mr?: number;
   ml?: number;
   nm?: boolean;
-}
+};
 
 const Icon = React.forwardRef(function Icon(
-  props: IProps,
+  props: IconProps,
   ref: React.Ref<SVGSVGElement>,
 ) {
   const {
-    name, size = 16, mr = 0, ml = 0, nm = false
+    name, size = 16, mr = 0, ml = 0, nm = false,
   } = props;
 
   return (
@@ -48,7 +49,7 @@ const Icon = React.forwardRef(function Icon(
       <use xlinkHref={`#${name}`} />
     </SvgIcon>
   );
-})
+});
 
 export { SvgIcon };
 

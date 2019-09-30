@@ -2,11 +2,22 @@ import React from "react";
 
 import PropTypes from "prop-types";
 
-const RawComponent = (props) => {
+interface RawComponentProps {
+  input?: { value: string },
+  defaultValue?: string
+}
+
+const RawComponent = (props: RawComponentProps) => {
   const {
-    input: { value },
+    input,
     defaultValue,
   } = props;
+
+  let value: string | undefined = undefined;
+
+  if (input) {
+    value = input.value;
+  }
 
   if (!value) {
     return <span>{defaultValue}</span>;

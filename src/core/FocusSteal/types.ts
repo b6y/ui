@@ -1,11 +1,11 @@
 import EventEmitter from "eventemitter3";
 
-import { Box as BoxType } from "../../styled/types";
+import { BoxProps } from "../../styled";
 
 export interface State {
 }
 
-export interface Props extends BoxType {
+export type FocusStealProps = BoxProps & {
   enabled?: boolean;
   onSteal: (evt: FocusStealEvent) => void;
 }
@@ -20,5 +20,5 @@ export interface PropsWithContext {
 }
 
 export interface FocusStealContext {
-  bus: EventEmitter;
+  bus?: EventEmitter;
 }

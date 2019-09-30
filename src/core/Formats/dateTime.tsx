@@ -3,11 +3,22 @@ import React from "react";
 import { DateTime } from "luxon";
 import PropTypes from "prop-types";
 
-const DateTimeComponent = (props) => {
+interface DateTimeComponentProps {
+  input?: { value: string },
+  defaultValue?: string
+}
+
+const DateTimeComponent = (props: DateTimeComponentProps) => {
   const {
-    input: { value },
+    input,
     defaultValue,
   } = props;
+
+  let value: string | undefined = undefined;
+
+  if (input) {
+    value = input.value;
+  }
 
   if (!value) {
     return <span>{defaultValue}</span>;

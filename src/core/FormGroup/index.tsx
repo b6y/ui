@@ -16,8 +16,14 @@ const Label = styled.label`
   margin-bottom: 5px;
 `;
 
-const FormGroup = ({ label, children, compact }) => (
-  <Wrapper compact={compact}>
+interface FormGroupProps {
+  label: string | React.ReactNode,
+  children?: React.ReactNode,
+  compact?: boolean
+}
+
+const FormGroup = ({ label, children, compact }: FormGroupProps) => (
+  <Wrapper compact={!!compact}>
     <Label>{label}</Label>
     {children}
   </Wrapper>

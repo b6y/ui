@@ -9,7 +9,6 @@ export { default as FakeTextInput } from "./FakeTextInput";
 export { default as FormGroup } from "./FormGroup";
 export { default as Group } from "./Group";
 export { default as Icon } from "./Icon";
-export { default as DatePicker } from "./InlineDatePickerInput";
 export { default as Label } from "./Label";
 export { default as Loading } from "./Loading";
 export { default as LoadingIndicator } from "./LoadingIndicator";

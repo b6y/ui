@@ -1,7 +1,7 @@
 import React from "react";
 
 import { connect } from "react-redux";
-import { compose } from "redux";
+import { compose, Dispatch } from "redux";
 
 import LoadingIndicator from "../../core/LoadingIndicator";
 import injectReducer from "../../redux/injectReducer";
@@ -32,13 +32,13 @@ const Loading = (props: LoadingProps) => {
 
 const withReducer = injectReducer({ key: "@b6y/components/core/Loading", reducer });
 
-export function mapDispatchToProps(dispatch) {
+export function mapDispatchToProps(dispatch: Dispatch) {
   return {
-    setState: (name, state) => dispatch(actions.setState(name, state)),
+    setState: (name: string, state: boolean) => dispatch(actions.setState(name, state)),
   };
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: any) => {
   return ({
     loading: state["@b6y/components/core/Loading"] || null,
   });

@@ -14,7 +14,12 @@ const circleFadeDelay = keyframes`
   }
 `;
 
-const Circle = (props) => {
+interface CircleProps {
+  rotate?: number;
+  delay?: number;
+}
+
+const Circle = (props: CircleProps) => {
   const { rotate, delay } = props;
 
   const CirclePrimitive = styled.div`

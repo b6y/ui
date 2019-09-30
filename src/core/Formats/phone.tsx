@@ -2,11 +2,22 @@ import React from "react";
 
 import PropTypes from "prop-types";
 
-const RawComponent = (props) => {
+interface PhoneComponentProps {
+  input?: { value: string },
+  defaultValue?: string
+}
+
+const PhoneComponent = (props: PhoneComponentProps) => {
   const {
-    input: { value },
+    input,
     defaultValue,
   } = props;
+
+  let value: string | undefined = undefined;
+
+  if (input) {
+    value = input.value;
+  }
 
   if (!value) {
     return <span>{defaultValue}</span>;
@@ -17,15 +28,15 @@ const RawComponent = (props) => {
   return <span>{phone}</span>;
 };
 
-RawComponent.propTypes = {
+PhoneComponent.propTypes = {
   input: PropTypes.shape({
     value: PropTypes.string,
   }),
   defaultValue: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
 };
 
-RawComponent.defaultProps = {
+PhoneComponent.defaultProps = {
   defaultValue: "Vázio",
 };
 
-export default RawComponent;
+export default PhoneComponent;
