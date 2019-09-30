@@ -19,10 +19,10 @@ export type PopperPlacement = | "bottom-end"
 
 export interface Props<TContentProps, TRef> {
   anchorEl: React.RefObject<HTMLElement | undefined>;
-  children: React.ReactElement<TContentProps>;
+  children?: React.ReactElement<TContentProps>;
   open: boolean;
   placement: PopperPlacement;
-  flip: boolean;
+  flip?: boolean;
 }
 
 /**

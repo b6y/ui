@@ -1,10 +1,14 @@
 import styled from "@emotion/styled";
 import PropTypes from "prop-types";
 
-import { Box } from "../../styled";
+import { Box, BoxProps } from "../../styled";
 import { getSpace } from "../../styled/system";
 
-const BoxGroup = styled(Box)`
+type BoxGroupProps = BoxProps & {
+  spacing: number;
+};
+
+const BoxGroup = styled(Box)<BoxGroupProps>`
   display: flex;
   margin-left: ${(props) => getSpace(-props.spacing)(props)};
   margin-right: ${(props) => getSpace(-props.spacing)(props)};
@@ -13,10 +17,6 @@ const BoxGroup = styled(Box)`
     padding-right: ${(props) => getSpace(props.spacing)(props)};
   }
 `;
-
-BoxGroup.propTypes = {
-  spacing: PropTypes.oneOfType([PropTypes.number]),
-};
 
 BoxGroup.defaultProps = {
   spacing: 2,

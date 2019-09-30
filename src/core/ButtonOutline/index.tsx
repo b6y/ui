@@ -1,29 +1,57 @@
 import styled from "@emotion/styled";
 import * as R from "ramda";
 
-import { theme } from "styled-tools";
-import { Box } from "../../styled";
-import { getBorderColor, getOutlineColor, getSize, translateSize } from "../../styled/system";
+import {
+  ButtonBox,
+  ButtonBoxProps,
+  Color,
+  getBorderColor,
+  getFontColor,
+  getOutlineColor,
+  getSize,
+  Padding,
+  themed,
+  translateSize,
+  WithStyled,
+} from "../../styled";
 
 import { SvgIcon } from "../Icon";
 
-const defaultSize = R.defaultTo(2);
-const iconMargin = getSize(1);
-
-const themeHeight = (props) => {
-  const size = translateSize(defaultSize(props.size));
-
-  const padding: any = theme("rectangularPaddings")(props)[size];
-  const fontSize: any = theme("fontSizes")(props)[size];
-
-  return {
-    fontSize: `${fontSize}rem`,
-    lineHeight: `1.5`,
-    padding: `${padding.y}rem ${padding.x}rem`,
-  };
+export type ButtonOutlineProps = ButtonBoxProps & WithStyled & {
+  state: Color,
+  size: string,
 };
 
-const ButtonOutline = styled(Box.withComponent("button"))(
+const defaultSize = R.defaultTo(2);
+const iconMargin = getSize(1);
+const getRectangularPaddings = themed<ButtonOutlineProps, Padding[]>("rectangularPaddings");
+const getFontSizes = themed<ButtonOutlineProps, number[]>("fontSizes");
+
+const themeHeight = (props: ButtonOutlineProps) => {
+  const size = translateSize(defaultSize(props.size));
+
+  const paddings = getRectangularPaddings(props);
+  const fontSizes = getFontSizes(props);
+
+  if (paddings && fontSizes) {
+    const padding: Padding = paddings[size];
+    const fontSize: number = fontSizes[size];
+
+    return {
+      fontSize: `${fontSize}rem`,
+      // TODO: ???
+      lineHeight: `1.5`,
+      padding: `${padding.y}rem ${padding.x}rem`,
+    };
+  } else {
+    return {
+      // TODO: ???
+      lineHeight: `1.5`,
+    };
+  }
+};
+
+const ButtonOutline = styled(ButtonBox)<ButtonOutlineProps>(
   (props) => ({
     backgroundClip: "padding-box",
     background: "transparent",
@@ -65,16 +93,10 @@ const ButtonOutline = styled(Box.withComponent("button"))(
 );
 
 ButtonOutline.defaultProps = {
-  as: "button",
   type: "button",
   size: "md",
   borderRadius: 2,
   borderColor: "transparent",
-};
-
-ButtonOutline.displayName = "ButtonOutline";
-ButtonOutline.propTypes = {
-  ...ButtonOutline.propTypes,
 };
 
 export default ButtonOutline;

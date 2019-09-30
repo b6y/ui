@@ -4,155 +4,26 @@ import "react-dates/lib/css/_datepicker.css";
 import styled from "@emotion/styled";
 import * as R from "ramda";
 import React from "react";
-import { injectIntl, MessageDescriptor, WithIntlProps } from "react-intl";
+import { injectIntl, MessageDescriptor, WrappedComponentProps } from "react-intl";
 import { theme } from "styled-tools";
+import moment, { Moment } from "moment";
 
 import { DateRangePicker, DayPickerRangeController, DayPickerSingleDateController } from "react-dates";
 import { Box } from "../../styled";
-import { translateSize } from "../../styled/system";
+import { translateSize, Color } from "../../styled/system";
 import FocusSteal from "../FocusSteal";
 import { FocusStealEvent } from "../FocusSteal/types";
-import InlineDatePickerInput/*, { Props as InlineDatePickerInputProps }*/ from "../InlineDatePickerInput";
 import Popper from "../Popper";
 import Portal, { PortalRefType } from "../Portal";
-import moment, { Moment } from "moment";
+import TextInput from "../TextInput";
 
-export const defaultState = {
-  defaultColor: "black",
-  defaultBorderColor: "gray",
-  hoverBorderColor: "cyan",
-  hoverColor: "black",
-  focusColor: "black",
-  focusBorderColor: "cyan",
-  focusShadowColor: "alphacyan",
-};
-
-export const states = {
-  default: defaultState,
-  primary: {
-    defaultColor: "black",
-    defaultBorderColor: "blue",
-    hoverBorderColor: "blue",
-    hoverColor: "black",
-    focusColor: "black",
-    focusBorderColor: "blue",
-    focusShadowColor: "alphablue",
-  },
-  secondary: {
-    defaultColor: "black",
-    defaultBorderColor: "darker",
-    hoverBorderColor: "darker",
-    hoverColor: "black",
-    focusColor: "black",
-    focusBorderColor: "darker",
-    focusShadowColor: "alphadarker",
-  },
-  success: {
-    defaultColor: "black",
-    defaultBorderColor: "green",
-    hoverBorderColor: "green",
-    hoverColor: "black",
-    focusColor: "black",
-    focusBorderColor: "green",
-    focusShadowColor: "alphagreen",
-  },
-  danger: {
-    defaultColor: "black",
-    defaultBorderColor: "red",
-    hoverBorderColor: "red",
-    hoverColor: "black",
-    focusColor: "black",
-    focusBorderColor: "red",
-    focusShadowColor: "alphared",
-  },
-  warning: {
-    defaultColor: "black",
-    defaultBorderColor: "yellow",
-    hoverBorderColor: "yellow",
-    hoverColor: "black",
-    focusColor: "black",
-    focusBorderColor: "yellow",
-    focusShadowColor: "alphayellow",
-  },
-  info: {
-    defaultColor: "black",
-    defaultBorderColor: "pink",
-    hoverBorderColor: "pink",
-    hoverColor: "black",
-    focusColor: "black",
-    focusBorderColor: "pink",
-    focusShadowColor: "alphapink",
-  },
-};
-
-const defaultSize = R.defaultTo(2);
-
-const themeIt = (props) => {
-  const size = translateSize(defaultSize(props.size));
-
-  const padding: any = theme("rectangularPaddings")(props)[size];
-  const fontSize: any = theme("fontSizes")(props)[size];
-
-  return {
-    fontSize: `${fontSize}rem`,
-    lineHeight: `1.5`,
-    padding: `${padding.y}rem ${padding.x}rem`,
-  };
-};
-
-const DefaultStyledTextInput = Box.withComponent("input");
-
-const StyledTextInputBase = styled(React.forwardRef<any, any>(({ form, ...props }, ref) => (
-  <DefaultStyledTextInput ref={ref} {...props} />
-)))(
-  {
-    color: "black",
-    appearance: "none",
-    width: "100%",
-    outline: 0,
-    display: "block",
-  },
-  themeIt,
-  (props) => ({
-    "background": props.disabled ? theme("colors.light")(props) : theme("colors.white")(props),
-    "color": theme(`colors.${props.defaultColor}`, props.defaultColor)(props),
-    "border": `1px solid ${theme(
-      `colors.${props.defaultBorderColor}`,
-      props.defaultBorderColor,
-    )(props)}`,
-    "&:hover": {
-      border: `1px solid ${theme(
-        `colors.${props.hoverBorderColor}`,
-        props.hoverBorderColor,
-      )(props)}`,
-      color: theme(`colors.${props.hoverColor}`, props.hoverColor)(props),
-    },
-    "&:focus": {
-      color: theme(`colors.${props.focusColor}`, props.focusColor)(props),
-      border: `1px solid ${theme(
-        `colors.${props.focusBorderColor}`,
-        props.focusBorderColor,
-      )(props)}`,
-      boxShadow: `0px 0px 0px 3px ${theme(
-        `colors.${props.focusShadowColor}`,
-        props.focusShadowColor,
-      )(props)}`,
-    },
-  }),
-);
-
-StyledTextInputBase.defaultProps = {
-  borderColor: "gray",
-};
-
-interface Props extends WithIntlProps<Props> {
+interface DatePickerInputProps extends WrappedComponentProps {
   onChange?: (value: string | null) => void;
+  onBlur?: (event: React.SyntheticEvent) => void;
+  onFocus?: (event: React.SyntheticEvent) => void;
   visibleMonths?: number;
-  placeholder: string | MessageDescriptor;
-  label: string | MessageDescriptor;
-  value: string;
-  size: string;
-  state: string;
+  value?: any;
+  state?: Color;
 }
 
 interface State {
@@ -160,11 +31,9 @@ interface State {
   value: Moment | null;
 }
 
-class StyledTextInput extends React.Component<Props, State> {
-  public static defaultProps = {
+class DatePickerInput extends React.Component<DatePickerInputProps, State> {
+  public static defaultProps: Partial<DatePickerInputProps> = {
     state: "default",
-    size: "md",
-    borderRadius: 2,
     visibleMonths: 2,
   };
 
@@ -176,7 +45,7 @@ class StyledTextInput extends React.Component<Props, State> {
     value: null,
   };
 
-  constructor(props, context) {
+  constructor(props: DatePickerInputProps, context: any) {
     super(props, context);
 
     this.changed = this.changed.bind(this);
@@ -193,7 +62,7 @@ class StyledTextInput extends React.Component<Props, State> {
     }
   }
 
-  public componentDidUpdate(prevProps: Props, prevState: State) {
+  public componentDidUpdate(prevProps: DatePickerInputProps, prevState: State) {
     if (this.props.value !== prevProps.value) {
       this.setState({ value: moment(this.props.value) });
     }
@@ -233,12 +102,20 @@ class StyledTextInput extends React.Component<Props, State> {
   public blurred(evt: React.SyntheticEvent) {
     // console.error("blurred");
     this.hideDropdown();
+
+    if (this.props.onBlur) {
+      this.props.onBlur(evt);
+    }
   }
 
   public focused(evt: React.SyntheticEvent) {
     evt.persist();
     // console.error("focused", evt);
     this.showDropdown();
+
+    if (this.props.onFocus) {
+      this.props.onFocus(evt);
+    }
   }
 
   public focusStolen(evt: FocusStealEvent) {
@@ -266,7 +143,6 @@ class StyledTextInput extends React.Component<Props, State> {
     const { props } = this;
 
     const filteredProps = R.omit([
-      "state",
       "field",
       "onFocus",
       "onBlur",
@@ -283,20 +159,20 @@ class StyledTextInput extends React.Component<Props, State> {
     //   value: props.value || "",
     // } as InlineDatePickerInputProps;
 
-    const state = states[props.state || "default"];
-    const newFilteredProps = { ...state, ...filteredProps };
+    const newFilteredProps = { ...filteredProps };
 
     const input = (
-      <StyledTextInputBase
+      <TextInput
         readOnly
         ref={this.input}
         value={props.value ? this.props.intl.formatDate(props.value, { timeZone: "UTC" }) : ""}
         onFocus={this.focused}
+        onBlur={this.blurred}
         onClick={() => this.showDropdown()}
         {...newFilteredProps} />
     );
 
-    let portalContent = null;
+    let portalContent: React.ReactElement | undefined;
 
     if (this.state.visible) {
       portalContent = (
@@ -327,4 +203,4 @@ class StyledTextInput extends React.Component<Props, State> {
   }
 }
 
-export default injectIntl(StyledTextInput);
+export default injectIntl(DatePickerInput);

@@ -18,7 +18,7 @@ interface State {}
 
 class AceInput extends React.PureComponent<Props, State> {
   // HAHA.
-  public isMounted: boolean;
+  public isMounted: boolean = false;
 
   constructor(props: Props, context: any) {
     super(props, context);
@@ -35,7 +35,7 @@ class AceInput extends React.PureComponent<Props, State> {
     this.isMounted = false;
   }
 
-  public onChange(value) {
+  public onChange(value: any) {
     if (R.isNil(value)) {
       if (this.props.onChange) {
         this.props.onChange(null);

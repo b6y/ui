@@ -1,4 +1,4 @@
-import { History } from "history";
+import { History, createMemoryHistory } from "history";
 import { AnyAction, Reducer, Store } from "redux";
 
 import configureStore from "./redux/configureStore";
@@ -32,7 +32,7 @@ export class Definition {
     this.reducers = params.reducers || {};
 
     if (!params.history) {
-      throw new Error("`history` must be set");
+      params.history = createMemoryHistory();
     }
 
     this.history = params.history;

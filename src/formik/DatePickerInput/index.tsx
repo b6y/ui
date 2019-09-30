@@ -74,12 +74,18 @@ class DatePickerInput extends React.PureComponent<DatePickerInputProps, State> {
       );
     }
 
-    const newProps = { ...props, label, placeholder, id };
+    const newProps = { ...props, id };
 
     return (
       <div>
         {labelComponent}
-        <BaseInput id={id} onBlur={this.blurred} onChange={this.changed} value={field.value} {...newProps} />
+        <BaseInput
+          id={id}
+          onBlur={this.blurred}
+          onChange={this.changed}
+          value={field.value}
+          {...newProps}
+        />
         <ErrorBag mt={1} field={field.name} />
       </div>
     );
