@@ -1,33 +1,10 @@
 import styled from "@emotion/styled";
 
 import {
-  alignSelf,
-  borderColor,
-  borderRadius,
-  borders,
-  color,
-  flex,
-  fontSize,
-  order,
-  space,
-  width,
-} from "../../styled/system";
+  SpanBox,
+} from "../../styled";
 
-const css = (props) => props.css;
-
-const MutedText = styled.span(
-  space,
-  width,
-  fontSize,
-  color,
-  flex,
-  order,
-  alignSelf,
-  borderRadius,
-  borders,
-  borderColor,
-  css,
-);
+const MutedText = styled(SpanBox)();
 
 MutedText.defaultProps = {
   color: "gray",

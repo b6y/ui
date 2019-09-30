@@ -1,10 +1,15 @@
 import styled from "@emotion/styled";
 import PropTypes from "prop-types";
 
-import { Box } from "../../styled";
+import { Box, BoxProps } from "../../styled";
 import { getSpace } from "../../styled/system";
 
-const Padding = styled(Box)`
+type PaddingProps = BoxProps & {
+  inverse?: boolean;
+  spacing?: number;
+};
+
+const Padding = styled(Box)<PaddingProps>`
   display: flex;
   flex-direction: ${(props) => props.inverse ? "row-reverse" : "row"};
   & > * {
