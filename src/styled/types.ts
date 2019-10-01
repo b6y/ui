@@ -299,7 +299,7 @@ export type FormBoxProps<BaseProps = React.HTMLAttributes<HTMLFormElement>> =
 
 export type SpanBoxProps = BoxProps<React.HTMLAttributes<HTMLSpanElement>> & gentypes.WithTextDecoration;
 
-export type ButtonBoxProps = BoxProps<React.HTMLAttributes<HTMLButtonElement>> & gentypes.WithTextDecoration;
+export interface ButtonBoxProps extends BoxProps<React.HTMLAttributes<HTMLButtonElement>>, gentypes.WithTextDecoration {}
 
 export type FlexProps =
   & BoxProps

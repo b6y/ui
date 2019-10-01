@@ -1,12 +1,10 @@
-import { action } from "@storybook/addon-actions";
-import React from "react";
-import Button from "./index";
 import styled from "@emotion/styled";
-import { Color } from "../../styled";
+import { action } from "@storybook/addon-actions";
+import { storiesOf } from "@storybook/react";
+import React from "react";
 
-export default {
-  title: "Button",
-};
+import { Color } from "../../styled";
+import Button from "./index";
 
 const Wrapper = styled.div`
 display: flex;
@@ -25,14 +23,16 @@ const make = (size: string) => {
           return <Button key={state} state={state} size={size} onClick={action("clicked")}>{state}</Button>;
         })}
       </Wrapper>
-    )
+    );
   };
-}
+};
 
-export const xs = make("xs");
-export const sm = make("sm");
-export const md = make("md");
-export const lg = make("lg");
-export const xlg = make("xlg");
-export const xxlg = make("xxlg");
-export const xxxlg = make("xxxlg");
+const stories = storiesOf("Button", module);
+
+stories.add("md (Default)", make("md"));
+stories.add("xs", make("xs"));
+stories.add("sm", make("sm"));
+stories.add("lg", make("lg"));
+stories.add("xlg", make("xlg"));
+stories.add("xxlg", make("xxlg"));
+stories.add("xxxlg", make("xxxlg"));

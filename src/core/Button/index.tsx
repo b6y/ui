@@ -1,8 +1,9 @@
 import styled from "@emotion/styled";
 import * as R from "ramda";
+import React from "react";
 
 import {
-  Box,
+  ButtonBox,
   ButtonBoxProps,
   Color,
   getBgColor,
@@ -17,9 +18,14 @@ import {
 
 import { SvgIcon } from "../Icon";
 
-type ButtonProps = ButtonBoxProps & {
-  state: Color,
-  size: string,
+export interface ButtonProps extends ButtonBoxProps {
+  /**
+   * Value to display, either empty (" ") or "X" / "O".
+   *
+   * @default " "
+   **/
+  state: Color;
+  size: string;
 };
 
 const defaultSize = R.defaultTo(2);
@@ -51,7 +57,7 @@ const themeHeight = (props: ButtonProps) => {
   }
 };
 
-const Button = styled(Box.withComponent("button"))<ButtonProps>(
+const Button: React.SFC<ButtonProps> = styled(ButtonBox)<ButtonProps>(
   (props) => ({
     appearance: "none",
     backgroundColor: getBgColor(props.state)(props),
