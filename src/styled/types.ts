@@ -187,14 +187,14 @@ export interface Theme {
   shadows: string[];
   rectangularPaddings: Padding[];
   squarePaddings: Padding[];
-  Box?: BoxProps;
-  SpanBox?: SpanBoxProps;
-  ButtonBox?: ButtonBoxProps;
-  Flex?: FlexProps;
-  Text?: TextProps;
-  Heading?: HeadingProps;
-  Link?: LinkProps;
-  Image?: ImageProps;
+  Box?: BaseBoxProps;
+  SpanBox?: BaseSpanProps;
+  ButtonBox?: BaseButtonProps;
+  Flex?: BaseFlexProps;
+  Text?: BaseTextProps;
+  Heading?: BaseHeadingProps;
+  Anchor?: BaseAnchorProps;
+  Image?: BaseImageProps;
 
   [key: string]: any;
 }
@@ -219,131 +219,83 @@ export interface WithTheme<TTheme = Theme> {
   theme?: TTheme;
 }
 
-export type WithStyled<T = Theme> = WithTheme<T> & WithCSS;
+export interface WithStyled<T = Theme> extends WithTheme<T>, WithCSS {}
 
-export type BoxProps<BaseProps = React.HTMLAttributes<HTMLDivElement>> =
-  & BaseProps
-  & gentypes.WithFontWeight
-  & gentypes.WithSpace
-  & gentypes.WithHeight
-  & gentypes.WithWidth
-  & gentypes.WithFontSize
-  & gentypes.WithColor
-  & gentypes.WithFlex
-  & gentypes.WithOrder
-  & gentypes.WithAlignSelf
-  & gentypes.WithJustifySelf
-  & gentypes.WithBorderRadius
-  & gentypes.WithBorders
-  & gentypes.WithBorderColor
-  & gentypes.WithVerticalAlign
-  & gentypes.WithBoxShadow
-  & WithStyled;
+export interface BaseProps extends
+  gentypes.WithSpace,
+  gentypes.WithHeight,
+  gentypes.WithWidth,
+  gentypes.WithFlex,
+  gentypes.WithOrder,
+  gentypes.WithAlignSelf,
+  gentypes.WithJustifySelf,
+  gentypes.WithBorderRadius,
+  gentypes.WithBorders,
+  gentypes.WithBorderColor,
+  gentypes.WithVerticalAlign,
+  gentypes.WithBoxShadow,
+  WithStyled {}
 
-export type InputProps<BaseProps = React.InputHTMLAttributes<HTMLInputElement>> =
-  & BaseProps
-  & gentypes.WithFontWeight
-  & gentypes.WithSpace
-  & gentypes.WithHeight
-  & gentypes.WithWidth
-  & gentypes.WithFontSize
-  & gentypes.WithColor
-  & gentypes.WithFlex
-  & gentypes.WithOrder
-  & gentypes.WithAlignSelf
-  & gentypes.WithJustifySelf
-  & gentypes.WithBorderRadius
-  & gentypes.WithBorders
-  & gentypes.WithBorderColor
-  & gentypes.WithVerticalAlign
-  & gentypes.WithBoxShadow
-  & WithStyled;
+export interface HasTextProps extends
+  gentypes.WithFontWeight,
+  gentypes.WithFontSize,
+  gentypes.WithColor,
+  gentypes.WithTextDecoration {}
 
-export type TextAreaProps<BaseProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>> =
-  & BaseProps
-  & gentypes.WithFontWeight
-  & gentypes.WithSpace
-  & gentypes.WithHeight
-  & gentypes.WithWidth
-  & gentypes.WithFontSize
-  & gentypes.WithColor
-  & gentypes.WithFlex
-  & gentypes.WithOrder
-  & gentypes.WithAlignSelf
-  & gentypes.WithJustifySelf
-  & gentypes.WithBorderRadius
-  & gentypes.WithBorders
-  & gentypes.WithBorderColor
-  & gentypes.WithVerticalAlign
-  & gentypes.WithBoxShadow
-  & WithStyled;
+export interface BoxProps extends
+  Omit<React.HTMLAttributes<HTMLDivElement>, "color" | "css">,
+  BaseProps {}
 
-export type FormBoxProps<BaseProps = React.HTMLAttributes<HTMLFormElement>> =
-  & BaseProps
-  & gentypes.WithFontWeight
-  & gentypes.WithSpace
-  & gentypes.WithHeight
-  & gentypes.WithWidth
-  & gentypes.WithFontSize
-  & gentypes.WithColor
-  & gentypes.WithFlex
-  & gentypes.WithOrder
-  & gentypes.WithAlignSelf
-  & gentypes.WithJustifySelf
-  & gentypes.WithBorderRadius
-  & gentypes.WithBorders
-  & gentypes.WithBorderColor
-  & gentypes.WithVerticalAlign
-  & gentypes.WithBoxShadow
-  & WithStyled;
+export interface InputProps extends
+  Omit<React.InputHTMLAttributes<HTMLInputElement>, "color" | "css" | "size" | "width" | "height">,
+  BaseProps,
+  HasTextProps {}
 
-export type SpanBoxProps = BoxProps<React.HTMLAttributes<HTMLSpanElement>> & gentypes.WithTextDecoration;
+export interface TextAreaProps extends
+  Omit<React.InputHTMLAttributes<HTMLTextAreaElement>, "color" | "css" | "size" | "width" | "height">,
+  BaseProps,
+  HasTextProps {}
 
-export interface ButtonBoxProps extends BoxProps<React.HTMLAttributes<HTMLButtonElement>>, gentypes.WithTextDecoration {}
+export interface FormProps extends
+  Omit<React.HTMLAttributes<HTMLFormElement>, "color" | "css">,
+  BaseProps {}
 
-export type FlexProps =
-  & BoxProps
-  & gentypes.WithFlexWrap
-  & gentypes.WithFlexDirection
-  & gentypes.WithFlexBasis
-  & gentypes.WithAlignItems
-  & gentypes.WithJustifyContent;
+export interface SpanProps extends 
+  Omit<React.HTMLAttributes<HTMLSpanElement>, "color" | "css">,
+  BaseProps,
+  HasTextProps {}
 
-export type TextProps =
-  & BoxProps<React.HTMLAttributes<HTMLParagraphElement>>
-  & gentypes.WithFontFamily
-  & gentypes.WithFontWeight
-  & gentypes.WithTextAlign
-  & gentypes.WithLineHeight
-  & gentypes.WithLetterSpacing;
+export interface AnchorProps extends
+  Omit<React.HTMLAttributes<HTMLAnchorElement>, "color" | "css">,
+  BaseProps,
+  HasTextProps {}
 
-export type HeadingProps =
-  & BoxProps<React.HTMLAttributes<HTMLHeadingElement>>
-  & gentypes.WithFontFamily
-  & gentypes.WithFontWeight
-  & gentypes.WithTextAlign
-  & gentypes.WithLineHeight
-  & gentypes.WithLetterSpacing;
+export interface ButtonProps extends
+  Omit<React.HTMLAttributes<HTMLButtonElement>, "color" | "css">,
+  BaseProps,
+  HasTextProps {}
 
-export type LinkProps = BoxProps<React.HTMLAttributes<HTMLAnchorElement>>;
+export interface FlexProps extends
+  Omit<React.HTMLAttributes<HTMLDivElement>, "color" | "css">,
+  BaseProps,
+  gentypes.WithFlexWrap,
+  gentypes.WithFlexDirection,
+  gentypes.WithFlexBasis,
+  gentypes.WithAlignItems,
+  gentypes.WithJustifyContent {}
 
-export type ImageProps =
-  & React.HTMLAttributes<HTMLImageElement>
-  & gentypes.WithFontWeight
-  & gentypes.WithSpace
-  & gentypes.WithHeight
-  & gentypes.WithWidth
-  & gentypes.WithFontSize
-  & gentypes.WithColor
-  & gentypes.WithFlex
-  & gentypes.WithOrder
-  & gentypes.WithAlignSelf
-  & gentypes.WithJustifySelf
-  & gentypes.WithBorderRadius
-  & gentypes.WithBorders
-  & gentypes.WithBorderColor
-  & gentypes.WithVerticalAlign
-  & gentypes.WithBoxShadow
-  & WithStyled;
+export interface TextProps extends
+  Omit<React.HTMLAttributes<HTMLParagraphElement>, "color" | "css">,
+  BaseProps,
+  HasTextProps {}
+
+export interface BaseHeadingProps extends
+  Omit<React.HTMLAttributes<HTMLHeadingElement>, "color" | "css">,
+  BaseProps,
+  HasTextProps {}
+
+export interface ImageProps extends
+  Omit<React.HTMLAttributes<HTMLImageElement>, "css">,
+  BaseProps {}
 
 export * from "./generatedTypes";

@@ -1,4 +1,6 @@
+import React from "react";
 import styled from "@emotion/styled";
+import * as R from "ramda";
 
 import {
   alignContent,
@@ -55,8 +57,31 @@ export function themed<Props, Result>(key: string) {
   };
 }
 
+export type BoxComponent = types.StyledHTML<"div", types.BoxProps>;
+export const Box: BoxComponent = styled.div(
+  space,
+  width,
+  height,
+  fontSize,
+  lineHeight,
+  color,
+  flex,
+  order,
+  alignSelf,
+  justifySelf,
+  borderRadius,
+  borders,
+  borderColor,
+  bgColor,
+  textDecoration,
+  verticalAlign,
+  boxShadow,
+  themed("Box"),
+  css,
+);
+
 export type InputComponent = types.StyledHTML<"input", types.InputProps>;
-export const Input: InputComponent = styled.input<types.InputProps>(
+export const Input: InputComponent = styled.input(
   space,
   width,
   height,
@@ -79,7 +104,7 @@ export const Input: InputComponent = styled.input<types.InputProps>(
 );
 
 export type TextAreaComponent = types.StyledHTML<"textarea", types.TextAreaProps>;
-export const TextArea: TextAreaComponent = styled.textarea<types.TextAreaProps>(
+export const TextArea: TextAreaComponent = styled.textarea(
   space,
   width,
   height,
@@ -101,31 +126,8 @@ export const TextArea: TextAreaComponent = styled.textarea<types.TextAreaProps>(
   css,
 );
 
-export type BoxComponent = types.StyledHTML<"div", types.BoxProps>;
-export const Box: BoxComponent = styled.div<types.BoxProps>(
-  space,
-  width,
-  height,
-  fontSize,
-  lineHeight,
-  color,
-  flex,
-  order,
-  alignSelf,
-  justifySelf,
-  borderRadius,
-  borders,
-  borderColor,
-  bgColor,
-  textDecoration,
-  verticalAlign,
-  boxShadow,
-  themed("Box"),
-  css,
-);
-
-export type FormBoxComponent = types.StyledHTML<"form", types.FormBoxProps>;
-export const FormBox: FormBoxComponent = styled.form<types.FormBoxProps>(
+export type FormBoxComponent = types.StyledHTML<"form", types.FormProps>;
+export const FormBox: FormBoxComponent = styled.form(
   space,
   width,
   height,
@@ -147,7 +149,7 @@ export const FormBox: FormBoxComponent = styled.form<types.FormBoxProps>(
   css,
 );
 
-export type SpanBoxComponent = types.StyledHTML<"span", types.SpanBoxProps>;
+export type SpanBoxComponent = types.StyledHTML<"span", types.SpanProps>;
 export const SpanBox: SpanBoxComponent = styled.span(
   space,
   width,
@@ -170,7 +172,7 @@ export const SpanBox: SpanBoxComponent = styled.span(
   css,
 );
 
-export type ButtonBoxComponent = types.StyledHTML<"button", types.ButtonBoxProps>;
+export type ButtonBoxComponent = types.StyledHTML<"button", types.ButtonProps>;
 export const ButtonBox: ButtonBoxComponent =
   styled.button(
     space,
@@ -209,7 +211,8 @@ export const Flex: FlexComponent = styled(Box)(
 );
 
 export type TextComponent = types.Styled<types.BoxProps, types.TextProps>;
-export const Text: TextComponent = styled(Box.withComponent("p"))(
+export const Text: TextComponent = styled.p(
+  color,
   fontFamily,
   fontWeight,
   textAlign,
