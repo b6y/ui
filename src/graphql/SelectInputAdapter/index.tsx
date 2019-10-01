@@ -191,9 +191,13 @@ export const withGraphQLAdapter = <K extends string, P, S>(
     public context!: React.ContextType<typeof ApplicationContext>;
 
     public render() {
+      if (!this.context) {
+        return null;
+      }
+
       const adapter = new GraphQLAdapter(options, () => ({
         endpoint: options.endpoint,
-        headers: options.headers(this.context),
+        headers: options.headers(this.context!),
       }));
 
       const props: P & { children?: React.ReactNode } & Record<K, GraphQLAdapter> = {
