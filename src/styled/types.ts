@@ -187,14 +187,14 @@ export interface Theme {
   shadows: string[];
   rectangularPaddings: Padding[];
   squarePaddings: Padding[];
-  Box?: BaseBoxProps;
-  SpanBox?: BaseSpanProps;
-  ButtonBox?: BaseButtonProps;
-  Flex?: BaseFlexProps;
-  Text?: BaseTextProps;
-  Heading?: BaseHeadingProps;
-  Anchor?: BaseAnchorProps;
-  Image?: BaseImageProps;
+  Box?: BoxProps;
+  SpanBox?: SpanProps;
+  ButtonBox?: ButtonProps;
+  Flex?: FlexProps;
+  Text?: TextProps;
+  Heading?: HeadingProps;
+  Link?: LinkProps;
+  Image?: ImageProps;
 
   [key: string]: any;
 }
@@ -225,15 +225,16 @@ export interface BaseProps extends
   gentypes.WithSpace,
   gentypes.WithHeight,
   gentypes.WithWidth,
-  gentypes.WithFlex,
   gentypes.WithOrder,
   gentypes.WithAlignSelf,
   gentypes.WithJustifySelf,
   gentypes.WithBorderRadius,
   gentypes.WithBorders,
   gentypes.WithBorderColor,
+  gentypes.WithBgColor,
   gentypes.WithVerticalAlign,
   gentypes.WithBoxShadow,
+  gentypes.WithLineHeight,
   WithStyled {}
 
 export interface HasTextProps extends
@@ -260,12 +261,12 @@ export interface FormProps extends
   Omit<React.HTMLAttributes<HTMLFormElement>, "color" | "css">,
   BaseProps {}
 
-export interface SpanProps extends 
+export interface SpanProps extends
   Omit<React.HTMLAttributes<HTMLSpanElement>, "color" | "css">,
   BaseProps,
   HasTextProps {}
 
-export interface AnchorProps extends
+export interface LinkProps extends
   Omit<React.HTMLAttributes<HTMLAnchorElement>, "color" | "css">,
   BaseProps,
   HasTextProps {}
@@ -289,7 +290,7 @@ export interface TextProps extends
   BaseProps,
   HasTextProps {}
 
-export interface BaseHeadingProps extends
+export interface HeadingProps extends
   Omit<React.HTMLAttributes<HTMLHeadingElement>, "color" | "css">,
   BaseProps,
   HasTextProps {}

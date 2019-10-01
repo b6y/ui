@@ -1,261 +1,118 @@
-import React from "react";
 import styled from "@emotion/styled";
-import * as R from "ramda";
 
-import {
-  alignContent,
-  alignItems,
-  alignSelf,
-  bgColor,
-  borderColor,
-  borderRadius,
-  borders,
-  boxShadow,
-  color,
-  flex,
-  flexBasis,
-  flexDirection,
-  flexWrap,
-  fontFamily,
-  fontSize,
-  fontWeight,
-  height,
-  justifyContent,
-  justifyItems,
-  justifySelf,
-  letterSpacing,
-  lineHeight,
-  order,
-  space,
-  textAlign,
-  textDecoration,
-  verticalAlign,
-  width,
-  WithCSS,
-  WithTheme,
-} from "./system";
+import {theme} from "styled-tools";
 
+import {baseCompose, flexCompose, textCompose} from "./base";
+import { css, themed } from "./system";
 import * as types from "./types";
-
-import {
-  theme,
-} from "styled-tools";
-
-export function css<P>(props: P & WithCSS) {
-  return (props).css;
-}
-
-export function themed<Props, Result>(key: string) {
-  return function themedApply<ApplyProps = Props, ApplyResult = Result>(
-    props: ApplyProps & WithTheme<types.Theme>,
-  ): ApplyResult | undefined  {
-    if (props.theme !== undefined) {
-      return props.theme[key] as ApplyResult || undefined;
-    }
-
-    return undefined;
-  };
-}
 
 export type BoxComponent = types.StyledHTML<"div", types.BoxProps>;
 export const Box: BoxComponent = styled.div(
-  space,
-  width,
-  height,
-  fontSize,
-  lineHeight,
-  color,
-  flex,
-  order,
-  alignSelf,
-  justifySelf,
-  borderRadius,
-  borders,
-  borderColor,
-  bgColor,
-  textDecoration,
-  verticalAlign,
-  boxShadow,
-  themed("Box"),
-  css,
+    ...baseCompose,
+    themed("Box"),
+    css,
 );
 
 export type InputComponent = types.StyledHTML<"input", types.InputProps>;
 export const Input: InputComponent = styled.input(
-  space,
-  width,
-  height,
-  fontSize,
-  lineHeight,
-  color,
-  flex,
-  order,
-  alignSelf,
-  justifySelf,
-  borderRadius,
-  borders,
-  borderColor,
-  bgColor,
-  textDecoration,
-  verticalAlign,
-  boxShadow,
-  themed("Input"),
-  css,
+    ...baseCompose,
+    ...textCompose,
+    themed("Input"),
+    css,
 );
 
 export type TextAreaComponent = types.StyledHTML<"textarea", types.TextAreaProps>;
 export const TextArea: TextAreaComponent = styled.textarea(
-  space,
-  width,
-  height,
-  fontSize,
-  lineHeight,
-  color,
-  flex,
-  order,
-  alignSelf,
-  justifySelf,
-  borderRadius,
-  borders,
-  borderColor,
-  bgColor,
-  textDecoration,
-  verticalAlign,
-  boxShadow,
-  themed("TextArea"),
-  css,
+    ...baseCompose,
+    ...textCompose,
+    themed("TextArea"),
+    css,
 );
 
-export type FormBoxComponent = types.StyledHTML<"form", types.FormProps>;
-export const FormBox: FormBoxComponent = styled.form(
-  space,
-  width,
-  height,
-  fontSize,
-  lineHeight,
-  color,
-  flex,
-  order,
-  alignSelf,
-  justifySelf,
-  borderRadius,
-  borders,
-  borderColor,
-  bgColor,
-  textDecoration,
-  verticalAlign,
-  boxShadow,
-  themed("FormBox"),
-  css,
+export type FormComponent = types.StyledHTML<"form", types.FormProps>;
+export const Form: FormComponent = styled.form(
+    ...baseCompose,
+    themed("Form"),
+    css,
 );
 
-export type SpanBoxComponent = types.StyledHTML<"span", types.SpanProps>;
-export const SpanBox: SpanBoxComponent = styled.span(
-  space,
-  width,
-  height,
-  fontSize,
-  lineHeight,
-  color,
-  flex,
-  order,
-  alignSelf,
-  justifySelf,
-  borderRadius,
-  borders,
-  borderColor,
-  bgColor,
-  textDecoration,
-  verticalAlign,
-  boxShadow,
-  themed("SpanBox"),
-  css,
+export type SpanComponent = types.StyledHTML<"span", types.SpanProps>;
+export const Span: SpanComponent = styled.span(
+    ...baseCompose,
+    ...textCompose,
+    themed("SpanBox"),
+    css,
 );
 
-export type ButtonBoxComponent = types.StyledHTML<"button", types.ButtonProps>;
-export const ButtonBox: ButtonBoxComponent =
-  styled.button(
-    space,
-    width,
-    height,
-    fontSize,
-    lineHeight,
-    color,
-    flex,
-    order,
-    alignSelf,
-    justifySelf,
-    borderRadius,
-    borders,
-    borderColor,
-    textDecoration,
-    verticalAlign,
-    boxShadow,
+export type ButtonComponent = types.StyledHTML<"button", types.ButtonProps>;
+export const Button: ButtonComponent = styled.button(
+    ...baseCompose,
+    ...textCompose,
     themed("Box"),
     css,
-  );
+);
 
 export type FlexComponent = types.Styled<types.BoxProps, types.FlexProps>;
 export const Flex: FlexComponent = styled(Box)(
-  {
-    display: "flex",
-  },
-  flexWrap,
-  flexDirection,
-  alignItems,
-  justifyContent,
-  flexBasis,
-  alignContent,
-  justifyItems,
-  themed("Flex"),
+    ...baseCompose,
+    ...flexCompose,
+    {
+        display: "flex",
+    },
+    themed("Flex"),
 );
 
-export type TextComponent = types.Styled<types.BoxProps, types.TextProps>;
+export type TextComponent = types.StyledHTML<"p", types.TextProps>;
 export const Text: TextComponent = styled.p(
-  color,
-  fontFamily,
-  fontWeight,
-  textAlign,
-  lineHeight,
-  letterSpacing,
-  themed("Text"),
+    ...baseCompose,
+    ...textCompose,
+    themed("Text"),
+    css,
 );
 
-type HeadingComponent = types.Styled<types.BoxProps, types.HeadingProps>;
-export const Heading: HeadingComponent = styled(Text.withComponent("h2"))(
-  (props) => ({
-    borderBottom: `1px solid ${theme("colors.light")(props)}`,
-  }),
-  themed("Heading"),
+type Heading2Component = types.StyledHTML<"h2", types.HeadingProps>;
+export const Heading2: Heading2Component = styled.h2(
+    ...baseCompose,
+    ...textCompose,
+    (props) => ({
+        borderBottom: `1px solid ${theme("colors.light")(props)}`,
+    }),
+    themed("Heading"),
+    css,
 );
 
-Heading.defaultProps = {
-  m: 0,
-  p: 2,
-  mb: 2,
-  fontSize: 4,
-  fontWeight: "400",
+Heading2.defaultProps = {
+    m: 0,
+    p: 2,
+    mb: 2,
+    fontSize: 4,
+    fontWeight: "400",
 };
 
-export type LinkComponent = types.Styled<types.BoxProps, types.LinkProps>;
-export const Link: LinkComponent = styled(Box.withComponent("a"))(themed("Link"));
+export type LinkComponent = types.StyledHTML<"a", types.LinkProps>;
+export const Link: LinkComponent = styled.a(
+    ...baseCompose,
+    ...textCompose,
+    themed("Link"),
+    css,
+);
 
 Link.defaultProps = {
-  color: "blue",
+    color: "blue",
 };
 
 export type ImageComponent = types.StyledHTML<"img", types.ImageProps>;
 export const Image: ImageComponent = styled.img(
-  {
-    maxWidth: "100%",
-    height: "auto",
-  },
-  borderRadius,
-  themed("Image"),
+    ...baseCompose,
+    {
+        maxWidth: "100%",
+        height: "auto",
+    },
+    themed("Image"),
 );
 
 Image.defaultProps = {
-  m: 0,
+    m: 0,
 };
 
 export * from "./system";

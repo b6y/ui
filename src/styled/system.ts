@@ -50,6 +50,22 @@ export const get = <T>(obj: any, ...paths: string[]): T | null => R.pathOr<T | n
 export const themeGet = <T>(paths: string[], fallback: T | null) => (props: EnsureWithTheme): T | null =>
   get<T>(props.theme, ...paths) || fallback;
 
+export function css<P>(props: P & types.WithCSS) {
+  return (props).css;
+}
+
+export function themed<Props, Result>(key: string) {
+  return function themedApply<ApplyProps = Props, ApplyResult = Result>(
+      props: ApplyProps & types.WithTheme<types.Theme>,
+  ): ApplyResult | undefined {
+    if (props.theme !== undefined) {
+      return props.theme[key] as ApplyResult || undefined;
+    }
+
+    return undefined;
+  };
+}
+
 export const translateSize = <T>(size: string | number, defaultValue = 2) => {
   if (typeof size === "number") {
     return size;
@@ -879,6 +895,5 @@ export const genTypes = () => {
     console.log("}");
   }
 };
-
 
 export * from "./types";
