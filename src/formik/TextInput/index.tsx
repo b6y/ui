@@ -11,7 +11,7 @@ import BaseTextInput, { TextInputProps as BaseTextInputProps } from "../../core/
 import { genid } from "../commons";
 import ErrorBag from "../ErrorBag";
 
-export type TextInputProps = FieldProps & WrappedComponentProps & {
+export interface TextInputProps extends FieldProps, WrappedComponentProps {
   fieldId: number;
   debugId: boolean;
   disabled: boolean;
@@ -19,7 +19,7 @@ export type TextInputProps = FieldProps & WrappedComponentProps & {
   placeholder: string | MessageDescriptor;
   disabledValue: string | MessageDescriptor;
   inputProps?: BaseTextInputProps;
-};
+}
 
 interface State {}
 
@@ -78,7 +78,7 @@ class TextInput extends React.PureComponent<TextInputProps, State> {
     return (
       <div>
         {labelComponent}
-        <BaseTextInput id={id} type="text" {...newProps.field} {...(newProps.inputProps || {})} />
+        <BaseTextInput id={id} type="text" {...newProps.field} />
         <ErrorBag mt={1} field={props.field.name} />
       </div>
     );

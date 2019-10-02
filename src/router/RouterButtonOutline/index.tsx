@@ -4,15 +4,14 @@ import ButtonOutline from "../../core/ButtonOutline";
 import { BaseRouterLink } from "../RouterLink";
 
 import {
-  ButtonBoxProps,
+  ButtonProps,
   Color,
-  WithStyled,
 } from "../../styled";
 
-export type ButtonLinkOutlineProps = ButtonBoxProps & WithStyled & {
-  state: Color,
-  size: string,
-};
+export interface ButtonLinkOutlineProps extends ButtonProps {
+  state: Color;
+  size: string;
+}
 
 const ButtonLinkOutline = styled(ButtonOutline.withComponent(BaseRouterLink))<ButtonLinkOutlineProps>();
 

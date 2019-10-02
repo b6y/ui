@@ -19,12 +19,10 @@ import {
 
 import { SvgIcon } from "../Icon";
 
-export type TextInputProps = InputProps & {
-  state?: Color,
-  type?: string,
-  value?: any,
-  inputSize?: string,
-};
+export interface TextInputProps extends InputProps {
+  state?: Color;
+  inputSize?: string;
+}
 
 const defaultSize = R.defaultTo(2);
 const iconMargin = getSize(1);
@@ -55,7 +53,12 @@ const themeHeight = (props: TextInputProps) => {
   }
 };
 
-const TextInput = styled(Input)<TextInputProps>(
+const Wrapped = React.forwardRef((props: TextInputProps, ref: React.Ref<string>) => {
+  const { state, inputSize, ...rest } = props;
+  return <Input {...rest} />;
+})
+
+const TextInput = styled(Wrapped)<TextInputProps>(
   () => ({
     color: "black",
     appearance: "none",

@@ -3,8 +3,8 @@ import * as R from "ramda";
 import React from "react";
 
 import {
-  ButtonBox,
-  ButtonBoxProps,
+  Button as BaseButton,
+  ButtonProps as BaseButtonProps,
   Color,
   getBgColor,
   getBorderColor,
@@ -18,15 +18,10 @@ import {
 
 import { SvgIcon } from "../Icon";
 
-export interface ButtonProps extends ButtonBoxProps {
-  /**
-   * Value to display, either empty (" ") or "X" / "O".
-   *
-   * @default " "
-   **/
+export interface ButtonProps extends BaseButtonProps {
   state: Color;
   size: string;
-};
+}
 
 const defaultSize = R.defaultTo(2);
 const iconMargin = getSize(1);
@@ -57,7 +52,13 @@ const themeHeight = (props: ButtonProps) => {
   }
 };
 
-const Button: React.SFC<ButtonProps> = styled(ButtonBox)<ButtonProps>(
+const Wrapper = React.forwardRef((props: ButtonProps, ref: any) => {
+  const { state, size, ...otherProps } = props;
+  return <BaseButton ref={ref} {...otherProps} />;
+});
+
+const Button = styled(Wrapper)(
+  themeHeight,
   (props) => ({
     appearance: "none",
     backgroundColor: getBgColor(props.state)(props),
@@ -70,7 +71,6 @@ const Button: React.SFC<ButtonProps> = styled(ButtonBox)<ButtonProps>(
     border: `1px solid ${getBorderColor(props.state)(props)}`,
     color: getFgColor(props.state)(props),
   }),
-  themeHeight,
   (props) => {
     return {
       "&[disabled]": {

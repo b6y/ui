@@ -7,44 +7,27 @@ import { NavLink, NavLinkProps } from "react-router-dom";
 import { css, themed, WithStyled } from "../../styled";
 
 import {
-  alignSelf,
-  borderColor,
-  borderRadius,
-  borders,
-  color,
-  flex,
-  fontSize,
-  getOutlineColor,
-  getRadii,
+  BaseProps,
+  HasTextProps,
   getSpace,
-  order,
-  space,
-  width,
-  WithAlignSelf,
-  WithBorderColor,
-  WithBorderRadius,
-  WithBorders,
-  WithColor,
-  WithFlex,
-  WithFontSize,
-  WithOrder,
-  WithSpace,
-  WithWidth,
+  getOutlineColor,getRadii,
 } from "../../styled";
 
-export type RouterLinkProps =
-  & NavLinkProps
-  & WithSpace
-  & WithWidth
-  & WithFontSize
-  & WithColor
-  & WithFlex
-  & WithOrder
-  & WithAlignSelf
-  & WithBorderRadius
-  & WithBorders
-  & WithBorderColor
-  & WithStyled;
+import { baseCompose, textCompose } from "../../styled/base";
+
+export const routerLinkProps: Array<keyof NavLinkProps> = [
+  "activeClassName",
+  "activeStyle",
+  "exact",
+  "strict",
+  "isActive",
+  "location",
+  "to",
+  "replace",
+  "innerRef",
+];
+
+export interface RouterLinkProps extends Omit<NavLinkProps, "css" | "color">, BaseProps, HasTextProps {}
 
 export const BaseRouterLink = styled(React.forwardRef((props: RouterLinkProps, ref: React.Ref<HTMLAnchorElement>) => {
   // Props removed because of `NavLink` conflicts
@@ -52,16 +35,8 @@ export const BaseRouterLink = styled(React.forwardRef((props: RouterLinkProps, r
 
   return <NavLink {...actualProps} innerRef={ref} />;
 }))(
-  space,
-  width,
-  fontSize,
-  color,
-  flex,
-  order,
-  alignSelf,
-  borderRadius,
-  borders,
-  borderColor,
+  ...baseCompose,
+  ...textCompose,
   themed("Link"),
   css,
 );

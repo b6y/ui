@@ -2,6 +2,7 @@ import { StyledComponent } from "@emotion/styled";
 import React from "react";
 
 import * as gentypes from "./generatedTypes";
+import { jsx } from "@emotion/core";
 
 export type Color =
   | "brand"
@@ -244,40 +245,40 @@ export interface HasTextProps extends
   gentypes.WithTextDecoration {}
 
 export interface BoxProps extends
-  Omit<React.HTMLAttributes<HTMLDivElement>, "color" | "css">,
+  Omit<JSX.IntrinsicElements["div"], "color" | "css" | "ref">,
   BaseProps {}
 
 export interface InputProps extends
-  Omit<React.InputHTMLAttributes<HTMLInputElement>, "color" | "css" | "size" | "width" | "height">,
+  Omit<JSX.IntrinsicElements["input"], "color" | "css" | "ref" | "size" | "width" | "height">,
   BaseProps,
   HasTextProps {}
 
 export interface TextAreaProps extends
-  Omit<React.InputHTMLAttributes<HTMLTextAreaElement>, "color" | "css" | "size" | "width" | "height">,
+  Omit<JSX.IntrinsicElements["textarea"], "color" | "css" | "ref" | "size" | "width" | "height">,
   BaseProps,
   HasTextProps {}
 
 export interface FormProps extends
-  Omit<React.HTMLAttributes<HTMLFormElement>, "color" | "css">,
+  Omit<JSX.IntrinsicElements["form"], "color" | "css" | "ref">,
   BaseProps {}
 
 export interface SpanProps extends
-  Omit<React.HTMLAttributes<HTMLSpanElement>, "color" | "css">,
+  Omit<JSX.IntrinsicElements["span"], "color" | "css" | "ref">,
   BaseProps,
   HasTextProps {}
 
 export interface LinkProps extends
-  Omit<React.HTMLAttributes<HTMLAnchorElement>, "color" | "css">,
+  Omit<JSX.IntrinsicElements["a"], "color" | "css" | "ref">,
   BaseProps,
   HasTextProps {}
 
 export interface ButtonProps extends
-  Omit<React.HTMLAttributes<HTMLButtonElement>, "color" | "css">,
+  Omit<JSX.IntrinsicElements["button"], "color" | "css" | "ref">,
   BaseProps,
   HasTextProps {}
 
 export interface FlexProps extends
-  Omit<React.HTMLAttributes<HTMLDivElement>, "color" | "css">,
+  Omit<JSX.IntrinsicElements["div"], "color" | "css" | "ref">,
   BaseProps,
   gentypes.WithFlexWrap,
   gentypes.WithFlexDirection,
@@ -286,17 +287,17 @@ export interface FlexProps extends
   gentypes.WithJustifyContent {}
 
 export interface TextProps extends
-  Omit<React.HTMLAttributes<HTMLParagraphElement>, "color" | "css">,
+  Omit<JSX.IntrinsicElements["p"], "color" | "css" | "ref">,
   BaseProps,
   HasTextProps {}
 
 export interface HeadingProps extends
-  Omit<React.HTMLAttributes<HTMLHeadingElement>, "color" | "css">,
+  Omit<JSX.IntrinsicElements["h1"], "color" | "css" | "ref">,
   BaseProps,
   HasTextProps {}
 
 export interface ImageProps extends
-  Omit<React.HTMLAttributes<HTMLImageElement>, "css">,
+  Omit<JSX.IntrinsicElements["img"], "color" | "css" | "ref" | "size" | "width" | "height">,
   BaseProps {}
 
 export * from "./generatedTypes";

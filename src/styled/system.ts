@@ -4,8 +4,8 @@ import * as R from "ramda";
 import * as gentypes from "./generatedTypes";
 import * as types from "./types";
 
-type EnsureWithTheme = {
-  theme: types.Theme;
+interface EnsureWithTheme {
+  theme: types.Theme; 
 }
 
 // utils
@@ -234,7 +234,10 @@ export const getColor = (color: string) => (props: any): string | null => {
   return get<string>(colors, color);
 };
 
-export const getBgColor = (color: types.Color, modifier?: types.Modifier) => (props: EnsureWithTheme): string | undefined => {
+export const getBgColor = (
+  color: types.Color,
+  modifier?: types.Modifier,
+) => (props: EnsureWithTheme): string | undefined => {
   if (props && props.theme) {
     const colors = props.theme.colors;
     const targetColor = props.theme.defaults.bg[color];
@@ -249,7 +252,10 @@ export const getBgColor = (color: types.Color, modifier?: types.Modifier) => (pr
   }
 };
 
-export const getBorderColor = (color: types.Color, modifier?: types.Modifier) => <P>(props: P & EnsureWithTheme): string | undefined => {
+export const getBorderColor = (
+  color: types.Color,
+  modifier?: types.Modifier,
+) => <P>(props: P & EnsureWithTheme): string | undefined => {
   if (props && props.theme) {
     const colors = props.theme.colors;
     const targetColor = props.theme.defaults.border[color];
@@ -264,7 +270,10 @@ export const getBorderColor = (color: types.Color, modifier?: types.Modifier) =>
   }
 };
 
-export const getOutlineColor = (color: types.Color, modifier?: types.Modifier) => (props: EnsureWithTheme): string | undefined => {
+export const getOutlineColor = (
+  color: types.Color,
+  modifier?: types.Modifier,
+) => (props: EnsureWithTheme): string | undefined => {
   if (props && props.theme) {
     const colors = props.theme.colors;
     const targetColor = props.theme.defaults.outline[color];
@@ -279,7 +288,10 @@ export const getOutlineColor = (color: types.Color, modifier?: types.Modifier) =
   }
 };
 
-export const getFgColor = (color: types.Color, modifier?: types.Modifier) => (props: EnsureWithTheme): string | undefined => {
+export const getFgColor = (
+  color: types.Color,
+  modifier?: types.Modifier,
+) => (props: EnsureWithTheme): string | undefined => {
   if (props && props.theme) {
     const colors = props.theme.colors;
     const targetColor = props.theme.defaults.fg[color];
@@ -294,7 +306,10 @@ export const getFgColor = (color: types.Color, modifier?: types.Modifier) => (pr
   }
 };
 
-export const getFontColor = (color: types.Color, modifier?: types.Modifier) => (props: EnsureWithTheme): string | undefined => {
+export const getFontColor = (
+  color: types.Color,
+  modifier?: types.Modifier,
+) => (props: EnsureWithTheme): string | undefined => {
   if (props && props.theme) {
     const colors = props.theme.colors;
     const targetColor = props.theme.defaults.font[color];
@@ -337,6 +352,10 @@ export const getFontSize = (n: any) => (props: EnsureWithTheme) => {
 
   return getStyle(n);
 };
+
+// space props
+export const spaceProps: Array<keyof gentypes.WithSpace> =
+  ["m", "mt", "mr", "mb", "ml", "mx", "my", "p", "pt", "pr", "pb", "pl", "px", "py"];
 
 export const space = <P>(props: P & EnsureWithTheme & gentypes.WithSpace): any => {
   const keys = Object.keys(props)
@@ -406,17 +425,30 @@ space.propTypes = {
   px: propTypes.responsive,
   py: propTypes.responsive,
 };
+// --
 
 // styles
+
+// width props
+export const widthProps: Array<keyof gentypes.WithWidth> = ["width"];
+
 export const width = style({
   prop: "width",
   transformValue: getWidth,
 });
+// --
+
+// height props
+export const heightProps: Array<keyof gentypes.WithHeight> = ["height"];
 
 export const height = style({
   prop: "height",
   transformValue: getWidth,
 });
+// --
+
+// fontSize props
+export const fontSizeProps: Array<keyof gentypes.WithFontSize> = ["fontSize"];
 
 export const fontSize = style({
   prop: "fontSize",
@@ -424,36 +456,63 @@ export const fontSize = style({
   transformValue: rem,
   scale: [0.8, 1, 1.2, 1.4, 1.6, 1.8, 2, 2.2, 2.4, 2.6],
 });
+// --
+
+// textColor props
+export const textColorProps: Array<keyof gentypes.WithTextColor> = ["color"];
 
 export const textColor = style({
   prop: "color",
   key: "colors",
 });
+// --
+
+// bgColor props
+export const bgColorProps: Array<keyof gentypes.WithBgColor> = ["bg"];
 
 export const bgColor = style({
   prop: "bg",
   cssProperty: "backgroundColor",
   key: "colors",
 });
+// --
+
+// textDecoration props
+export const textDecorationProps: Array<keyof gentypes.WithTextDecoration> = ["textDecoration"];
 
 export const textDecoration = style({
   prop: "textDecoration",
 });
+// --
+
+// color props
+export const colorProps: Array<keyof gentypes.WithColor> = [...bgColorProps, ...textColorProps];
 
 export const color = compose(
   textColor,
   bgColor,
 );
+// --
 
-// typography
+// fontFamily props
+export const fontFamilyProps: Array<keyof gentypes.WithFontFamily> = ["fontFamily"];
+
 export const fontFamily = style({
   prop: "fontFamily",
   key: "fonts",
 });
+// --
+
+// textAlign props
+export const textAlignProps: Array<keyof gentypes.WithTextAlign> = ["textAlign"];
 
 export const textAlign = style({
   prop: "textAlign",
 });
+// --
+
+// lineHeight props
+export const lineHeightProps: Array<keyof gentypes.WithLineHeight> = ["lineHeight"];
 
 export const lineHeight = style({
   prop: "lineHeight",
@@ -461,50 +520,84 @@ export const lineHeight = style({
   transformValue: rem,
   scale: [0.8, 1, 1.2, 1.4, 1.6, 1.8, 2, 2.2, 2.4, 2.6],
 });
+// --
+
+// fontWeight props
+export const fontWeightProps: Array<keyof gentypes.WithFontWeight> = ["fontWeight"];
 
 export const fontWeight = style({
   prop: "fontWeight",
   key: "fontWeights",
 });
+// --
+
+// fontStyle props
+export const fontStyleProps: Array<keyof gentypes.WithFontStyle> = ["fontStyle"];
 
 export const fontStyle = style({
   prop: "fontStyle",
 });
+// --
+
+// letterSpacing props
+export const letterSpacingProps: Array<keyof gentypes.WithLetterSpacing> = ["letterSpacing"];
 
 export const letterSpacing = style({
   prop: "letterSpacing",
   key: "letterSpacings",
   transformValue: rem,
 });
+// --
 
 // layout
+
+// display props
+export const displayProps: Array<keyof gentypes.WithDisplay> = ["display"];
+
 export const display = style({
   prop: "display",
 });
+// --
+
+// maxWidth props
+export const maxWidthProps: Array<keyof gentypes.WithMaxWidth> = ["maxWidth"];
 
 export const maxWidth = style({
   prop: "maxWidth",
   key: "maxWidths",
   transformValue: rem,
 });
+// --
+
+// minWidth props
+export const minWidthProps: Array<keyof gentypes.WithMinWidth> = ["minWidth"];
 
 export const minWidth = style({
   prop: "minWidth",
   key: "minWidths",
   transformValue: rem,
 });
+// --
+
+// maxHeight props
+export const maxHeightProps: Array<keyof gentypes.WithMaxHeight> = ["maxHeight"];
 
 export const maxHeight = style({
   prop: "maxHeight",
   key: "maxHeights",
   transformValue: rem,
 });
+// --
+
+// minHeight props
+export const minHeightProps: Array<keyof gentypes.WithMinHeight> = ["minHeight"];
 
 export const minHeight = style({
   prop: "minHeight",
   key: "minHeights",
   transformValue: rem,
 });
+// --
 
 export const sizeWidth = style({
   prop: "size",
@@ -518,20 +611,27 @@ export const sizeHeight = style({
   transformValue: rem,
 });
 
+// sizeWidth props
+export const sizeProps: Array<keyof gentypes.WithSize> = ["size"];
+
 export const size = compose(
   sizeHeight,
   sizeWidth,
 );
+// --
 
 interface RatioProps {
-  ratio: number;
+  ratio?: number;
 }
 
-export const ratioPadding = style({
+const ratioPadding = style({
   prop: "ratio",
   cssProperty: "paddingBottom",
   transformValue: (n) => `${n * 100}%`,
 });
+
+// ratio props
+export const ratioProps: Array<keyof RatioProps> = ["ratio"];
 
 export const ratio = (props: RatioProps) =>
   props.ratio
@@ -540,147 +640,276 @@ export const ratio = (props: RatioProps) =>
       ...ratioPadding(props),
     }
     : null;
+
 ratio.propTypes = {
   ...ratioPadding.propTypes,
 };
+// --
+
+// verticalAlign props
+export const verticalAlignProps: Array<keyof gentypes.WithVerticalAlign> = ["verticalAlign"];
 
 export const verticalAlign = style({
   prop: "verticalAlign",
 });
+// --
 
 // flexbox
+
+// alignItems props
+export const alignItemsProps: Array<keyof gentypes.WithAlignItems> = ["alignItems"];
+
 export const alignItems = style({
   prop: "alignItems",
 });
+// --
+
+// alignContent props
+export const alignContentProps: Array<keyof gentypes.WithAlignContent> = ["alignContent"];
 
 export const alignContent = style({
   prop: "alignContent",
 });
+//
+
+// justifyItems props
+export const justifyItemsProps: Array<keyof gentypes.WithJustifyItems> = ["justifyItems"];
 
 export const justifyItems = style({
   prop: "justifyItems",
 });
+// --
+
+// justifyContent props
+export const justifyContentProps: Array<keyof gentypes.WithJustifyContent> = ["justifyContent"];
 
 export const justifyContent = style({
   prop: "justifyContent",
 });
+// --
+
+// flexWrap props
+export const flexWrapProps: Array<keyof gentypes.WithFlexWrap> = ["flexWrap"];
 
 export const flexWrap = style({
   prop: "flexWrap",
 });
+// --
+
+// flexBasis props
+export const flexBasisProps: Array<keyof gentypes.WithFlexBasis> = ["flexBasis"];
 
 export const flexBasis = style({
   prop: "flexBasis",
   transformValue: getWidth,
 });
+// --
+
+// flexDirection props
+export const flexDirectionProps: Array<keyof gentypes.WithFlexDirection> = ["flexDirection"];
 
 export const flexDirection = style({
   prop: "flexDirection",
 });
+// --
+
+// flex props
+export const flexProps: Array<keyof gentypes.WithFlex> = ["flex"];
 
 export const flex = style({
   prop: "flex",
 });
+// --
+
+// justifySelf props
+export const justifySelfProps: Array<keyof gentypes.WithJustifySelf> = ["justifySelf"];
 
 export const justifySelf = style({
   prop: "justifySelf",
 });
+// --
+
+// alignSelf props
+export const alignSelfProps: Array<keyof gentypes.WithAlignSelf> = ["alignSelf"];
 
 export const alignSelf = style({
   prop: "alignSelf",
 });
+// --
+
+// order props
+export const orderProps: Array<keyof gentypes.WithOrder> = ["order"];
 
 export const order = style({
   prop: "order",
 });
+// --
 
 // grid
+
+// gridGap props
+export const gridGapProps: Array<keyof gentypes.WithGridGap> = ["gridGap"];
+
 export const gridGap = style({
   prop: "gridGap",
   transformValue: rem,
   key: "space",
 });
+// --
+
+// gridColumnGap props
+export const gridColumnGapProps: Array<keyof gentypes.WithGridColumnGap> = ["gridColumnGap"];
 
 export const gridColumnGap = style({
   prop: "gridColumnGap",
   transformValue: rem,
   key: "space",
 });
+// --
+
+// gridRowGap props
+export const gridRowGapProps: Array<keyof gentypes.WithGridRowGap> = ["gridRowGap"];
 
 export const gridRowGap = style({
   prop: "gridRowGap",
   transformValue: rem,
   key: "space",
 });
+// --
+
+// gridColumn props
+export const gridColumnProps: Array<keyof gentypes.WithGridColumn> = ["gridColumn"];
 
 export const gridColumn = style({
   prop: "gridColumn",
 });
+// --
+
+// gridRow props
+export const gridRowProps: Array<keyof gentypes.WithGridRow> = ["gridRow"];
 
 export const gridRow = style({
   prop: "gridRow",
 });
+// --
+
+// gridAutoFlow props
+export const gridAutoFlowProps: Array<keyof gentypes.WithGridAutoFlow> = ["gridAutoFlow"];
 
 export const gridAutoFlow = style({
   prop: "gridAutoFlow",
 });
+// --
+
+// gridAutoColumns props
+export const gridAutoColumnsProps: Array<keyof gentypes.WithGridAutoColumns> = ["gridAutoColumns"];
 
 export const gridAutoColumns = style({
   prop: "gridAutoColumns",
 });
+// --
+
+// gridAutoRows props
+export const gridAutoRowsProps: Array<keyof gentypes.WithGridAutoRows> = ["gridAutoRows"];
 
 export const gridAutoRows = style({
   prop: "gridAutoRows",
 });
+// --
+
+// gridTemplateColumns props
+export const gridTemplateColumnsProps: Array<keyof gentypes.WithGridTemplateColumns> = ["gridTemplateColumns"];
 
 export const gridTemplateColumns = style({
   prop: "gridTemplateColumns",
 });
+// --
+
+// gridTemplateRows props
+export const gridTemplateRowsProps: Array<keyof gentypes.WithGridTemplateRows> = ["gridTemplateRows"];
 
 export const gridTemplateRows = style({
   prop: "gridTemplateRows",
 });
+// --
+
+// gridTemplateAreas props
+export const gridTemplateAreasProps: Array<keyof gentypes.WithGridTemplateAreas> = ["gridTemplateAreas"];
 
 export const gridTemplateAreas = style({
   prop: "gridTemplateAreas",
 });
+// --
+
+// gridArea props
+export const gridAreaProps: Array<keyof gentypes.WithGridArea> = ["gridArea"];
 
 export const gridArea = style({
   prop: "gridArea",
 });
+// --
 
 // borders
 const getBorder = (n: any) => (num(n) && n > 0 ? `${n}px solid` : n);
+
+// border props
+export const borderProps: Array<keyof gentypes.WithBorder> = ["border"];
 
 export const border = style({
   prop: "border",
   key: "borders",
   transformValue: getBorder,
 });
+// --
+
+// borderTop props
+export const borderTopProps: Array<keyof gentypes.WithBorderTop> = ["borderTop"];
 
 export const borderTop = style({
   prop: "borderTop",
   key: "borders",
   transformValue: getBorder,
 });
+// --
+
+// borderRight props
+export const borderRightProps: Array<keyof gentypes.WithBorderRight> = ["borderRight"];
 
 export const borderRight = style({
   prop: "borderRight",
   key: "borders",
   transformValue: getBorder,
 });
+// --
+
+// borderBottom props
+export const borderBottomProps: Array<keyof gentypes.WithBorderBottom> = ["borderBottom"];
 
 export const borderBottom = style({
   prop: "borderBottom",
   key: "borders",
   transformValue: getBorder,
 });
+// --
+
+// borderLeft props
+export const borderLeftProps: Array<keyof gentypes.WithBorderLeft> = ["borderLeft"];
 
 export const borderLeft = style({
   prop: "borderLeft",
   key: "borders",
   transformValue: getBorder,
 });
+// --
+
+// borders props
+export const bordersProps: Array<keyof gentypes.WithBorders> = [
+  ...borderProps,
+  ...borderTopProps,
+  ...borderRightProps,
+  ...borderBottomProps,
+  ...borderLeftProps,
+];
 
 export const borders = compose(
   border,
@@ -689,80 +918,147 @@ export const borders = compose(
   borderBottom,
   borderLeft,
 );
+// --
+
+// borderColor props
+export const borderColorProps: Array<keyof gentypes.WithBorderColor> = ["borderColor"];
 
 export const borderColor = style({
   prop: "borderColor",
   key: "colors",
 });
+// --
+
+// borderRadius props
+export const borderRadiusProps: Array<keyof gentypes.WithBorderRadius> = ["borderRadius"];
 
 export const borderRadius = style({
   prop: "borderRadius",
   key: "radii",
   transformValue: rem,
 });
+// --
+
+// boxShadow props
+export const boxShadowProps: Array<keyof gentypes.WithBoxShadow> = ["boxShadow"];
 
 export const boxShadow = style({
   prop: "boxShadow",
   key: "shadows",
 });
+// --
+
+// opacity props
+export const opacityProps: Array<keyof gentypes.WithOpacity> = ["opacity"];
 
 export const opacity = style({
   prop: "opacity",
 });
+// --
+
+// overflow props
+export const overflowProps: Array<keyof gentypes.WithOverflow> = ["overflow"];
 
 export const overflow = style({
   prop: "overflow",
 });
+// --
 
 // backgrounds
+
+// background props
+export const backgroundProps: Array<keyof gentypes.WithBackground> = ["background"];
+
 export const background = style({
   prop: "background",
 });
+// --
+
+// backgroundImage props
+export const backgroundImageProps: Array<keyof gentypes.WithBackgroundImage> = ["backgroundImage"];
 
 export const backgroundImage = style({
   prop: "backgroundImage",
 });
+// --
+
+// backgroundSize props
+export const backgroundSizeProps: Array<keyof gentypes.WithBackgroundSize> = ["backgroundSize"];
 
 export const backgroundSize = style({
   prop: "backgroundSize",
 });
+// --
+
+// backgroundPosition props
+export const backgroundPositionProps: Array<keyof gentypes.WithBackgroundPosition> = ["backgroundPosition"];
 
 export const backgroundPosition = style({
   prop: "backgroundPosition",
 });
+// --
+
+// backgroundRepeat props
+export const backgroundRepeatProps: Array<keyof gentypes.WithBackgroundRepeat> = ["backgroundRepeat"];
 
 export const backgroundRepeat = style({
   prop: "backgroundRepeat",
 });
+// --
 
 // position
+
+// position props
+export const positionProps: Array<keyof gentypes.WithPosition> = ["position"];
+
 export const position = style({
   prop: "position",
 });
+// --
+
+// zIndex props
+export const zIndexProps: Array<keyof gentypes.WithZIndex> = ["zIndex"];
 
 export const zIndex = style({
   prop: "zIndex",
 });
+// --
+
+// top props
+export const topProps: Array<keyof gentypes.WithTop> = ["top"];
 
 export const top = style({
   prop: "top",
   transformValue: rem,
 });
+// --
+
+// right props
+export const rightProps: Array<keyof gentypes.WithRight> = ["right"];
 
 export const right = style({
   prop: "right",
   transformValue: rem,
 });
+// --
+
+// bottom props
+export const bottomProps: Array<keyof gentypes.WithBottom> = ["bottom"];
 
 export const bottom = style({
   prop: "bottom",
   transformValue: rem,
 });
+// --
+
+// left props
+export const leftProps: Array<keyof gentypes.WithLeft> = ["left"];
 
 export const left = style({
   prop: "left",
   transformValue: rem,
 });
+// --
 
 export const styles: { [key: string]: ((props: EnsureWithTheme) => any) & { propTypes: any } } = {
   space,

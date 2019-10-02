@@ -1,24 +1,23 @@
+import React from "react";
 import styled from "@emotion/styled";
 
-import Button from "../../core/Button";
+import Button, { ButtonProps } from "../../core/Button";
 import { BaseRouterLink, RouterLinkProps } from "../RouterLink";
 
 import {
-  ButtonBoxProps,
   Color,
   WithStyled,
 } from "../../styled";
 
-export type RouterButtonProps = ButtonBoxProps & RouterLinkProps & WithStyled & {
-  state: Color,
-  size: string,
-};
+export interface RouterButtonProps extends Omit<RouterLinkProps, "type"> {
+  state: Color;
+  size: string;
+}
 
-const RouterButton = styled(Button.withComponent(BaseRouterLink))<RouterButtonProps>();
+const RouterButton = Button.withComponent(BaseRouterLink) as React.SFC<ButtonProps & RouterLinkProps>;
 
 RouterButton.defaultProps = {
   textDecoration: "none",
-  type: undefined,
   size: "md",
   borderRadius: 2,
 };
