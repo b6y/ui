@@ -1,26 +1,17 @@
-import styled from "@emotion/styled";
+import React from "react";
 
-import ButtonOutline from "../../core/ButtonOutline";
-import { BaseRouterLink } from "../RouterLink";
+import ButtonOutline, {ButtonOutlineProps} from "../../core/ButtonOutline";
+import {BaseRouterLink, RouterLinkProps} from "../RouterLink";
 
-import {
-  ButtonProps,
-  Color,
-} from "../../styled";
+const RouterButtonOutline = ButtonOutline.withComponent(BaseRouterLink) as React.FunctionComponent<ButtonOutlineProps & RouterLinkProps>;
 
-export interface ButtonLinkOutlineProps extends ButtonProps {
-  state: Color;
-  size: string;
-}
-
-const ButtonLinkOutline = styled(ButtonOutline.withComponent(BaseRouterLink))<ButtonLinkOutlineProps>();
-
-ButtonLinkOutline.defaultProps = {
-  textDecoration: "none",
-  type: undefined,
-  size: "md",
-  borderRadius: 2,
-  borderColor: "transparent",
+RouterButtonOutline.defaultProps = {
+    textDecoration: "none",
+    type: undefined,
+    size: "md",
+    borderRadius: 2,
+    borderColor: "transparent",
 };
 
-export default ButtonLinkOutline;
+export default RouterButtonOutline;
+

@@ -4,10 +4,10 @@ import React from "react";
 import { injectIntl, MessageDescriptor, WrappedComponentProps } from "react-intl";
 
 import errorMessages from "../../messages/errors";
-import { Box } from "../../styled";
+import { Box, Text } from "../../styled";
 import * as types from "../../styled/types";
 
-export type ErrorBagProps = types.BoxProps & WrappedComponentProps & {
+interface ErrorBagProps extends types.BoxProps, WrappedComponentProps {
   field?: string;
 }
 
@@ -57,8 +57,10 @@ class ErrorBagBase extends React.PureComponent<ErrorBagProps & { formik: FormikC
       }
 
       return (
-        <Box color="red" {...props}>
-          {error}
+        <Box {...props}>
+          <Text color="red">
+            {error}
+          </Text>
         </Box>
       );
     }

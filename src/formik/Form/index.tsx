@@ -2,24 +2,16 @@ import styled from "@emotion/styled";
 import { connect, FormikContext } from "formik";
 import React from "react";
 
-import { FormBox } from "../../styled";
-import * as types from "../../styled/types";
+import { Form as BaseForm, FormProps as BaseFormProps } from "../../styled";
 
-type FormBoxProps = types.BoxProps<React.HTMLAttributes<HTMLFormElement>>;
+export interface InnerFormProps extends BaseFormProps {
+  formik: FormikContext<any>;
+}
 
-type BaseFormProps =
-  & FormBoxProps
-  & { formik: FormikContext<any> };
+export interface FormProps extends BaseFormProps {}
 
-export type FormProps = BaseFormProps & Exclude<
-  keyof BaseFormProps,
-  "onReset" | "onSubmit"
->;
-
-const Form = styled(FormBox)``;
-
-class FormikForm extends React.PureComponent<FormProps> {
-  constructor(props: FormProps) {
+class FormikForm extends React.PureComponent<InnerFormProps> {
+  constructor(props: InnerFormProps) {
     super(props);
 
     this.onSubmit = this.onSubmit.bind(this);
@@ -29,7 +21,7 @@ class FormikForm extends React.PureComponent<FormProps> {
   public render() {
     const { formik: _, onSubmit: _1, onReset: _2, ...props } = this.props;
 
-    return <Form onReset={this.onReset} onSubmit={this.onSubmit} {...props} />;
+    return <BaseForm onReset={this.onReset} onSubmit={this.onSubmit} {...props} />;
   }
 
   private onSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -47,4 +39,4 @@ class FormikForm extends React.PureComponent<FormProps> {
   }
 }
 
-export default connect(FormikForm);
+export default connect<FormProps>(FormikForm);

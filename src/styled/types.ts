@@ -300,4 +300,28 @@ export interface ImageProps extends
   Omit<JSX.IntrinsicElements["img"], "color" | "css" | "ref" | "size" | "width" | "height">,
   BaseProps {}
 
+export interface TableHeadProps extends
+    Omit<JSX.IntrinsicElements["thead"], "color" | "css" | "ref">,
+    BaseProps {}
+
+export interface TableBodyProps extends
+    Omit<JSX.IntrinsicElements["tbody"], "color" | "css" | "ref">,
+    BaseProps {}
+
+export interface TableFootProps extends
+    Omit<JSX.IntrinsicElements["tfoot"], "color" | "css" | "ref">,
+    BaseProps {}
+
+export interface TableRowProps extends
+    Omit<JSX.IntrinsicElements["tr"], "color" | "css" | "ref">,
+    BaseProps {}
+
+export interface TableCellProps extends
+    Omit<JSX.IntrinsicElements["td"], "color" | "css" | "ref">,
+    BaseProps {}
+
+export interface TableProps extends
+    Omit<JSX.IntrinsicElements["table"], "color" | "css" | "ref">,
+    BaseProps {}
+
 export * from "./generatedTypes";

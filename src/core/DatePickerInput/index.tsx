@@ -9,8 +9,8 @@ import { theme } from "styled-tools";
 import moment, { Moment } from "moment";
 
 import { DateRangePicker, DayPickerRangeController, DayPickerSingleDateController } from "react-dates";
-import { Box } from "../../styled";
-import { translateSize, Color } from "../../styled/system";
+import { Box, Color, translateSize } from "../../styled";
+import {  } from "../../styled";
 import FocusSteal from "../FocusSteal";
 import { FocusStealEvent } from "../FocusSteal/types";
 import Popper from "../Popper";
