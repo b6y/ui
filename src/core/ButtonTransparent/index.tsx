@@ -1,9 +1,10 @@
 import styled from "@emotion/styled";
 import * as R from "ramda";
+import React from "react";
 
 import {
-  ButtonBox,
-  ButtonBoxProps,
+  Button as BaseButton,
+  ButtonProps as BaseButtonProps,
   Color,
   getBorderColor,
   getFontColor,
@@ -17,10 +18,10 @@ import {
 
 import { SvgIcon } from "../Icon";
 
-export type ButtonTransparentProps = ButtonBoxProps & WithStyled & {
-  state: Color,
-  size: string,
-};
+export interface ButtonTransparentProps extends BaseButtonProps {
+  state: Color;
+  size: string;
+}
 
 const defaultSize = R.defaultTo(2);
 const iconMargin = getSize(1);
@@ -51,7 +52,11 @@ const themeHeight = (props: ButtonTransparentProps) => {
   }
 };
 
-const ButtonTransparent = styled(ButtonBox)<ButtonTransparentProps>(
+const Wrapper = React.forwardRef((props: ButtonTransparentProps, ref: React.Ref<HTMLButtonElement>) => {
+  return <BaseButton ref={ref} {...props} />;
+});
+
+const ButtonTransparent = styled(Wrapper)(
   themeHeight,
   (props) => ({
     appearance: "none",

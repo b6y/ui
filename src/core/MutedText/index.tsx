@@ -1,10 +1,10 @@
 import styled from "@emotion/styled";
 
 import {
-  SpanBox,
+  Span,
 } from "../../styled";
 
-const MutedText = styled(SpanBox)();
+const MutedText = styled(Span)();
 
 MutedText.defaultProps = {
   color: "gray",

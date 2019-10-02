@@ -1,12 +1,10 @@
 import styled from "@emotion/styled";
 
 import ButtonTransparent, { ButtonTransparentProps } from "../../core/ButtonTransparent";
-import { BaseRouterLink } from "../RouterLink";
-import { Styled } from "../../styled"
+import { BaseRouterLink, RouterLinkProps } from "../RouterLink";
 
-type RouterButtonTransparentProps = ButtonTransparentProps
-
-const RouterButtonTransparent = styled(ButtonTransparent.withComponent(BaseRouterLink))<RouterButtonTransparentProps>();
+const RouterButtonTransparent = ButtonTransparent
+  .withComponent(BaseRouterLink) as React.FunctionComponent<ButtonTransparentProps & RouterLinkProps>;
 
 RouterButtonTransparent.defaultProps = {
   textDecoration: "none",

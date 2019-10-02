@@ -57,7 +57,7 @@ const Wrapper = React.forwardRef((props: ButtonProps, ref: any) => {
   return <BaseButton ref={ref} {...otherProps} />;
 });
 
-const Button = styled(Wrapper)(
+export const Button = styled(Wrapper)(
   themeHeight,
   (props) => ({
     appearance: "none",
@@ -102,6 +102,7 @@ const Button = styled(Wrapper)(
   },
 );
 
+Button.displayName = "Button";
 Button.defaultProps = {
   state: "default",
   type: "button",

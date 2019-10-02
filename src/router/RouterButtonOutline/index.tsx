@@ -3,7 +3,8 @@ import React from "react";
 import ButtonOutline, {ButtonOutlineProps} from "../../core/ButtonOutline";
 import {BaseRouterLink, RouterLinkProps} from "../RouterLink";
 
-const RouterButtonOutline = ButtonOutline.withComponent(BaseRouterLink) as React.FunctionComponent<ButtonOutlineProps & RouterLinkProps>;
+const RouterButtonOutline = ButtonOutline
+    .withComponent(BaseRouterLink) as React.FunctionComponent<ButtonOutlineProps & RouterLinkProps>;
 
 RouterButtonOutline.defaultProps = {
     textDecoration: "none",
@@ -14,4 +15,3 @@ RouterButtonOutline.defaultProps = {
 };
 
 export default RouterButtonOutline;
-

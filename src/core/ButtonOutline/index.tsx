@@ -17,8 +17,8 @@ import {
 import {SvgIcon} from "../Icon";
 
 export interface ButtonOutlineProps extends BaseButtonProps {
-    state: Color,
-    size: string,
+    state: Color;
+    size: string;
 }
 
 const defaultSize = R.defaultTo(2);
