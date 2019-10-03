@@ -3,11 +3,11 @@ import React from "react";
 import { withInfo } from "@storybook/addon-info";
 import { withKnobs } from "@storybook/addon-knobs";
 import { addDecorator, addParameters, configure } from "@storybook/react";
-import { themes } from "@storybook/theming";
+import theme from "./theme";
 
 addParameters({
     options: {
-        theme: themes.dark,
+        theme,
     },
     backgrounds: [
         { name: "white", value: "#fff", default: true },

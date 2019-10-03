@@ -12,6 +12,8 @@ interface InjectReducer {
 
 export default ({ key, reducer }: InjectReducer) =>
   <TProps extends unknown>(WrappedComponent: React.ComponentType<TProps>) => {
+    console.log(Object.freeze(WrappedComponent));
+
   const ReducerInjector = class extends React.PureComponent<TProps> {
     public static WrappedComponent = WrappedComponent;
 
@@ -31,6 +33,7 @@ export default ({ key, reducer }: InjectReducer) =>
     }
 
     public render() {
+      console.log("///////////////")
       return <WrappedComponent {...this.props}/>;
     }
   };

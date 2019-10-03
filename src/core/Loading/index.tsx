@@ -14,7 +14,7 @@ interface LoadingProps {
   children: () => React.ReactElement;
 }
 
-const Loading = (props: LoadingProps) => {
+export const Loading = (props: LoadingProps) => {
   const { loading, name, children } = props;
 
   let state = loading && loading[name];

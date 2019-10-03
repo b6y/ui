@@ -6,6 +6,7 @@ import React from "react";
 import App from "../src/core/Application";
 import AppContext from "../src/core/Application/context";
 import definition from "../src/definition";
+import { Box } from "../src/styled";
 
 const history = createMemoryHistory();
 const appDefinition = definition({ history });
@@ -17,7 +18,7 @@ export const PrintContext = (props: {}) => {
     }, []);
     return (
         <>
-            <pre>{JSON.stringify(ctx, null, "\t")}</pre>
+            <pre>{JSON.stringify(ctx, null, "  ")}</pre>
         </>
     );
 };
@@ -29,16 +30,20 @@ export const PrintTheme = (props: {}) => {
     }, []);
     return (
         <>
-            <pre>{JSON.stringify(theme, null, "\t")}</pre>
+            <pre>{JSON.stringify(theme, null, "  ")}</pre>
         </>
     );
 };
 
 export default (props: React.PropsWithChildren<{}>) => {
     return (
-        <div style={{ fontFamily: "Roboto" }}>
+        <div>
             <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i\&display=swap" rel="stylesheet" />
-            <App definition={appDefinition}>{props.children}</App>
+            <App definition={appDefinition}>
+                <Box p={3}>
+                    {props.children}
+                </Box>
+            </App>
         </div>
     );
 };

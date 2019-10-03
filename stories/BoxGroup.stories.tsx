@@ -13,8 +13,8 @@ export const simple = () => {
 
   return (
     <Application>
-      <Box css={css`box-shadow: inset 0 0 0 1px red`} p={spacing} m={spacing}>
-        <Box css={css`box-shadow: inset 0 0 0 1px blue`} py={spacing}>
+      <Box bg="black" p={spacing}>
+        <Box bg="darker" py={spacing}>
           <BoxGroup spacing={spacing}>
             <Box bg="red" width={1}>Box1</Box>
             <Box bg="blue" width={1}>Box2</Box>
