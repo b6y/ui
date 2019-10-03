@@ -22,6 +22,7 @@ import { SvgIcon } from "../Icon";
 export interface TextInputProps extends InputProps {
   state?: Color;
   inputSize?: string;
+  defaultOutlineColor?: Color;
 }
 
 const defaultSize = R.defaultTo(2);
@@ -54,11 +55,11 @@ const themeHeight = (props: TextInputProps) => {
 };
 
 const Wrapped = React.forwardRef((props: TextInputProps, ref: React.Ref<HTMLInputElement>) => {
-  const { state, inputSize, ...rest } = props;
+  const { state, inputSize, defaultOutlineColor, ...rest } = props;
   return <Input ref={ref} {...rest} />;
-})
+});
 
-const TextInput = styled(Wrapped)<TextInputProps>(
+export const TextInput = styled(Wrapped)(
   () => ({
     color: "black",
     appearance: "none",
@@ -66,41 +67,45 @@ const TextInput = styled(Wrapped)<TextInputProps>(
     outline: 0,
     display: "block",
   }),
-  // (props) => ({
-  //   "background": props.disabled ? getFgColor("light")(props) : getFgColor("white")(props),
-  //   "color": theme(`colors.${props.defaultColor}`, props.defaultColor)(props),
-  //   "border": `1px solid ${theme(
-  //     `colors.${props.defaultBorderColor}`,
-  //     props.defaultBorderColor,
-  //   )(props)}`,
-  //   "&:hover": {
-  //     border: `1px solid ${theme(
-  //       `colors.${props.hoverBorderColor}`,
-  //       props.hoverBorderColor,
-  //     )(props)}`,
-  //     color: theme(`colors.${props.hoverColor}`, props.hoverColor)(props),
-  //   },
-  //   "&:focus": {
-  //     color: theme(`colors.${props.focusColor}`, props.focusColor)(props),
-  //     border: `1px solid ${theme(
-  //       `colors.${props.focusBorderColor}`,
-  //       props.focusBorderColor,
-  //     )(props)}`,
-  //     boxShadow: `0px 0px 0px 3px ${theme(
-  //       `colors.${props.focusShadowColor}`,
-  //       props.focusShadowColor,
-  //     )(props)}`,
-  //   },
-  // }),
+  (props) => {
+    const state = props.state || "default";
+
+    let outline = state;
+
+    if (state === "default") {
+      outline = props.defaultOutlineColor || "primary";
+    }
+
+    return {
+      "background": props.disabled ? getBgColor("light", "dark")(props) : getBgColor("white")(props),
+      "color": props.disabled ? getFgColor("dark")(props) : getFgColor("black")(props),
+      "border": `1px solid ${getBorderColor(state)(props)}`,
+      "&:hover": {
+        border: `1px solid ${getBorderColor(outline, "dark")(props)}`,
+        boxShadow: `0px 0px 0px 3px ${getOutlineColor(outline, "alpha")(props)}`,
+      },
+      "&:focus": {
+        border: `1px solid ${getBorderColor(outline, "dark")(props)}`,
+        boxShadow: `0px 0px 0px 3px ${getOutlineColor(outline, "alphadark")(props)}`,
+      },
+      "&[disabled]:hover": {
+      },
+      "&[disabled]:focus": {
+      },
+      [`& ${SvgIcon} + *`]: {
+        marginLeft: iconMargin(props),
+      },
+    };
+  },
   themeHeight,
 );
 
 TextInput.defaultProps = {
   state: "default",
+  defaultOutlineColor: "primary",
   type: "text",
   inputSize: "md",
   borderRadius: 2,
-  borderColor: "gray",
 };
 
 export default TextInput;

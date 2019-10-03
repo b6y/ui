@@ -56,7 +56,7 @@ const Wrapper = React.forwardRef((props: ButtonTransparentProps, ref: React.Ref<
   return <BaseButton ref={ref} {...props} />;
 });
 
-const ButtonTransparent = styled(Wrapper)(
+export const ButtonTransparent = styled(Wrapper)(
   themeHeight,
   (props) => ({
     appearance: "none",

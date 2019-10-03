@@ -109,6 +109,8 @@ export const fonts = {
   mono: "\"SF Mono\", \"Roboto Mono\", Menlo, monospace",
 };
 
+export const observeFonts = ["Open Sans"];
+
 export const shadows = [
   "none",
   `inset 0 0 0 1px ${colors.gray}`,
@@ -285,4 +287,5 @@ export default {
   rectangularPaddings,
   squarePaddings,
   sizes,
+  observeFonts,
 } as Theme;

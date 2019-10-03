@@ -1,7 +1,27 @@
 import React from "react";
 
 import { withInfo } from "@storybook/addon-info";
-import { addDecorator, configure } from "@storybook/react";
+import { withKnobs } from "@storybook/addon-knobs";
+import { addDecorator, addParameters, configure } from "@storybook/react";
+import { themes } from "@storybook/theming";
+
+addParameters({
+    options: {
+        theme: themes.dark,
+    },
+    backgrounds: [
+        { name: "white", value: "#fff", default: true },
+        { name: "black", value: "#000" },
+        { name: "gray", value: "#bbb" },
+        { name: "yellow", value: "#fec107" },
+        { name: "green", value: "#00c292" },
+        { name: "blue", value: "#03a9f3" },
+        { name: "red", value: "#ff0000" },
+    ],
+});
+
+// addDecorator(withInfo({}));
+addDecorator(withKnobs);
 
 // addDecorator(withInfo({
 //     styles: {

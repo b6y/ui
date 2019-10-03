@@ -61,7 +61,7 @@ class TextAreaInput extends React.PureComponent<TextAreaInputProps, State> {
     return (
       <div>
         {labelComponent}
-        <BaseTextAreaInput id={id} type="text" {...newProps.field} {...(newProps.inputProps || {})} />
+        <BaseTextAreaInput id={id} {...newProps.field} {...(newProps.inputProps || {})} />
         <ErrorBag mt={1} field={props.field.name} />
       </div>
     );

@@ -183,6 +183,7 @@ export interface Theme {
   fontSizes: number[];
   fontWeights: FontWeights;
   fonts: Fonts;
+  observeFonts: string[],
   colors: Colors;
   radii: number[];
   shadows: string[];

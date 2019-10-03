@@ -6,6 +6,7 @@ const GlobalCSS = css`
   }
   html,
   body {
+    font-size: 18px;
     cursor: unset;
     height: 100%;
     width: 100%;

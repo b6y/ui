@@ -15,34 +15,37 @@ import {
   Padding,
   themed,
   translateSize,
+  Fonts,
 } from "../../styled";
 
 import { SvgIcon } from "../Icon";
 
-export type TextAreaInputProps = TextAreaProps & {
-  state?: Color,
-  type?: string,
-  value?: any,
-  inputSize?: string,
-};
+export interface TextAreaInputProps extends TextAreaProps {
+  state?: Color;
+  defaultOutlineColor?: Color;
+  inputSize?: string;
+}
 
 const defaultSize = R.defaultTo(2);
 const iconMargin = getSize(1);
 const getRectangularPaddings = themed<TextAreaInputProps, Padding[]>("rectangularPaddings");
 const getFontSizes = themed<TextAreaInputProps, number[]>("fontSizes");
+const getFonts = themed<TextAreaInputProps, Fonts>("fonts");
 
 const themeHeight = (props: TextAreaInputProps) => {
   const size = translateSize(defaultSize(props.inputSize));
 
   const paddings = getRectangularPaddings(props);
   const fontSizes = getFontSizes(props);
+  const fonts = getFonts(props);
 
-  if (paddings && fontSizes) {
+  if (paddings && fontSizes && fonts) {
     const padding: Padding = paddings[size];
     const fontSize: number = fontSizes[size];
 
     return {
       fontSize: `${fontSize}rem`,
+      fontFamily: fonts.mono,
       // TODO: ???
       lineHeight: `1.5`,
       padding: `${padding.y}rem ${padding.x}rem`,
@@ -55,7 +58,12 @@ const themeHeight = (props: TextAreaInputProps) => {
   }
 };
 
-const TextAreaInput = styled(TextArea)<TextAreaInputProps>(
+const Wrapped = React.forwardRef((props: TextAreaInputProps, ref: React.Ref<HTMLTextAreaElement>) => {
+  const { state, inputSize, defaultOutlineColor, ...rest } = props;
+  return <TextArea ref={ref} {...rest} />;
+});
+
+export const TextAreaInput = styled(Wrapped)(
   () => ({
     color: "black",
     appearance: "none",
@@ -63,38 +71,41 @@ const TextAreaInput = styled(TextArea)<TextAreaInputProps>(
     outline: 0,
     display: "block",
   }),
-  // (props) => ({
-  //   "background": props.disabled ? getFgColor("light")(props) : getFgColor("white")(props),
-  //   "color": theme(`colors.${props.defaultColor}`, props.defaultColor)(props),
-  //   "border": `1px solid ${theme(
-  //     `colors.${props.defaultBorderColor}`,
-  //     props.defaultBorderColor,
-  //   )(props)}`,
-  //   "&:hover": {
-  //     border: `1px solid ${theme(
-  //       `colors.${props.hoverBorderColor}`,
-  //       props.hoverBorderColor,
-  //     )(props)}`,
-  //     color: theme(`colors.${props.hoverColor}`, props.hoverColor)(props),
-  //   },
-  //   "&:focus": {
-  //     color: theme(`colors.${props.focusColor}`, props.focusColor)(props),
-  //     border: `1px solid ${theme(
-  //       `colors.${props.focusBorderColor}`,
-  //       props.focusBorderColor,
-  //     )(props)}`,
-  //     boxShadow: `0px 0px 0px 3px ${theme(
-  //       `colors.${props.focusShadowColor}`,
-  //       props.focusShadowColor,
-  //     )(props)}`,
-  //   },
-  // }),
+  (props) => {
+    const state = props.state || "default";
+
+    let outline = state;
+
+    if (state === "default") {
+      outline = props.defaultOutlineColor || "primary";
+    }
+
+    return {
+      "background": props.disabled ? getBgColor("light", "alphadark")(props) : getBgColor("white")(props),
+      "color": props.disabled ? getFgColor("black", "alphalight")(props) : getFgColor("black")(props),
+      "border": `1px solid ${getBorderColor(state)(props)}`,
+      "&:hover": {
+        border: `1px solid ${getBorderColor(outline, "dark")(props)}`,
+        boxShadow: `0px 0px 0px 3px ${getOutlineColor(outline, "alpha")(props)}`,
+      },
+      "&:focus": {
+        border: `1px solid ${getBorderColor(outline, "dark")(props)}`,
+        boxShadow: `0px 0px 0px 3px ${getOutlineColor(outline, "alphadark")(props)}`,
+      },
+      "&[disabled]:hover": {
+      },
+      "&[disabled]:focus": {
+      },
+      [`& ${SvgIcon} + *`]: {
+        marginLeft: iconMargin(props),
+      },
+    };
+  },
   themeHeight,
 );
 
 TextAreaInput.defaultProps = {
   state: "default",
-  type: "text",
   inputSize: "md",
   borderRadius: 2,
   borderColor: "gray",

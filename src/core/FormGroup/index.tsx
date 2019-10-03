@@ -16,24 +16,18 @@ const Label = styled.label`
   margin-bottom: 5px;
 `;
 
-interface FormGroupProps {
-  label: string | React.ReactNode,
-  children?: React.ReactNode,
-  compact?: boolean
+export interface FormGroupProps {
+  label: string | React.ReactNode;
+  children?: React.ReactNode;
+  compact?: boolean;
 }
 
-const FormGroup = ({ label, children, compact }: FormGroupProps) => (
+export const FormGroup = ({ label, children, compact }: FormGroupProps) => (
   <Wrapper compact={!!compact}>
     <Label>{label}</Label>
     {children}
   </Wrapper>
 );
-
-FormGroup.propTypes = {
-  label: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-  children: PropTypes.element,
-  compact: PropTypes.bool,
-};
 
 FormGroup.defaultProps = {
   compact: false,

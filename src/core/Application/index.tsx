@@ -1,8 +1,9 @@
 import { Global } from "@emotion/core";
 import { ThemeProvider } from "emotion-theming";
 import React from "react";
+import { HelmetProvider } from "react-helmet-async";
 import { Provider as ReduxProvider } from "react-redux";
-import { HelmetProvider } from 'react-helmet-async';
+import FontFaceObserver from "fontfaceobserver";
 
 import FocusStealProvider from "../../core/FocusSteal/provider";
 import LanguageProvider from "../../core/LanguageProvider";
@@ -30,7 +31,7 @@ export let portal = React.createRef<HTMLDivElement>();
 
 const helmetContext = {};
 
-class Application extends React.PureComponent<InnerProps> {
+export class Application extends React.PureComponent<InnerProps> {
   public render() {
     const { definition } = this.props;
     const theme = definition.theme(defaultTheme);
@@ -42,26 +43,45 @@ class Application extends React.PureComponent<InnerProps> {
             <FocusStealProvider>
               <Global styles={GlobalStyle}/>
               <LanguageProvider messages={definition.messages}>
-                  <ThemeProvider theme={theme}>
-                    <div>
-                      {this.props.children}
-                    </div>
-                  </ThemeProvider>
+                <ThemeProvider theme={theme}>
+                  <div style={{ fontFamily: theme.fonts[0] }}>
+                    {this.props.children}
+
+                    <div ref={portal} id="portal-target" />
+                  </div>
+                </ThemeProvider>
               </LanguageProvider>
             </FocusStealProvider>
           </ReduxProvider>
         </HelmetProvider>
-        <div ref={portal} id="portal-target" />
       </>
     );
   }
 }
 
 class ApplicationRoot extends React.PureComponent<Props> {
+  public app = React.createRef<Application>();
+
+  public componentDidMount() {
+    if (this.props.definition.theme) {
+      const theme = this.props.definition.theme(defaultTheme);
+      
+      Promise.all(theme.observeFonts.map((font) => {
+        const observer = new FontFaceObserver(font);
+
+        return observer.load().then(() => {
+          return [observer, font];
+        });
+      })).then((a) => {
+        document.body.classList.add("fontLoaded");
+      });
+    }
+  }
+
   public render() {
     return (
       <Context.Provider value={this.props.definition}>
-        <Application {...this.props}>
+        <Application ref={this.app} {...this.props}>
           {this.props.children}
         </Application>
       </Context.Provider>

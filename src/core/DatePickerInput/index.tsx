@@ -17,21 +17,23 @@ import Popper from "../Popper";
 import Portal, { PortalRefType } from "../Portal";
 import TextInput from "../TextInput";
 
-interface DatePickerInputProps extends WrappedComponentProps {
+export interface DatePickerInputProps extends WrappedComponentProps {
+  placeholder?: string | MessageDescriptor;
   onChange?: (value: string | null) => void;
   onBlur?: (event: React.SyntheticEvent) => void;
   onFocus?: (event: React.SyntheticEvent) => void;
   visibleMonths?: number;
   value?: any;
   state?: Color;
+  disabled?: boolean;
 }
 
-interface State {
+export interface State {
   visible: boolean;
   value: Moment | null;
 }
 
-class DatePickerInput extends React.Component<DatePickerInputProps, State> {
+class BaseDatePickerInput extends React.Component<DatePickerInputProps, State> {
   public static defaultProps: Partial<DatePickerInputProps> = {
     state: "default",
     visibleMonths: 2,
@@ -54,6 +56,7 @@ class DatePickerInput extends React.Component<DatePickerInputProps, State> {
     this.focusStolen = this.focusStolen.bind(this);
     this.pickerChanged = this.pickerChanged.bind(this);
     this.pickerFocusChanged = this.pickerFocusChanged.bind(this);
+    this.outsideClicked = this.outsideClicked.bind(this);
   }
 
   public componentDidMount() {
@@ -99,13 +102,27 @@ class DatePickerInput extends React.Component<DatePickerInputProps, State> {
     this.hideDropdown();
   }
 
-  public blurred(evt: React.SyntheticEvent) {
-    // console.error("blurred");
-    this.hideDropdown();
+  public blurred(evt: React.FocusEvent<HTMLInputElement>) {
+    evt.persist();
 
-    if (this.props.onBlur) {
-      this.props.onBlur(evt);
+    console.log(this.portal.current, this.input.current, evt.target, evt)
+
+    const target = evt.relatedTarget || evt.target;
+
+    if (this.portal.current && this.input.current) {
+      if (this.input.current !== target &&
+        target &&
+        target instanceof HTMLElement &&
+        !this.portal.current.contains(target)) {
+        this.hideDropdown();
+      }
     }
+    // // console.error("blurred");
+    // this.hideDropdown();
+
+    // if (this.props.onBlur) {
+    //   this.props.onBlur(evt);
+    // }
   }
 
   public focused(evt: React.SyntheticEvent) {
@@ -135,7 +152,10 @@ class DatePickerInput extends React.Component<DatePickerInputProps, State> {
   }
 
   public pickerFocusChanged(arg: { focused: boolean | null }) {
-    console.log({ arg })
+  }
+
+  public outsideClicked() {
+    this.hideDropdown();
   }
 
   public render() {
@@ -151,6 +171,7 @@ class DatePickerInput extends React.Component<DatePickerInputProps, State> {
       "value",
       "name",
       "children",
+      "placeholder",
     ], props);
 
     // const fieldProps = {
@@ -161,10 +182,21 @@ class DatePickerInput extends React.Component<DatePickerInputProps, State> {
 
     const newFilteredProps = { ...filteredProps };
 
+    let placeholder: string | undefined;
+
+    if (typeof props.placeholder === "string") {
+      placeholder = props.placeholder;
+    }
+
+    if (R.is(Object, props.placeholder)) {
+      placeholder = props.intl.formatMessage(props.placeholder as MessageDescriptor);
+    }
+
     const input = (
       <TextInput
         readOnly
         ref={this.input}
+        placeholder={placeholder}
         value={props.value ? this.props.intl.formatDate(props.value, { timeZone: "UTC" }) : ""}
         onFocus={this.focused}
         onBlur={this.blurred}
@@ -180,8 +212,8 @@ class DatePickerInput extends React.Component<DatePickerInputProps, State> {
           <DayPickerSingleDateController
             onDateChange={this.pickerChanged}
             onFocusChange={this.pickerFocusChanged}
-            focused={this.state.visible}
-            hideKeyboardShortcutsPanel={true}
+            onOutsideClick={this.outsideClicked}
+            focused={true}
             numberOfMonths={3}
             date={this.state.value}
           />
@@ -190,7 +222,7 @@ class DatePickerInput extends React.Component<DatePickerInputProps, State> {
     }
 
     return (
-      <FocusSteal enabled={this.state.visible} onSteal={this.focusStolen}>
+      <>
         {input}
         <Popper
           placement="bottom-start"
@@ -198,9 +230,11 @@ class DatePickerInput extends React.Component<DatePickerInputProps, State> {
           ref={this.portal}
           open={this.state.visible}
           children={portalContent}/>
-      </FocusSteal>
+      </>
     );
   }
 }
 
-export default injectIntl(DatePickerInput);
+export const DatePickerInput = injectIntl(BaseDatePickerInput);
+
+export default DatePickerInput;

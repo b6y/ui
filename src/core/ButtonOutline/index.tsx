@@ -54,7 +54,7 @@ const Wrapper = React.forwardRef((props: ButtonOutlineProps, ref: React.Ref<HTML
     return <BaseButton ref={ref} {...props} />
 });
 
-const ButtonOutline = styled(Wrapper)(
+export const ButtonOutline = styled(Wrapper)(
     (props) => ({
         backgroundClip: "padding-box",
         background: "transparent",
