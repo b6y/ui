@@ -3,9 +3,9 @@ import React from "react";
 
 import { TextInput } from "../src/core/TextInput";
 import { Padding } from "../src/core/Padding";
-import Application from "./context";
+import { wrap } from "./context";
 
-export const simple = () => {
+export const simple = wrap(() => {
   const [state, setState] = React.useState(null);
 
   const changed = (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -14,7 +14,7 @@ export const simple = () => {
   };
 
   return (
-    <Application>
+    <>
       <Padding width={1 / 2} spacing={3} my={3}>
         <TextInput onChange={changed} value={state || ""} placeholder="brand" state="brand" disabled />
         <TextInput onChange={changed} value={state || ""} placeholder="brand" state="brand" />
@@ -59,9 +59,9 @@ export const simple = () => {
         <TextInput onChange={changed} value={state || ""} placeholder="muted" state="muted" disabled />
         <TextInput onChange={changed} value={state || ""} placeholder="muted" state="muted" />
       </Padding>
-    </Application>
+    </>
   );
-};
+});
 
 simple.story = {
   parameters: {},

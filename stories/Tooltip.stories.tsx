@@ -1,24 +1,18 @@
-
-import { Meta, Preview, Props, Story } from "@storybook/addon-docs/blocks";
 import { select  } from "@storybook/addon-knobs";
 import React from "react";
 
 import { Tooltip } from "../src/core/Tooltip";
-import { Box } from "../src/styled";
-import Application from "./context";
-import { css } from "@emotion/core";
+import { wrap } from "./context";
 
-export const simple = () => {
-  const spacing = select("spacing",  [0, 1, 2, 3, 4, 5, 6], 2);
-
+export const simple = wrap(() => {
   return (
-    <Application>
-      <Tooltip text="Teste">
-        <b>Teste</b>
+    <>
+      <Tooltip text={<b><i>html</i> test</b>}>
+        <span>Teste</span>
       </Tooltip>
-    </Application>
+    </>
   );
-};
+});
 
 simple.story = {
   parameters: {},

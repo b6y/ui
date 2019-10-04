@@ -1,6 +1,6 @@
 import { History } from "history";
-import { Reducer, Store as ReduxStore } from "redux";
 import { useStore as reduxUseStore } from "react-redux";
+import { Reducer, Store as ReduxStore } from "redux";
 import { Saga, Task } from "redux-saga";
 
 import { Mode } from "./constants";

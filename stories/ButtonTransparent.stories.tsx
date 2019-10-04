@@ -1,17 +1,15 @@
-
-import { Meta, Preview, Props, Story } from "@storybook/addon-docs/blocks";
 import { select  } from "@storybook/addon-knobs";
 import React from "react";
 
 import { ButtonTransparent } from "../src/core/ButtonTransparent";
 import { Padding } from "../src/core/Padding";
-import Application from "./context";
+import { wrap } from "./context";
 
-export const states = () => {
+export const states = wrap(() => {
   const size = select("size", ["xs", "sm", "md", "lg", "xlg", "xxlg", "xxxlg"], "md");
 
   return (
-    <Application>
+    <>
       <div>
         <Padding>
           <ButtonTransparent state="brand" size={size}>brand</ButtonTransparent>
@@ -32,9 +30,9 @@ export const states = () => {
           <ButtonTransparent state="muted" size={size}>muted</ButtonTransparent>
         </Padding>
       </div>
-    </Application>
+    </>
   );
-};
+});
 
 export default {
   title: "Core|ButtonTransparent",

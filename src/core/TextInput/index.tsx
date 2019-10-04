@@ -77,8 +77,8 @@ export const TextInput = styled(Wrapped)(
     }
 
     return {
-      "background": props.disabled ? getBgColor("light", "dark")(props) : getBgColor("white")(props),
-      "color": props.disabled ? getFgColor("dark")(props) : getFgColor("black")(props),
+      "background": props.disabled ? getBgColor("light", "alphadark")(props) : getBgColor("white")(props),
+      "color": props.disabled ? getFgColor("black", "alpha")(props) : getFgColor("black")(props),
       "border": `1px solid ${getBorderColor(state)(props)}`,
       "&:hover": {
         border: `1px solid ${getBorderColor(outline, "dark")(props)}`,

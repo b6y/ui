@@ -580,7 +580,6 @@ const GlobalCSS = css`
     cursor: unset;
     height: 100%;
     width: 100%;
-    background-color: #edf1f5;
   }
 
   body {

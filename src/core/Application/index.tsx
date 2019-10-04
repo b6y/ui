@@ -37,24 +37,21 @@ export class Application extends React.PureComponent<InnerProps> {
     const theme = definition.theme(defaultTheme);
 
     return (
-      <>
-        <HelmetProvider context={helmetContext}>
-          <ReduxProvider store={definition.store}>
-            <FocusStealProvider>
-              <Global styles={GlobalStyle}/>
+      <HelmetProvider context={helmetContext}>
+        <ReduxProvider store={definition.store}>
+          <FocusStealProvider>
+            <Global styles={GlobalStyle}/>
+            <div style={{ fontFamily: theme.fonts[0] }}>
+              <div ref={portal} id="portal-target" />
               <LanguageProvider messages={definition.messages}>
                 <ThemeProvider theme={theme}>
-                  <div style={{ fontFamily: theme.fonts[0] }}>
-                    {this.props.children}
-
-                    <div ref={portal} id="portal-target" />
-                  </div>
+                  {this.props.children}
                 </ThemeProvider>
               </LanguageProvider>
-            </FocusStealProvider>
-          </ReduxProvider>
-        </HelmetProvider>
-      </>
+            </div>
+          </FocusStealProvider>
+        </ReduxProvider>
+      </HelmetProvider>
     );
   }
 }

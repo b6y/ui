@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import styled from "@emotion/styled";
 
+import { portal } from "../Application";
 import { getBgColor, getSpace, getRadii, Box, BoxProps, Color, WithStyled } from "../../styled";
 
 export interface FooterProps {}
@@ -87,16 +88,15 @@ border: 1px solid ${(props) => getBgColor(props.borderColor || "default", "light
 export type ModalChild = FooterDef | HeaderDef | BodyDef | undefined;
 export type ModalChildren = ModalChild[];
 
-export type ModalProps = WithStyled & {
+export interface ModalProps extends WithStyled {
   borderColor?: Color;
   visible?: boolean;
   children: ModalChild | ModalChildren;
-};
+}
 
 export interface ModalState {}
 
-
-class Modal extends React.PureComponent<ModalProps, ModalState> {
+export class Modal extends React.PureComponent<ModalProps, ModalState> {
   public static Footer = Footer;
   public static Header = Header;
   public static Body = Body;

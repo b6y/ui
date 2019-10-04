@@ -1,11 +1,11 @@
 import React from "react";
 
-import { Markdown } from "../src/core/Markdown";
+import { text } from "@storybook/addon-knobs";
 import {selectLoadingState, setLoadingState} from "../src/core/Loading";
+import { Markdown } from "../src/core/Markdown";
 import { useStore } from "../src/redux";
 import { Box } from "../src/styled";
-import Application from "./context";
-import { text } from "@storybook/addon-knobs";
+import { wrap } from "./context";
 
 const markdownExample = `\
 # Test
@@ -15,7 +15,7 @@ const markdownExample = `\
 [a](https://google.com.br/)
 `;
 
-const Simple = () => {
+export const simple = wrap(() => {
   const content = text("source", markdownExample);
   const store = useStore();
 
@@ -30,15 +30,7 @@ const Simple = () => {
       <Markdown source={content} />
     </Box>
   );
-};
-
-export const simple = () => {
-  return (
-    <Application>
-      <Simple />
-    </Application>
-  );
-};
+});
 
 simple.story = {
   parameters: {},

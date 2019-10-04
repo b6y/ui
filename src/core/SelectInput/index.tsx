@@ -1,7 +1,7 @@
-import { withTheme } from "emotion-theming";
+import { useTheme } from "emotion-theming";
 import { FieldProps } from "formik";
 import * as R from "ramda";
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import AsyncSelect from "react-select/async";
 import { Theme } from "../../styled";
 import { getValue, translateSize } from "../../styled/system";
@@ -49,6 +49,7 @@ const customStyles = (size: any, theme: Theme): ReactSelectStyles => ({
     label: "container",
     background: "none",
     padding: 0,
+    width: '100%'
   }),
   control: (base, state) => ({
     ...base,
@@ -156,11 +157,13 @@ const customStyles = (size: any, theme: Theme): ReactSelectStyles => ({
   }),
 });
 
-export interface SelectInputProps extends FieldProps {
+export interface SelectInputProps {
   options: Adapter;
-  theme: Theme;
-  id: any;
-  isClearable: boolean;
+  isClearable?: boolean;
+  value?: any;
+  onChange?: (value: string | null) => void;
+  onBlur?: (event: React.SyntheticEvent) => void;
+  onFocus?: (event: React.SyntheticEvent) => void;
 }
 
 interface State {
@@ -229,7 +232,90 @@ const MenuList = (props: MenuListComponentProps<any>) => {
   );
 };
 
-class SelectInput extends React.PureComponent<SelectInputProps, State> {
+const NewBaseSelectInput = (props: SelectInputProps) => {
+  const isMounted = useRef(false);
+  const theme = useTheme<Theme>();
+
+  const [state, setState] = useState({ option: null, value: null, loading: true } as State);
+
+  const setOption = (value: any) => {
+    if (value !== null) {
+      setState({ ...state, loading: true });
+
+      const { options } = props;
+
+      return options.byIds([value], props).then((res) => {
+        if (isMounted.current) {
+          setState({ value, option: res[0], loading: false });
+        }
+
+        return res[0];
+      });
+    } else {
+      setState({ loading: false, option: null, value: null });
+
+      return Promise.resolve(null);
+    }
+  };
+
+  useEffect(() => {
+    isMounted.current = true;
+
+    const { value } = props;
+
+    if (R.isNil(value)) {
+      setOption(null);
+    } else {
+      setOption(value);
+    }
+  }, []);
+
+  const onChange = (value: any) => {
+    setState({ ...state, value });
+
+    if (props.onChange) {
+      props.onChange(value);
+    }
+  };
+
+  const onBlur = (evt: React.SyntheticEvent) => {
+    if (props.onBlur) {
+      props.onBlur(evt);
+    }
+  };
+
+  const onFocus = (evt: React.SyntheticEvent) => {
+    if (props.onFocus) {
+      props.onFocus(evt);
+    }
+  };
+
+  const portalDOM = document.getElementById("portal-target");
+
+  const { options, isClearable } = props;
+
+  return (
+    <AsyncSelect
+      components={{ Option: CustomOption, SingleValue: CustomDisplayOption, MenuList }}
+      loadOptions={(text: any) => options.search(text, props)}
+      defaultOptions={true}
+      cacheOptions
+      styles={customStyles(2, theme)}
+      onChange={onChange}
+      onBlur={onBlur}
+      onFocus={onFocus}
+      value={state.loading ? null : state.option}
+      isClearable={isClearable}
+      isSearchable={!state.loading}
+      menuPortalTarget={portalDOM}
+      isLoading={state.loading}
+      isDisabled={state.loading}
+      placeholder={state.loading ? "Carregando..." : "Selecione..."}
+    />
+  );
+}
+
+class BaseSelectInput extends React.PureComponent<SelectInputProps, State> {
   // HAHA.
   public isMounted: boolean = false;
 
@@ -268,12 +354,12 @@ class SelectInput extends React.PureComponent<SelectInputProps, State> {
 
   public componentDidMount() {
     this.isMounted = true;
-    const { field } = this.props;
+    const { value } = this.props;
 
-    if (R.isNil(field) || R.isNil(field.value)) {
+    if (R.isNil(value)) {
       this.setOption(null);
     } else {
-      this.setOption(field.value);
+      this.setOption(value);
     }
   }
 
@@ -282,18 +368,15 @@ class SelectInput extends React.PureComponent<SelectInputProps, State> {
   }
 
   public componentDidUpdate(prevProps: SelectInputProps) {
-    const { field } = this.props;
-    const { field: oldField } = prevProps;
-
     let oldValue = null;
     let value = null;
 
-    if (!R.isNil(field) && !R.isNil(field.value)) {
-      value = field.value;
+    if (!R.isNil(this.props.value)) {
+      value = this.props.value;
     }
 
-    if (!R.isNil(oldField) && !R.isNil(oldField.value)) {
-      oldValue = oldField.value;
+    if (!R.isNil(prevProps.value)) {
+      oldValue = prevProps.value;
     }
 
     if (oldValue !== value) {
@@ -306,27 +389,29 @@ class SelectInput extends React.PureComponent<SelectInputProps, State> {
   }
 
   public onChange(value: any) {
-    const { field, form } = this.props;
-
     this.setState({ value });
 
-    if (R.isNil(value) || R.isNil(value.value)) {
-      form.setFieldValue(field.name, null);
-    } else {
-      form.setFieldValue(field.name, value.value);
+    if (this.props.onChange) {
+      this.props.onChange(value);
     }
   }
 
-  public onBlur() {
-    const { field, form } = this.props;
+  public onBlur(evt: React.SyntheticEvent) {
+    if (this.props.onBlur) {
+      this.props.onBlur(evt);
+    }
+  }
 
-    form.setFieldTouched(field.name, true);
+  public onFocus(evt: React.SyntheticEvent) {
+    if (this.props.onFocus) {
+      this.props.onFocus(evt);
+    }
   }
 
   public render() {
     const portalDOM = document.getElementById("portal-target");
 
-    const { field, options, theme, id, isClearable } = this.props;
+    const { options, theme, isClearable } = this.props;
 
     const { option, loading } = this.state;
 
@@ -338,11 +423,10 @@ class SelectInput extends React.PureComponent<SelectInputProps, State> {
           defaultOptions={true}
           cacheOptions
           styles={customStyles(2, theme)}
-          name={field.name}
           onChange={this.onChange}
           onBlur={this.onBlur}
+          onFocus={this.onFocus}
           value={loading ? null : option}
-          inputId={id}
           isClearable={isClearable}
           isSearchable={!loading}
           menuPortalTarget={portalDOM}
@@ -355,4 +439,9 @@ class SelectInput extends React.PureComponent<SelectInputProps, State> {
   }
 }
 
-export default withTheme(SelectInput);
+export * from "./adapter";
+
+// export const SelectInput = withTheme(BaseSelectInput);
+export const SelectInput = NewBaseSelectInput;
+
+export default SelectInput;

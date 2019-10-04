@@ -8,7 +8,7 @@ import * as types from "./types";
 
 export const H2 = styled(React.forwardRef(
     (props: types.HeadingProps, ref: React.Ref<HTMLHeadingElement>) => {
-        return <div ref={ref} {...clearAll(props)} />;
+        return <h2 ref={ref} {...clearAll(props)} />;
     },
 ))(
     ...baseCompose,

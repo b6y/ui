@@ -1,17 +1,15 @@
-
-import { Meta, Preview, Props, Story } from "@storybook/addon-docs/blocks";
-import { select  } from "@storybook/addon-knobs";
+import { select } from "@storybook/addon-knobs";
 import React from "react";
 
 import { Button } from "../src/core/Button";
 import { Padding } from "../src/core/Padding";
-import Application from "./context";
+import { wrap } from "./context";
 
-export const states = () => {
+export const states = wrap(() => {
   const size = select("size", ["xs", "sm", "md", "lg", "xlg", "xxlg", "xxxlg"], "md");
 
   return (
-    <Application>
+    <>
       <div>
         <Padding>
           <Button state="brand" size={size}>brand</Button>
@@ -32,9 +30,9 @@ export const states = () => {
           <Button state="muted" size={size}>muted</Button>
         </Padding>
       </div>
-    </Application>
+    </>
   );
-};
+});
 
 export default {
   title: "Core|Button",

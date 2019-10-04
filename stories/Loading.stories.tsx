@@ -5,9 +5,9 @@ import { Loading } from "../src/core/Loading";
 import {selectLoadingState, setLoadingState} from "../src/core/Loading";
 import { useStore } from "../src/redux";
 import { Box } from "../src/styled";
-import Application from "./context";
+import { wrap } from "./context";
 
-const Simple = () => {
+export const simple = wrap(() => {
   const store = useStore();
 
   const toggle = () => {
@@ -26,15 +26,7 @@ const Simple = () => {
       </Box>
     </Box>
   );
-};
-
-export const simple = () => {
-  return (
-    <Application>
-      <Simple />
-    </Application>
-  );
-};
+});
 
 simple.story = {
   parameters: {},

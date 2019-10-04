@@ -1,23 +1,19 @@
 import React from "react";
 
 import { Application } from "../src/core/Application";
-import Context, { PrintContext, PrintTheme } from "./context";
+import { PrintContext, PrintTheme, wrap } from "./context";
 
-export const theme = () => {
+export const theme = wrap(() => {
   return (
-    <Context>
-      <pre><PrintTheme /></pre>
-    </Context>
+    <pre><PrintTheme /></pre>
   );
-};
+});
 
-export const context = () => {
+export const context = wrap(() => {
   return (
-    <Context>
-      <pre><PrintContext /></pre>
-    </Context>
+    <pre><PrintContext /></pre>
   );
-};
+});
 
 export default {
   title: "Core|Application",
