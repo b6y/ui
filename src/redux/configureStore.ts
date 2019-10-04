@@ -52,6 +52,10 @@ export default function configureStore(initialState = {}, history: History, redu
 
     store.replaceReducer(rootReducerCreator(store.injectedReducers));
   };
+  store.select = <T>(selector: (state: any) => T | undefined): T | undefined => {
+    return selector(store.getState());
+  };
+  store["@b6y/store"] = true;
 
   // Make reducers hot reloadable, see http://mxs.is/googmo
   /* istanbul ignore next */

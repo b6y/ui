@@ -14,7 +14,7 @@ interface LoadingProps {
   children: () => React.ReactElement;
 }
 
-export const Loading = (props: LoadingProps) => {
+const BaseLoading = (props: LoadingProps) => {
   const { loading, name, children } = props;
 
   let state = loading && loading[name];
@@ -34,7 +34,7 @@ const withReducer = injectReducer({ key: "@b6y/components/core/Loading", reducer
 
 export function mapDispatchToProps(dispatch: Dispatch) {
   return {
-    setState: (name: string, state: boolean) => dispatch(actions.setState(name, state)),
+    setState: (name: string, state: boolean) => dispatch(actions.setLoadingState(name, state)),
   };
 }
 
@@ -49,7 +49,12 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-export default compose<typeof Loading>(
+export const Loading = compose<typeof BaseLoading>(
   withReducer,
   withConnect,
-)(Loading);
+)(BaseLoading);
+
+export * from "./actions";
+export * from "./selectors";
+
+export default Loading;

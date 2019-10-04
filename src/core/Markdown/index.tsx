@@ -7,6 +7,8 @@ export interface Props {
   source: string;
 }
 
-export default (props: Props) => {
+export const Markdown = (props: Props) => {
   return <ReactMarkdown source={props.source} renderers={{ code: Highlight }} />;
 };
+
+export default Markdown;

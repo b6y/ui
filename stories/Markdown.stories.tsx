@@ -1,13 +1,22 @@
 import React from "react";
 
-import { Button } from "../src/core/Button";
-import { Loading } from "../src/core/Loading";
+import { Markdown } from "../src/core/Markdown";
 import {selectLoadingState, setLoadingState} from "../src/core/Loading";
 import { useStore } from "../src/redux";
 import { Box } from "../src/styled";
 import Application from "./context";
+import { text } from "@storybook/addon-knobs";
+
+const markdownExample = `\
+# Test
+## test
+### test
+#### test
+[a](https://google.com.br/)
+`;
 
 const Simple = () => {
+  const content = text("source", markdownExample);
   const store = useStore();
 
   const toggle = () => {
@@ -18,12 +27,7 @@ const Simple = () => {
 
   return (
     <Box>
-      <Button onClick={toggle} state="default" size="md">Toggle</Button>
-      <Box>
-        <Loading name="test">
-          {() => <b>Content</b>}
-        </Loading>
-      </Box>
+      <Markdown source={content} />
     </Box>
   );
 };
@@ -41,6 +45,6 @@ simple.story = {
 };
 
 export default {
-  title: "Core|Loading",
-  component: Loading,
+  title: "Core|Markdown",
+  component: Markdown,
 };
