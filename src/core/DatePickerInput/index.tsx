@@ -26,6 +26,7 @@ export interface DatePickerInputProps extends WrappedComponentProps {
   value?: any;
   state?: Color;
   disabled?: boolean;
+  inputSize?: string;
 }
 
 export interface State {
@@ -57,6 +58,7 @@ class BaseDatePickerInput extends React.Component<DatePickerInputProps, State> {
     this.pickerChanged = this.pickerChanged.bind(this);
     this.pickerFocusChanged = this.pickerFocusChanged.bind(this);
     this.outsideClicked = this.outsideClicked.bind(this);
+    this.inputKeyDown = this.inputKeyDown.bind(this);
   }
 
   public componentDidMount() {
@@ -67,7 +69,11 @@ class BaseDatePickerInput extends React.Component<DatePickerInputProps, State> {
 
   public componentDidUpdate(prevProps: DatePickerInputProps, prevState: State) {
     if (this.props.value !== prevProps.value) {
-      this.setState({ value: moment(this.props.value) });
+      if (this.props.value !== null) {
+        this.setState({ value: moment(this.props.value) });
+      } else {
+        this.setState({ value: null });
+      }
     }
   }
 
@@ -105,7 +111,7 @@ class BaseDatePickerInput extends React.Component<DatePickerInputProps, State> {
   public blurred(evt: React.FocusEvent<HTMLInputElement>) {
     evt.persist();
 
-    console.log(this.portal.current, this.input.current, evt.target, evt)
+    // console.log(this.portal.current, this.input.current, evt.target, evt)
 
     const target = evt.relatedTarget || evt.target;
 
@@ -135,6 +141,13 @@ class BaseDatePickerInput extends React.Component<DatePickerInputProps, State> {
     }
   }
 
+  public inputKeyDown(evt: React.KeyboardEvent) {
+    console.log(evt.which)
+    if (evt.which === 8) {
+      this.pickerChanged(null);
+    }
+  }
+
   public focusStolen(evt: FocusStealEvent) {
     // console.error("focusStolen");
     if (this.portal.current && this.input.current) {
@@ -146,8 +159,11 @@ class BaseDatePickerInput extends React.Component<DatePickerInputProps, State> {
   }
 
   public pickerChanged(value: Moment | null) {
+    this.hideDropdown();
     if (this.props.onChange && value !== null) {
       this.props.onChange(value.format("YYYY-MM-DD HH:mm:ss"));
+    } else if (this.props.onChange) {
+      this.props.onChange(null);
     }
   }
 
@@ -172,6 +188,7 @@ class BaseDatePickerInput extends React.Component<DatePickerInputProps, State> {
       "name",
       "children",
       "placeholder",
+      "visibleMonths",
     ], props);
 
     // const fieldProps = {
@@ -200,6 +217,7 @@ class BaseDatePickerInput extends React.Component<DatePickerInputProps, State> {
         value={props.value ? this.props.intl.formatDate(props.value, { timeZone: "UTC" }) : ""}
         onFocus={this.focused}
         onBlur={this.blurred}
+        onKeyDown={this.inputKeyDown}
         onClick={() => this.showDropdown()}
         {...newFilteredProps} />
     );
