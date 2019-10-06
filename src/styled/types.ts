@@ -237,6 +237,10 @@ export interface BaseProps extends
   gentypes.WithVerticalAlign,
   gentypes.WithBoxShadow,
   gentypes.WithLineHeight,
+  gentypes.WithMaxWidth,
+  gentypes.WithMaxHeight,
+  gentypes.WithMinWidth,
+  gentypes.WithMinHeight,
   WithStyled {}
 
 export interface HasTextProps extends

@@ -4,6 +4,7 @@ import { Styles as ReactSelectStyles } from "react-select/src/styles";
 import {
     getBgColor,
     getBorderColor,
+    getFgColor,
     getFontSize,
     getOutlineColor,
     getSize,
@@ -12,7 +13,6 @@ import {
     Theme,
     themed,
     translateSize,
-    getFgColor,
 } from "../../styled";
 import { SelectInputProps } from "./types";
 
@@ -133,21 +133,27 @@ export const styles = (inputProps: SelectInputProps, theme: Theme): ReactSelectS
         }),
         dropdownIndicator: (base) => ({
             ...base,
-            label: "dropdownIndicator",
-            padding: 0,
-            paddingLeft: 4,
-            paddingRight: 0,
-            margin: 0,
-            color: getBorderColor(state)(props),
+            "label": "dropdownIndicator",
+            "padding": 0,
+            "paddingLeft": 4,
+            "paddingRight": 0,
+            "margin": 0,
+            "color": getBorderColor(state)(props),
+            ":hover": {
+                color: getBorderColor(state, "dark")(props),
+            },
         }),
         clearIndicator: (base) => ({
             ...base,
-            label: "clearIndicator",
-            padding: 0,
-            paddingLeft: 0,
-            paddingRight: 4,
-            margin: 0,
-            color: getBorderColor(state)(props),
+            "label": "clearIndicator",
+            "padding": 0,
+            "paddingLeft": 0,
+            "paddingRight": 4,
+            "margin": 0,
+            "color": getBorderColor(state)(props),
+            ":hover": {
+                color: getBorderColor(state, "dark")(props),
+            },
         }),
         multiValue: (base) => ({
             ...base,

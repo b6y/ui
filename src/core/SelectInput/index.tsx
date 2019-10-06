@@ -114,6 +114,7 @@ const NewBaseSelectInput = (props: SelectInputProps) => {
   );
 };
 
+export * from "./types";
 export * from "./adapter";
 
 // export const SelectInput = withTheme(BaseSelectInput);

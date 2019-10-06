@@ -101,7 +101,7 @@ export const fontWeights = {
   bold: 700,
 };
 
-export const radii = [0, .15, .3];
+export const radii = [0, .2, .4];
 
 export const fonts = {
   0: `'Open Sans', sans-serif`,

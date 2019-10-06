@@ -24,7 +24,7 @@ addParameters({
     ],
 });
 
-addDecorator(withA11y);
+// addDecorator(withA11y);
 // addDecorator(withInfo({}));
 addDecorator(withKnobs);
 

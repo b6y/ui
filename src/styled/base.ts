@@ -15,6 +15,10 @@ export const baseCompose = [
     system.verticalAlign,
     system.boxShadow,
     system.lineHeight,
+    system.maxHeight,
+    system.maxWidth,
+    system.minWidth,
+    system.minHeight,
 ];
 
 export const baseProps = [
@@ -31,6 +35,10 @@ export const baseProps = [
     ...system.verticalAlignProps,
     ...system.boxShadowProps,
     ...system.lineHeightProps,
+    ...system.maxHeightProps,
+    ...system.maxWidthProps,
+    ...system.minWidthProps,
+    ...system.minHeightProps,
 ]
 
 export const clearBase = R.omit(baseProps);

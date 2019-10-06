@@ -1,14 +1,16 @@
 import { select } from "@storybook/addon-knobs";
 import React, { useMemo, useState } from "react";
+import styled from "@emotion/styled";
 
 import { BoxGroup } from "../src/core/BoxGroup";
 import { Button } from "../src/core/Button";
 import { ButtonOutline } from "../src/core/ButtonOutline";
 import { ButtonTransparent } from "../src/core/ButtonTransparent";
 import { DatePickerInput } from "../src/core/DatePickerInput";
+import { MultiSelectInput } from "../src/core/MultiSelectInput";
 import { ArrayAdapter, SelectInput } from "../src/core/SelectInput";
-import { TextInput } from "../src/core/TextInput";
 import { TextAreaInput } from "../src/core/TextAreaInput";
+import { TextInput } from "../src/core/TextInput";
 import { Box } from "../src/styled";
 import { wrap } from "./context";
 
@@ -25,9 +27,28 @@ const defaultOptions = [
   { label: "Value 10", value: 10 },
 ];
 
+const BoxLabel = styled(Box)`
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  width: 160px;
+`;
+
+const Section = (props: React.PropsWithChildren<{ spacing: number }>) => {
+  return (
+    <Box bg="black" p={props.spacing} mb={3}>
+      <Box bg="alphalight" py={props.spacing}>
+        {props.children}
+      </Box>
+    </Box>
+  )
+}
+
 export const simple = wrap(() => {
   const [selectValue, setSelectValue] = useState(2);
-  const [textInputValue, setTextInputValue] = useState("2");
+  const [multiSelectValue, setMultiSelectValue] = useState([]);
+  const [textInputValue, setTextInputValue] = useState(null);
   const [textAreaInputValue, setTextAreaInputValue] = useState("2");
   const [datePickerValue, setDatePickerValue] = useState(undefined as string);
 
@@ -40,10 +61,26 @@ export const simple = wrap(() => {
     return new ArrayAdapter(defaultOptions);
   }, []);
 
+  const input = (
+    <TextInput
+      placeholder="Reference size"
+      state={state}
+      inputSize={size}
+      value={textInputValue}
+      onChange={(evt) => setTextInputValue(evt.target.value)}
+    />
+  );
+
   return (
-    <Box bg="black" p={spacing}>
-      <Box bg="darker" py={spacing}>
+    <Box css={{ maxWidth: "600px" }}>
+      <Section spacing={spacing}>
         <BoxGroup spacing={spacing}>
+          <BoxLabel bg={background}>
+            SelectInput
+            </BoxLabel>
+          <Box bg={background} width={1}>
+            {input}
+          </Box>
           <Box bg={background} width={1}>
             <SelectInput
               placeholder="SelectInput"
@@ -55,15 +92,39 @@ export const simple = wrap(() => {
               onChange={(value) => setSelectValue(value)}
             />
           </Box>
+        </BoxGroup>
+      </Section>
+      <Section spacing={spacing}>
+        <BoxGroup spacing={spacing}>
+          <BoxLabel bg={background}>
+            MultiSelectInput
+            </BoxLabel>
           <Box bg={background} width={1}>
-            <TextInput
-              placeholder="TextInput"
+            {input}
+          </Box>
+
+          <Box bg={background} width={1}>
+            <MultiSelectInput
+              placeholder="MultiSelectInput"
               state={state}
               inputSize={size}
-              value={textInputValue}
-              onChange={(evt) => setTextInputValue(evt.target.value)}
+              isClearable={true}
+              options={options}
+              values={multiSelectValue}
+              onChange={(value) => setMultiSelectValue(value)}
             />
           </Box>
+        </BoxGroup>
+      </Section>
+      <Section spacing={spacing}>
+        <BoxGroup spacing={spacing}>
+          <BoxLabel bg={background}>
+            DatePickerInput
+            </BoxLabel>
+          <Box bg={background} width={1}>
+            {input}
+          </Box>
+
           <Box bg={background} width={1}>
             <DatePickerInput
               placeholder="DatePickerInput"
@@ -73,6 +134,17 @@ export const simple = wrap(() => {
               onChange={(value) => setDatePickerValue(value)}
             />
           </Box>
+        </BoxGroup>
+      </Section>
+      <Section spacing={spacing}>
+        <BoxGroup spacing={spacing}>
+          <BoxLabel bg={background}>
+            TextAreaInput
+            </BoxLabel>
+          <Box bg={background} width={1}>
+            {input}
+          </Box>
+
           <Box bg={background} width={1}>
             <TextAreaInput
               placeholder="TextAreaInput"
@@ -83,17 +155,50 @@ export const simple = wrap(() => {
               onChange={(evt) => setTextAreaInputValue(evt.target.value)}
             />
           </Box>
+        </BoxGroup>
+      </Section>
+      <Section spacing={spacing}>
+        <BoxGroup spacing={spacing}>
+          <BoxLabel bg={background}>
+            Button
+            </BoxLabel>
           <Box bg={background} width={1}>
-            <Button width={1} size={size} state={state}>Test</Button>
+            {input}
           </Box>
+
           <Box bg={background} width={1}>
-            <ButtonOutline width={1} size={size} state={state}>Test</ButtonOutline>
-          </Box>
-          <Box bg={background} width={1}>
-            <ButtonTransparent width={1} size={size} state={state}>Test</ButtonTransparent>
+            <Button width={1} size={size} state={state}>Button</Button>
           </Box>
         </BoxGroup>
-      </Box>
+      </Section>
+      <Section spacing={spacing}>
+        <BoxGroup spacing={spacing}>
+          <BoxLabel bg={background}>
+            ButtonOutline
+            </BoxLabel>
+          <Box bg={background} width={1}>
+            {input}
+          </Box>
+
+          <Box bg={background} width={1}>
+            <ButtonOutline width={1} size={size} state={state}>ButtonOutline</ButtonOutline>
+          </Box>
+        </BoxGroup>
+      </Section>
+      <Section spacing={spacing}>
+        <BoxGroup spacing={spacing}>
+          <BoxLabel bg={background}>
+            ButtonTransparent
+            </BoxLabel>
+          <Box bg={background} width={1}>
+            {input}
+          </Box>
+
+          <Box bg={background} width={1}>
+            <ButtonTransparent width={1} size={size} state={state}>ButtonTransparent</ButtonTransparent>
+          </Box>
+        </BoxGroup>
+      </Section>
     </Box>
   );
 });
