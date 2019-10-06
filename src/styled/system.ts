@@ -324,12 +324,20 @@ export const getFontColor = (
   }
 };
 
-export const getSpace = (n: any) => (props: EnsureWithTheme) => {
-  const scale = props.theme ? (get<number[]>(props.theme, "space") || defaultScale) : defaultScale;
+export const ensureWithTheme = <T>(fn: (theme: types.Theme) => T) => {
+  return (props: types.WithStyled): T | undefined => {
+    if (props.theme) {
+      return fn(props.theme);
+    }
+  };
+}
+
+export const getSpace = (n: any) => ensureWithTheme((theme) => {
+  const scale = theme ? (get<number[]>(theme, "space") || defaultScale) : defaultScale;
   const getStyle = getValue(scale, "rem");
 
   return getStyle(n);
-};
+});
 
 export const getRadii = (n: any) => (props: EnsureWithTheme) => {
   const scale = props.theme ? (get<number[]>(props.theme, "radii") || defaultRadii) : defaultRadii;
@@ -352,6 +360,10 @@ export const getFontSize = (n: any) => (props: EnsureWithTheme) => {
 
   return getStyle(n);
 };
+
+export const hasTransition = ensureWithTheme((theme) => {
+  return { transition: "all 100ms" };
+});
 
 // space props
 export const spaceProps: Array<keyof gentypes.WithSpace> =

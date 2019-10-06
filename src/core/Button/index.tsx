@@ -14,6 +14,7 @@ import {
   Padding,
   themed,
   translateSize,
+  hasTransition,
 } from "../../styled";
 
 import { SvgIcon } from "../Icon";
@@ -59,6 +60,7 @@ const Wrapper = React.forwardRef((props: ButtonProps, ref: any) => {
 
 export const Button = styled(Wrapper)(
   themeHeight,
+  hasTransition,
   (props) => ({
     appearance: "none",
     backgroundColor: getBgColor(props.state)(props),

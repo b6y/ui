@@ -1,15 +1,19 @@
 import React from "react";
 
+import { withA11y } from "@storybook/addon-a11y";
 import { withInfo } from "@storybook/addon-info";
 import { withKnobs } from "@storybook/addon-knobs";
 import { addDecorator, addParameters, configure } from "@storybook/react";
+
 import theme from "./theme";
 
 addParameters({
     options: {
         theme,
     },
+    grid: { cellSize: 12 },
     backgrounds: [
+        { name: "transparent", value: "transparent" },
         { name: "white", value: "#fff", default: true },
         { name: "black", value: "#000" },
         { name: "gray", value: "#bbb" },
@@ -20,6 +24,7 @@ addParameters({
     ],
 });
 
+addDecorator(withA11y);
 // addDecorator(withInfo({}));
 addDecorator(withKnobs);
 

@@ -1,6 +1,6 @@
-import React from "react";
 import styled from "@emotion/styled";
 import * as R from "ramda";
+import React from "react";
 
 import {
     Button as BaseButton,
@@ -9,6 +9,7 @@ import {
     getBorderColor,
     getOutlineColor,
     getSize,
+    hasTransition,
     Padding,
     themed,
     translateSize,
@@ -51,10 +52,12 @@ const themeHeight = (props: ButtonOutlineProps) => {
 };
 
 const Wrapper = React.forwardRef((props: ButtonOutlineProps, ref: React.Ref<HTMLButtonElement>) => {
-    return <BaseButton ref={ref} {...props} />
+    return <BaseButton ref={ref} {...props} />;
 });
 
 export const ButtonOutline = styled(Wrapper)(
+    themeHeight,
+    hasTransition,
     (props) => ({
         backgroundClip: "padding-box",
         background: "transparent",
@@ -92,7 +95,6 @@ export const ButtonOutline = styled(Wrapper)(
             marginLeft: iconMargin(props),
         },
     }),
-    themeHeight,
 );
 
 ButtonOutline.defaultProps = {

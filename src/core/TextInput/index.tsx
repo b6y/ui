@@ -1,4 +1,4 @@
-import styled from "@emotion/styled";
+import styled, { StyledComponent } from "@emotion/styled";
 import * as R from "ramda";
 import React, { HTMLAttributes } from "react";
 import { injectIntl, MessageDescriptor, WrappedComponentProps } from "react-intl";
@@ -10,6 +10,7 @@ import {
   getFgColor,
   getOutlineColor,
   getSize,
+  hasTransition,
   Input,
   InputProps,
   Padding,
@@ -60,6 +61,7 @@ const Wrapped = React.forwardRef((props: TextInputProps, ref: React.Ref<HTMLInpu
 });
 
 export const TextInput = styled(Wrapped)(
+  hasTransition,
   () => ({
     color: "black",
     appearance: "none",

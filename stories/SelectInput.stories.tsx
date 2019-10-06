@@ -1,32 +1,60 @@
 import { action } from "@storybook/addon-actions";
-import React from "react";
+import React, { useMemo, useState } from "react";
 
-import { SelectInput, ArrayAdapter } from "../src/core/SelectInput";
-import { Padding } from "../src/core/Padding";
+import { ArrayAdapter, OptionType, SelectInput } from "../src/core/SelectInput";
 import { wrap } from "./context";
 
-export const simple = wrap(() => {
-  const [state, setState] = React.useState(null);
+const defaultOptions = [
+  { label: "Value 1", value: 1 },
+  { label: "Value 2", value: 2 },
+  { label: "Value 3", value: 3 },
+  { label: "Value 4", value: 4 },
+  { label: "Value 5", value: 5 },
+  { label: "Value 6", value: 6 },
+  { label: "Value 7", value: 7 },
+  { label: "Value 8", value: 8 },
+  { label: "Value 9", value: 9 },
+  { label: "Value 10", value: 10 },
+]
 
-  const changed = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    action("changed")(evt.target.value);
-    setState(evt.target.value);
+export const controlled = wrap(() => {
+  const [state, setState] = useState(3);
+
+  const changed = (value: any, item?: OptionType) => {
+    action("changed")(item);
+    setState(value);
   };
 
-  const options = new ArrayAdapter([{ label: 'Ok', value: 1, option: (<b>xd</b>), }])
+  const options = useMemo(() => {
+    return new ArrayAdapter(defaultOptions);
+  }, []);
 
   return (
     <>
-      <Padding width={1 / 2} spacing={3} my={3}>
-        <SelectInput options={options} />
-      </Padding>
+      <SelectInput
+        size="md"
+        isClearable={true}
+        options={options}
+        onChange={changed}
+        onBlur={() => action("blurred")()}
+        onFocus={() => action("focused")()}
+        value={state}
+      />
     </>
   );
 });
 
-simple.story = {
-  parameters: {},
-};
+export const uncontrolled = wrap(() => {
+  const options = useMemo(() => {
+    return new ArrayAdapter(defaultOptions);
+  }, []);
+
+  return (
+    <>
+      <SelectInput size="md" isClearable={true} options={options} value={2} />
+    </>
+  );
+});
 
 export default {
   title: "Core|SelectInput",

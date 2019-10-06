@@ -14,6 +14,7 @@ import {
   themed,
   translateSize,
   WithStyled,
+  hasTransition,
 } from "../../styled";
 
 import { SvgIcon } from "../Icon";
@@ -58,6 +59,7 @@ const Wrapper = React.forwardRef((props: ButtonTransparentProps, ref: React.Ref<
 
 export const ButtonTransparent = styled(Wrapper)(
   themeHeight,
+  hasTransition,
   (props) => ({
     appearance: "none",
 
