@@ -5,13 +5,13 @@
 import { History } from "history";
 import { combineReducers, Reducer } from "redux";
 
-import languageProviderReducer from "../core/LanguageProvider/reducer";
+import { languageProviderReducer } from "../core/LanguageProvider/reducer";
 import { Reducers } from "./store";
 
 /**
  * Merges the main reducer with the router state and dynamically injected reducers
  */
-export default function reducerCreatorFactory(history: History, reducers: Reducers) {
+export function reducerCreatorFactory(history: History, reducers: Reducers) {
   return function createReducer(injectedReducers = {}) {
     return combineReducers({
       ...reducers,

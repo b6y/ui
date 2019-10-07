@@ -3,7 +3,7 @@ import { connect as formikConnect, FormikContext } from "formik";
 import React from "react";
 import { injectIntl, MessageDescriptor, WrappedComponentProps } from "react-intl";
 
-import errorMessages from "../../messages/errors";
+import { messages as errorMessages } from "../../messages/errors";
 import { Box, Text } from "../../styled";
 import * as types from "../../styled/types";
 
@@ -13,7 +13,7 @@ interface ErrorBagProps extends types.BoxProps, WrappedComponentProps {
 
 interface State {}
 
-class ErrorBagBase extends React.PureComponent<ErrorBagProps & { formik: FormikContext<any> }, State> {
+class BaseErrorBag extends React.PureComponent<ErrorBagProps & { formik: FormikContext<any> }, State> {
   public static defaultProps = {
     field: "$",
   };
@@ -28,8 +28,8 @@ class ErrorBagBase extends React.PureComponent<ErrorBagProps & { formik: FormikC
       let error = originalError;
 
       if (typeof originalError === "string") {
-        if (ErrorBagBase.cache[originalError]) {
-          error = ErrorBagBase.cache[originalError];
+        if (BaseErrorBag.cache[originalError]) {
+          error = BaseErrorBag.cache[originalError];
         } else {
 
           if (typeof error === "string" && error.startsWith("#")) {
@@ -52,7 +52,7 @@ class ErrorBagBase extends React.PureComponent<ErrorBagProps & { formik: FormikC
               error = originalError;
             }
           }
-          ErrorBagBase.cache[originalError] = error;
+          BaseErrorBag.cache[originalError] = error;
         }
       }
 
@@ -69,4 +69,4 @@ class ErrorBagBase extends React.PureComponent<ErrorBagProps & { formik: FormikC
   }
 }
 
-export default styled(injectIntl(formikConnect<ErrorBagProps>(ErrorBagBase)))();
+export const ErrorBag = styled(injectIntl(formikConnect<ErrorBagProps>(BaseErrorBag)))();

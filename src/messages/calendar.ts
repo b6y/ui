@@ -1,6 +1,6 @@
 import { defineMessages } from "react-intl";
 
-export default defineMessages({
+export const messages = defineMessages({
   title: { id: "calendar.title", defaultMessage: "Calendário" },
 
   sunday: { id: "calendar.sunday", defaultMessage: "Domingo" },

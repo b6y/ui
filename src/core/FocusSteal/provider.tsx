@@ -3,9 +3,9 @@ import React from "react";
 
 import { FocusStealEvent } from "./types";
 
-import Context from "./context";
+import { FocusStealContext } from "./context";
 
-export default class FocusStealProvider extends React.PureComponent {
+export class FocusStealProvider extends React.PureComponent {
   public bus = new EventEmitter();
 
   public componentDidMount() {
@@ -20,7 +20,7 @@ export default class FocusStealProvider extends React.PureComponent {
 
   public render() {
     return (
-      <Context.Provider value={{ bus: this.bus }} {...this.props} />
+      <FocusStealContext.Provider value={{ bus: this.bus }} {...this.props} />
     );
   }
 }

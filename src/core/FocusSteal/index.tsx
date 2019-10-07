@@ -1,6 +1,6 @@
 import React from "react";
 
-import Context from "./context";
+import { FocusStealContext } from "./context";
 
 import { FocusStealEvent, FocusStealProps, State } from "./types";
 
@@ -25,14 +25,14 @@ export function notContains<R1 extends HTMLElement, R2 extends HTMLElement>(
   };
 }
 
-class FocusStealConsumer extends React.PureComponent<FocusStealProps, State> {
-  public static contextType = Context;
+export class FocusStealConsumer extends React.PureComponent<FocusStealProps, State> {
+  public static contextType = FocusStealContext;
 
   public static defaultProps = {
     enabled: true,
   };
 
-  public context!: React.ContextType<typeof Context>;
+  public context!: React.ContextType<typeof FocusStealContext>;
 
   constructor(props: FocusStealProps) {
     super(props);
@@ -62,5 +62,3 @@ class FocusStealConsumer extends React.PureComponent<FocusStealProps, State> {
     return <React.Fragment>{this.props.children}</React.Fragment>;
   }
 }
-
-export default FocusStealConsumer;

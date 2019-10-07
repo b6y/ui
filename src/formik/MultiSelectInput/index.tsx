@@ -5,10 +5,13 @@ import * as R from "ramda";
 import React from "react";
 import { injectIntl, MessageDescriptor, WrappedComponentProps } from "react-intl";
 
-import Label from "../../core/Label";
-import BaseMultiSelectInput, { MultiSelectInputProps as BaseMultiSelectInputProps } from "../../core/MultiSelectInput";
+import { Label } from "../../core/Label";
+import {
+  MultiSelectInput as BaseMultiSelectInput,
+  MultiSelectInputProps as BaseMultiSelectInputProps,
+} from "../../core/MultiSelectInput";
 import { genid } from "../commons";
-import ErrorBag from "../ErrorBag";
+import { ErrorBag } from "../ErrorBag";
 
 export type MultiSelectInputProps = BaseMultiSelectInputProps & FieldProps & WrappedComponentProps & {
   fieldId: number;
@@ -20,7 +23,7 @@ export type MultiSelectInputProps = BaseMultiSelectInputProps & FieldProps & Wra
 
 interface State {}
 
-class MultiSelectInput extends React.PureComponent<MultiSelectInputProps, State> {
+class MultiSelectInputWrapper extends React.PureComponent<MultiSelectInputProps, State> {
   public static defaultProps = {
     isClearable: true,
   };
@@ -69,4 +72,5 @@ class MultiSelectInput extends React.PureComponent<MultiSelectInputProps, State>
   }
 }
 
-export default injectIntl(MultiSelectInput);
+
+export const MultiSelectInput = injectIntl(MultiSelectInputWrapper);

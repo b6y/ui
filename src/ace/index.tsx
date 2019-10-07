@@ -16,7 +16,7 @@ interface Props {
 
 interface State {}
 
-class AceInput extends React.PureComponent<Props, State> {
+class BaseAceInput extends React.PureComponent<Props, State> {
   // HAHA.
   public isMounted: boolean = false;
 
@@ -105,4 +105,4 @@ class AceInput extends React.PureComponent<Props, State> {
   }
 }
 
-export default withTheme(AceInput);
+export const AceInput = withTheme(BaseAceInput);

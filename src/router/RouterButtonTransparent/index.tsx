@@ -1,9 +1,9 @@
 import styled from "@emotion/styled";
 
-import ButtonTransparent, { ButtonTransparentProps } from "../../core/ButtonTransparent";
+import { ButtonTransparent, ButtonTransparentProps } from "../../core/ButtonTransparent";
 import { BaseRouterLink, RouterLinkProps } from "../RouterLink";
 
-const RouterButtonTransparent = ButtonTransparent
+export const RouterButtonTransparent = ButtonTransparent
   .withComponent(BaseRouterLink) as React.FunctionComponent<ButtonTransparentProps & RouterLinkProps>;
 
 RouterButtonTransparent.defaultProps = {
@@ -12,5 +12,3 @@ RouterButtonTransparent.defaultProps = {
   size: "md",
   borderRadius: 2,
 };
-
-export default RouterButtonTransparent;

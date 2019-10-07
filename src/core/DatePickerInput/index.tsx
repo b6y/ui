@@ -1,21 +1,16 @@
 import "react-dates/initialize";
 import "react-dates/lib/css/_datepicker.css";
 
-import styled from "@emotion/styled";
+import moment, { Moment } from "moment";
 import * as R from "ramda";
 import React from "react";
 import { injectIntl, MessageDescriptor, WrappedComponentProps } from "react-intl";
-import { theme } from "styled-tools";
-import moment, { Moment } from "moment";
 
-import { DateRangePicker, DayPickerRangeController, DayPickerSingleDateController } from "react-dates";
-import { Box, Color, translateSize } from "../../styled";
-import {  } from "../../styled";
-import FocusSteal from "../FocusSteal";
+import { DayPickerSingleDateController } from "react-dates";
+import { Box, Color } from "../../styled";
 import { FocusStealEvent } from "../FocusSteal/types";
-import Popper from "../Popper";
-import Portal, { PortalRefType } from "../Portal";
-import TextInput from "../TextInput";
+import { Popper } from "../Popper";
+import { TextInput } from "../TextInput";
 
 export interface DatePickerInputProps extends WrappedComponentProps {
   placeholder?: string | MessageDescriptor;
@@ -40,7 +35,7 @@ class BaseDatePickerInput extends React.Component<DatePickerInputProps, State> {
     visibleMonths: 2,
   };
 
-  public portal = React.createRef<PortalRefType>();
+  public portal = React.createRef<HTMLDivElement>();
   public input = React.createRef<HTMLInputElement>();
 
   public state = {
@@ -142,7 +137,7 @@ class BaseDatePickerInput extends React.Component<DatePickerInputProps, State> {
   }
 
   public inputKeyDown(evt: React.KeyboardEvent) {
-    console.log(evt.which)
+    console.log(evt.which);
     if (evt.which === 8) {
       this.pickerChanged(null);
     }
@@ -254,5 +249,3 @@ class BaseDatePickerInput extends React.Component<DatePickerInputProps, State> {
 }
 
 export const DatePickerInput = injectIntl(BaseDatePickerInput);
-
-export default DatePickerInput;

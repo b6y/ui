@@ -10,7 +10,7 @@ interface Action extends AnyAction {
   data?: any;
 }
 
-function loadingComponentReducer(state = initialState, action: Action) {
+export function coreLoadingReducer(state = initialState, action: Action) {
   switch (action.type) {
     case SET_STATE:
       return {
@@ -21,5 +21,3 @@ function loadingComponentReducer(state = initialState, action: Action) {
       return state;
   }
 }
-
-export default loadingComponentReducer;

@@ -1,6 +1,6 @@
 import { create } from '@storybook/theming';
 
-export default create({
+export const theme = create({
   base: 'dark',
 
   brandTitle: '@b6y/ui',

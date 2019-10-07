@@ -1,16 +1,16 @@
 import { Global } from "@emotion/core";
 import { ThemeProvider } from "emotion-theming";
+import FontFaceObserver from "fontfaceobserver";
 import React from "react";
 import { HelmetProvider } from "react-helmet-async";
 import { Provider as ReduxProvider } from "react-redux";
-import FontFaceObserver from "fontfaceobserver";
 
-import FocusStealProvider from "../../core/FocusSteal/provider";
-import LanguageProvider from "../../core/LanguageProvider";
+import { FocusStealProvider } from "../../core/FocusSteal/provider";
+import { LanguageProvider } from "../../core/LanguageProvider";
 import { Definition } from "../../definition";
-import GlobalStyle from "../../globalStyles";
-import defaultTheme from "../../theme";
-import Context from "./context";
+import { GlobalCSS } from "../../globalStyles";
+import { theme as defaultTheme } from "../../theme";
+import { DefinitionContext } from "./context";
 
 export interface Props {
   definition: Definition;
@@ -31,7 +31,7 @@ export let portal = React.createRef<HTMLDivElement>();
 
 const helmetContext = {};
 
-export class Application extends React.PureComponent<InnerProps> {
+export class ApplicationContexts extends React.PureComponent<InnerProps> {
   public render() {
     const { definition } = this.props;
     const theme = definition.theme(defaultTheme);
@@ -40,7 +40,7 @@ export class Application extends React.PureComponent<InnerProps> {
       <HelmetProvider context={helmetContext}>
         <ReduxProvider store={definition.store}>
           <FocusStealProvider>
-            <Global styles={GlobalStyle}/>
+            <Global styles={GlobalCSS}/>
             <div style={{ fontFamily: theme.fonts[0] }}>
               <div ref={portal} id="portal-target" />
               <LanguageProvider messages={definition.messages}>
@@ -56,13 +56,13 @@ export class Application extends React.PureComponent<InnerProps> {
   }
 }
 
-class ApplicationRoot extends React.PureComponent<Props> {
+export class Application extends React.PureComponent<Props> {
   public app = React.createRef<Application>();
 
   public componentDidMount() {
     if (this.props.definition.theme) {
       const theme = this.props.definition.theme(defaultTheme);
-      
+
       Promise.all(theme.observeFonts.map((font) => {
         const observer = new FontFaceObserver(font);
 
@@ -77,13 +77,13 @@ class ApplicationRoot extends React.PureComponent<Props> {
 
   public render() {
     return (
-      <Context.Provider value={this.props.definition}>
-        <Application ref={this.app} {...this.props}>
+      <DefinitionContext.Provider value={this.props.definition}>
+        <ApplicationContexts ref={this.app} {...this.props}>
           {this.props.children}
-        </Application>
-      </Context.Provider>
+        </ApplicationContexts>
+      </DefinitionContext.Provider>
     );
   }
 }
 
-export default ApplicationRoot;
+export * from "./context";

@@ -5,10 +5,13 @@ import * as R from "ramda";
 import React from "react";
 import { injectIntl, MessageDescriptor, WrappedComponentProps } from "react-intl";
 
-import Label from "../../core/Label";
-import BaseTextAreaInput, { TextAreaInputProps as BaseTextAreaInputProps } from "../../core/TextAreaInput";
+import { Label } from "../../core/Label";
+import {
+  TextAreaInput as BaseTextAreaInput,
+  TextAreaInputProps as BaseTextAreaInputProps,
+} from "../../core/TextAreaInput";
 import { genid } from "../commons";
-import ErrorBag from "../ErrorBag";
+import { ErrorBag } from "../ErrorBag";
 
 export type TextAreaInputProps = FieldProps & WrappedComponentProps & {
   fieldId: number;
@@ -21,7 +24,7 @@ export type TextAreaInputProps = FieldProps & WrappedComponentProps & {
 interface State {}
 
 // eslint-disable-next-line react/prefer-stateless-function
-class TextAreaInput extends React.PureComponent<TextAreaInputProps, State> {
+class TextAreaInputWrapper extends React.PureComponent<TextAreaInputProps, State> {
   public id = memoize((actualId) => genid("text-area-input", actualId));
 
   public render() {
@@ -68,4 +71,4 @@ class TextAreaInput extends React.PureComponent<TextAreaInputProps, State> {
   }
 }
 
-export default injectIntl(TextAreaInput);
+export const TextAreaInput = injectIntl(TextAreaInputWrapper);

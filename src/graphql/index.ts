@@ -4,7 +4,7 @@ import * as R from "ramda";
 
 import * as error from "@b6y/error";
 
-import clientCreator from "./client";
+import { clientCreator } from "./client";
 
 export interface CreateGraphQLParams {
   endpoint: string;
@@ -77,7 +77,7 @@ const upgradeErrors = (resultKey = "result", errors: any[]): error.Error[] => {
   // ];
 };
 
-export default function createGraphQL(params: CreateGraphQLParams): GraphQLMethods {
+export function createGraphQL(params: CreateGraphQLParams): GraphQLMethods {
   const wrap = <TResponse>(resultKey: string, promise: Promise<FetchResult<any>>): Promise<Response<TResponse>> =>
     promise
       .catch((ex) => {

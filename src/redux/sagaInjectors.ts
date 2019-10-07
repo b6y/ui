@@ -53,7 +53,7 @@ export function ejectSagaFactory(store: Store, isValid: boolean) {
   };
 }
 
-export default function getInjectors(store: Store) {
+export function getSagaInjectors(store: Store) {
   return {
     injectSaga: injectSagaFactory(store, true),
     ejectSaga: ejectSagaFactory(store, true),

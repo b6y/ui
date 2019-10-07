@@ -111,5 +111,3 @@ Button.defaultProps = {
   size: "md",
   borderRadius: 2,
 };
-
-export default Button;

@@ -32,5 +32,3 @@ export const FormGroup = ({ label, children, compact }: FormGroupProps) => (
 FormGroup.defaultProps = {
   compact: false,
 };
-
-export default FormGroup;

@@ -19,7 +19,7 @@ interface CircleProps {
   delay?: number;
 }
 
-const Circle = (props: CircleProps) => {
+export const Circle = (props: CircleProps) => {
   const { rotate, delay } = props;
 
   const CirclePrimitive = styled.div`
@@ -51,5 +51,3 @@ const Circle = (props: CircleProps) => {
   `;
   return <CirclePrimitive />;
 };
-
-export default Circle;

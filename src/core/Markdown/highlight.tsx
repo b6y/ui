@@ -11,19 +11,19 @@ import "prismjs/components/prism-typescript";
 
 import React from "react";
 
-interface Props {
+export interface HighlightProps {
   value: string;
   language?: string;
 }
 
-class Highlight extends React.PureComponent<Props> {
+export class Highlight extends React.PureComponent<HighlightProps> {
   public static defaultProps = {
     language: "",
   };
 
   public codeEl: any;
 
-  constructor(props: Props) {
+  constructor(props: HighlightProps) {
     super(props);
 
     this.codeEl = null;
@@ -51,5 +51,3 @@ class Highlight extends React.PureComponent<Props> {
     );
   }
 }
-
-export default Highlight;

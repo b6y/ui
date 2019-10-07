@@ -4,10 +4,8 @@ import {
   Span,
 } from "../../styled";
 
-const MutedText = styled(Span)();
+export const MutedText = styled(Span)();
 
 MutedText.defaultProps = {
   color: "gray",
 };
-
-export default MutedText;

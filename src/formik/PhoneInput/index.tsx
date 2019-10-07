@@ -5,10 +5,10 @@ import * as R from "ramda";
 import React from "react";
 import { injectIntl, MessageDescriptor, WrappedComponentProps } from "react-intl";
 
-import Label from "../../core/Label";
-import BasePhoneInput from "../../core/PhoneInput";
+import { Label } from "../../core/Label";
+import { PhoneInput as BasePhoneInput } from "../../core/PhoneInput";
 import { genid } from "../commons";
-import ErrorBag from "../ErrorBag";
+import { ErrorBag } from "../ErrorBag";
 
 export type PhoneInputProps = FieldProps & WrappedComponentProps & {
   fieldId: number;

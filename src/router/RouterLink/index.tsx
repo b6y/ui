@@ -8,9 +8,10 @@ import { css, themed, WithStyled } from "../../styled";
 
 import {
   BaseProps,
-  HasTextProps,
+  getOutlineColor,
+  getRadii,
   getSpace,
-  getOutlineColor,getRadii,
+  HasTextProps,
 } from "../../styled";
 
 import { baseCompose, textCompose } from "../../styled/base";
@@ -66,5 +67,3 @@ RouterLink.defaultProps = {
   tabIndex: 0,
   activeClassName: "__active",
 };
-
-export default RouterLink;

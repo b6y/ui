@@ -109,5 +109,3 @@ TextInput.defaultProps = {
   inputSize: "md",
   borderRadius: 2,
 };
-
-export default TextInput;

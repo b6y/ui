@@ -336,7 +336,7 @@ const InputWrapper = styled(StyledInputBase)`
   }
 `;
 
-class StyledInput extends React.PureComponent<StyledInputProps, StyledInputState> {
+export class PhoneInput extends React.PureComponent<StyledInputProps, StyledInputState> {
   public static propTypes = {
     size: PropTypes.string,
     state: PropTypes.string,
@@ -411,5 +411,3 @@ class StyledInput extends React.PureComponent<StyledInputProps, StyledInputState
     );
   }
 }
-
-export default StyledInput;

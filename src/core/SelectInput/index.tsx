@@ -12,7 +12,7 @@ import { CustomOption } from "./option";
 import { styles } from "./styles";
 import { SelectInputProps, State } from "./types";
 
-const NewBaseSelectInput = (props: SelectInputProps) => {
+export const SelectInput = (props: SelectInputProps) => {
   const isMounted = useRef(false);
   const theme = useTheme<Theme>();
 
@@ -116,8 +116,3 @@ const NewBaseSelectInput = (props: SelectInputProps) => {
 
 export * from "./types";
 export * from "./adapter";
-
-// export const SelectInput = withTheme(BaseSelectInput);
-export const SelectInput = NewBaseSelectInput;
-
-export default SelectInput;

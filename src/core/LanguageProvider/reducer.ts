@@ -7,7 +7,7 @@ const initialState = {
   locale: "pt",
 };
 
-function languageProviderReducer(state = initialState, action: AnyAction) {
+export function languageProviderReducer(state = initialState, action: AnyAction) {
   return produce(state, (draft) => {
     switch (action.type) {
       case CHANGE_LOCALE:
@@ -15,5 +15,3 @@ function languageProviderReducer(state = initialState, action: AnyAction) {
     }
   });
 }
-
-export default languageProviderReducer;

@@ -5,11 +5,11 @@ import * as R from "ramda";
 import React from "react";
 import { injectIntl, MessageDescriptor, WrappedComponentProps } from "react-intl";
 
-import Label from "../../core/Label";
-import BaseAceInput from "../../ace/index";
+import { AceInput as Editor } from "../../ace/index";
+import { Label } from "../../core/Label";
 import * as types from "../../styled/types";
 import { genid } from "../commons";
-import ErrorBag from "../ErrorBag";
+import { ErrorBag } from "../ErrorBag";
 
 export type AceInputProps = FieldProps & types.BoxProps & WrappedComponentProps & {
   extraLibs?: { [name: string]: string };
@@ -23,7 +23,7 @@ export type AceInputProps = FieldProps & types.BoxProps & WrappedComponentProps 
 
 interface State {}
 
-class AceInput extends React.PureComponent<AceInputProps, State> {
+class BaseAceInput extends React.PureComponent<AceInputProps, State> {
   public static defaultProps = {
     isClearable: true,
   };
@@ -65,7 +65,7 @@ class AceInput extends React.PureComponent<AceInputProps, State> {
     return (
       <div>
         {labelComponent}
-        <BaseAceInput
+        <Editor
           extraLibs={props.extraLibs}
           name={props.field.name}
           value={props.field.value || ""}
@@ -79,4 +79,4 @@ class AceInput extends React.PureComponent<AceInputProps, State> {
   }
 }
 
-export default injectIntl(AceInput);
+export const AceInput = injectIntl(BaseAceInput);

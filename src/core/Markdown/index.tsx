@@ -1,14 +1,12 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
 
-import Highlight from "./highlight";
+import { Highlight } from "./highlight";
 
-export interface Props {
+export interface MarkdownProps {
   source: string;
 }
 
-export const Markdown = (props: Props) => {
+export const Markdown = (props: MarkdownProps) => {
   return <ReactMarkdown source={props.source} renderers={{ code: Highlight }} />;
 };
-
-export default Markdown;

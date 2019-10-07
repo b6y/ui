@@ -2,7 +2,9 @@ import styled from "@emotion/styled";
 import React from "react";
 import { Color, getBgColor, getColor, getFgColor, WithStyled } from "../../styled";
 
-type SvgIconProps = WithStyled & {
+export interface SvgIconProps extends
+  WithStyled,
+  Omit<JSX.IntrinsicElements["svg"], "color" | "css" | "ref"> {
   mr?: number;
   ml?: number;
   /**
@@ -12,7 +14,15 @@ type SvgIconProps = WithStyled & {
   color?: string;
 }
 
-const SvgIcon = styled("svg")<SvgIconProps>(
+const StyledSvg = styled.svg``;
+
+const SvgIconWrapper = (props: SvgIconProps) => {
+  const { color, mr, ml, nm, ...filteredProps } = props;
+
+  return <StyledSvg {...filteredProps} />;
+}
+
+export const SvgIcon = styled(SvgIconWrapper)(
   (props) => ({
     marginLeft: `${props.ml}px`,
     marginRight: `${props.mr}px`,
@@ -36,7 +46,7 @@ export type IconProps = React.SVGProps<SVGSVGElement> & WithStyled & {
   nm?: boolean;
 };
 
-const Icon = React.forwardRef(function Icon(
+export const Icon = React.forwardRef(function Icon(
   props: IconProps,
   ref: React.Ref<SVGSVGElement>,
 ) {
@@ -50,7 +60,3 @@ const Icon = React.forwardRef(function Icon(
     </SvgIcon>
   );
 });
-
-export { SvgIcon };
-
-export default Icon;

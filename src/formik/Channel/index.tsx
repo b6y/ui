@@ -4,9 +4,9 @@ import { connect } from "react-redux";
 import { compose, Dispatch } from "redux";
 import { createStructuredSelector } from "reselect";
 
-import injectReducer from "../../redux/injectReducer";
+import { injectReducer } from "../../redux/injectReducer";
 import * as actions from "./actions";
-import reducer from "./reducer";
+import { formikChannelReducer } from "./reducer";
 
 interface ChannelProps {
   name: string;
@@ -22,7 +22,7 @@ interface ChannelState {
 
 }
 
-class Channel extends React.PureComponent<ChannelProps, ChannelState> {
+class BaseChannel extends React.PureComponent<ChannelProps, ChannelState> {
 
   public static actions = actions;
   public formRef = React.createRef<Formik>();
@@ -90,7 +90,7 @@ class Channel extends React.PureComponent<ChannelProps, ChannelState> {
 
 const withReducer = injectReducer({
   key: "@b6y/ui/formik/Channel",
-  reducer,
+  reducer: formikChannelReducer,
 });
 
 export function mapDispatchToProps(dispatch: Dispatch) {
@@ -111,7 +111,7 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-export default compose(
+export const Channel = compose(
   withReducer,
   withConnect,
-)(Channel);
+)(BaseChannel);

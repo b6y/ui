@@ -20,7 +20,7 @@ const defaultChannelState = (): ChannelState => ({
   isSubmitting: false,
 });
 
-function formikChannelComponentReducer(state = initialState, action: Action) {
+export function formikChannelReducer(state = initialState, action: Action) {
   return produce<State>(state, (draft) => {
     const { data } = action;
 
@@ -36,5 +36,3 @@ function formikChannelComponentReducer(state = initialState, action: Action) {
     }
   });
 }
-
-export default formikChannelComponentReducer;

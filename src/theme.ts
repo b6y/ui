@@ -274,7 +274,7 @@ export const breakpoints =
       lg === undefined ? defaultValue : lg,
     ];
 
-export default {
+export const theme = {
   breakpoints: [24, 32, 48, 64, 80, 96].map((n) => `${n}rem`),
   defaults,
   space,

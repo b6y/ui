@@ -2,9 +2,9 @@ import hoistNonReactStatics from "hoist-non-react-statics";
 import React from "react";
 import { ReactReduxContext } from "react-redux";
 
-import getInjectors from "./sagaInjectors";
+import { getSagaInjectors } from "./sagaInjectors";
 
-interface InjectSaga {
+export interface InjectSaga {
   key: string;
   saga: () => void;
   mode?: string;
@@ -21,7 +21,7 @@ interface InjectSaga {
  *   - constants.ONCE_TILL_UNMOUNT—behaves like 'RESTART_ON_REMOUNT' but never runs it again.
  *
  */
-export default ({ key, saga, mode }: InjectSaga) =>
+export const injectSaga = ({ key, saga, mode }: InjectSaga) =>
   <TProps extends unknown>(WrappedComponent: React.ComponentType<TProps>) => {
     const InjectSaga = class extends React.PureComponent<TProps> {
       public static WrappedComponent = WrappedComponent;
@@ -37,7 +37,7 @@ export default ({ key, saga, mode }: InjectSaga) =>
       constructor(props: TProps, context: any) {
         super(props, context);
         const { store } = context;
-        this.injectors = getInjectors(store);
+        this.injectors = getSagaInjectors(store);
         this.injectors.injectSaga(key, { saga, mode }, this.props);
       }
 

@@ -10,7 +10,7 @@ import ReactResizeDetector from "react-resize-detector";
 
 import { Box, BoxProps } from "../../styled";
 
-interface ScrollContext {
+export interface ScrollContext {
   enabled: boolean;
   name?: string;
   bus?: EventEmitter;
@@ -19,14 +19,13 @@ interface ScrollContext {
   getRect?(el: HTMLElement): ElementRect;
 }
 
-interface ScrollEvent {
+export interface ScrollEvent {
   ctx: ScrollContext;
 }
 
-interface State {
-}
+export interface State {}
 
-interface Props extends BoxProps {
+export interface ScrollControllerProps extends BoxProps {
   enabled: boolean;
   name: string;
   root: boolean;
@@ -34,18 +33,18 @@ interface Props extends BoxProps {
   y: boolean;
 }
 
-interface PropsWithContext {
+export interface ScrollControllerPropsWithContext {
   ctx: ScrollContext;
 }
 
-interface ElementRect {
+export interface ElementRect {
   width: number;
   height: number;
   left: number;
   top: number;
 }
 
-interface ScrollContainerInfo extends ElementRect {
+export interface ScrollContainerInfo extends ElementRect {
   scrollTop: number;
   scrollLeft: number;
 }
@@ -172,10 +171,10 @@ export const listenToScroll = <P, S>(
   });
 };
 
-class ContextualizedScrollController extends React.PureComponent<Props & PropsWithContext, State> {
+class ContextualizedScrollController extends React.PureComponent<ScrollControllerProps & ScrollControllerPropsWithContext, State> {
   public containerRef: React.RefObject<HTMLDivElement> = React.createRef();
 
-  constructor(props: Props & PropsWithContext) {
+  constructor(props: ScrollControllerProps & ScrollControllerPropsWithContext) {
     super(props);
 
     this.scrolled = debounce(this.scrolled.bind(this), 5);
@@ -262,7 +261,7 @@ class ContextualizedScrollController extends React.PureComponent<Props & PropsWi
   }
 
   public render() {
-    const safeProps = omit<Props>(this.props);
+    const safeProps = omit<ScrollControllerProps>(this.props);
 
     return (
       <Context.Provider value={{
@@ -303,7 +302,7 @@ class ContextualizedScrollController extends React.PureComponent<Props & PropsWi
   }
 }
 
-class ScrollController extends React.PureComponent<Props, State> {
+class ScrollController extends React.PureComponent<ScrollControllerProps, State> {
   public static defaultProps = {
     enabled: true,
     x: true,
@@ -329,12 +328,10 @@ class ScrollController extends React.PureComponent<Props, State> {
   }
 }
 
-interface RootProps { }
+export interface RootScrollControllerProps { }
 
-export class RootScrollController extends React.PureComponent<RootProps> {
+export class RootScrollController extends React.PureComponent<RootScrollControllerProps> {
   public render() {
     return <ScrollController name="root" x={true} y={true} root={true} {...this.props} />;
   }
 }
-
-export default ScrollController;

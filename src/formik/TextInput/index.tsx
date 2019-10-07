@@ -5,11 +5,13 @@ import * as R from "ramda";
 import React from "react";
 import { injectIntl, MessageDescriptor, WrappedComponentProps } from "react-intl";
 
-import Label from "../../core/Label";
-import BaseTextInput, { TextInputProps as BaseTextInputProps } from "../../core/TextInput";
-
+import { Label } from "../../core/Label";
+import {
+  TextInput as BaseTextInput,
+  TextInputProps as BaseTextInputProps,
+} from "../../core/TextInput";
 import { genid } from "../commons";
-import ErrorBag from "../ErrorBag";
+import { ErrorBag } from "../ErrorBag";
 
 export interface TextInputProps extends FieldProps, WrappedComponentProps {
   fieldId: number;
@@ -24,7 +26,7 @@ export interface TextInputProps extends FieldProps, WrappedComponentProps {
 interface State {}
 
 // eslint-disable-next-line react/prefer-stateless-function
-class TextInput extends React.PureComponent<TextInputProps, State> {
+class TextInputWrapper extends React.PureComponent<TextInputProps, State> {
   public id = memoize((actualId: string) => genid("text-input", actualId));
 
   public render() {
@@ -85,4 +87,4 @@ class TextInput extends React.PureComponent<TextInputProps, State> {
   }
 }
 
-export default injectIntl(TextInput);
+export const TextInput = injectIntl(TextInputWrapper);

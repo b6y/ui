@@ -15,7 +15,7 @@ export function injectReducerFactory(store: Store, isValid?: boolean) {
   };
 }
 
-export default function getInjectors(store: Store) {
+export function getReducerInjectors(store: Store) {
   return {
     injectReducer: injectReducerFactory(store, true),
   };

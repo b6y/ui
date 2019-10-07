@@ -1,9 +1,8 @@
+import styled from "@emotion/styled";
 import React from "react";
 import ReactDOM from "react-dom";
-import styled from "@emotion/styled";
 
-import { portal } from "../Application";
-import { getBgColor, getSpace, getRadii, Box, BoxProps, Color, WithStyled } from "../../styled";
+import { Box, BoxProps, Color, getBgColor, getRadii, getSpace, WithStyled } from "../../styled";
 
 export interface FooterProps {}
 export interface HeaderProps {}
@@ -118,7 +117,7 @@ export class Modal extends React.PureComponent<ModalProps, ModalState> {
     const header = children.find((c) => {
       if (c) {
         return c.type === Header;
-      } 
+      }
 
       return false;
     });
@@ -184,5 +183,3 @@ export class Modal extends React.PureComponent<ModalProps, ModalState> {
     return modal;
   }
 }
-
-export default Modal;

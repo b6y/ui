@@ -27,5 +27,3 @@ export const Group = styled(Flex)`
 `;
 
 Group.displayName = "Group";
-
-export default Group;

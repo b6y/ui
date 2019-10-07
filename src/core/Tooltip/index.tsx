@@ -3,7 +3,7 @@ import * as R from "ramda";
 import React, { ReactElement } from "react";
 
 import { Box, Span } from "../../styled";
-import Popper, { PopperPlacement } from "../Popper";
+import { Popper, PopperPlacement } from "../Popper";
 
 export interface Props {
   children: React.ReactNode;
@@ -104,5 +104,3 @@ export const Tooltip = React.forwardRef(function Tooltip(props: Props, ref) {
     </Popper>
   </>;
 });
-
-export default Tooltip;

@@ -1,8 +1,8 @@
 import React, { lazy, Suspense } from "react";
 
-import LoadingIndicator from "../core/LoadingIndicator";
+import { LoadingIndicator } from "../core/LoadingIndicator";
 
-export default <T extends React.ComponentType<Props>, Props = any>(promise: () => Promise<{ default: T }>) => {
+export const Loadable = <T extends React.ComponentType<Props>, Props = any>(promise: () => Promise<{ default: T }>) => {
   const Component = lazy(promise);
   return (props: any) => {
     return (
@@ -12,14 +12,3 @@ export default <T extends React.ComponentType<Props>, Props = any>(promise: () =
     );
   };
 };
-
-// export default (promise) =>
-//   Loadable({
-//     loader: () => {
-//       return promise().catch((ex) => {
-//         console.trace(ex);
-//         throw ex;
-//       });
-//     },
-//     loading: LoadingIndicator,
-//   });

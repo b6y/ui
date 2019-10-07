@@ -102,5 +102,3 @@ ButtonTransparent.defaultProps = {
   size: "md",
   borderRadius: 2,
 };
-
-export default ButtonTransparent;

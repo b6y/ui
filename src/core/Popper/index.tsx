@@ -1,8 +1,6 @@
-import PopperJS from 'popper.js';
-import React, { MutableRefObject } from 'react';
-import ReactDOM from 'react-dom';
-
-import FocusSteal from "../FocusSteal";
+import PopperJS from "popper.js";
+import React, { MutableRefObject } from "react";
+import ReactDOM from "react-dom";
 
 export type PopperPlacement = | "bottom-end"
                               | "bottom-start"
@@ -28,7 +26,7 @@ export interface Props<TContentProps, TRef> {
 /**
  * Poppers rely on the 3rd party library [Popper.js](https://github.com/FezVrasta/popper.js) for positioning.
  */
-const Popper = React.forwardRef(function Popper<TContentProps, TRef>(
+export const Popper = React.forwardRef(function Popper<TContentProps, TRef>(
   props: Props<TContentProps, TRef>,
   ref: any,
 ) {
@@ -125,5 +123,3 @@ const Popper = React.forwardRef(function Popper<TContentProps, TRef>(
 
   return ReactDOM.createPortal(content, document.body);
 });
-
-export default Popper;

@@ -5,10 +5,10 @@ import * as R from "ramda";
 import React from "react";
 import { injectIntl, MessageDescriptor, WrappedComponentProps } from "react-intl";
 
-import BaseInput from "../../core/DatePickerInput";
-import Label from "../../core/Label";
+import { DatePickerInput as BaseDatePickerInput } from "../../core/DatePickerInput";
+import { Label } from "../../core/Label";
 import { genid } from "../commons";
-import ErrorBag from "../ErrorBag";
+import { ErrorBag } from "../ErrorBag";
 
 export type DatePickerInputProps = FieldProps & WrappedComponentProps & {
   fieldId: number;
@@ -20,7 +20,7 @@ export type DatePickerInputProps = FieldProps & WrappedComponentProps & {
 interface State {}
 
 // eslint-disable-next-line react/prefer-stateless-function
-class DatePickerInput extends React.PureComponent<DatePickerInputProps, State> {
+class DatePickerInputWrapper extends React.PureComponent<DatePickerInputProps, State> {
   public id = memoize((actualId) => genid("inline-date-picker-input", actualId));
 
   constructor(props: DatePickerInputProps) {
@@ -79,7 +79,7 @@ class DatePickerInput extends React.PureComponent<DatePickerInputProps, State> {
     return (
       <div>
         {labelComponent}
-        <BaseInput
+        <BaseDatePickerInput
           id={id}
           onBlur={this.blurred}
           onChange={this.changed}
@@ -92,4 +92,4 @@ class DatePickerInput extends React.PureComponent<DatePickerInputProps, State> {
   }
 }
 
-export default injectIntl(DatePickerInput);
+export const DatePickerInput = injectIntl(DatePickerInputWrapper);

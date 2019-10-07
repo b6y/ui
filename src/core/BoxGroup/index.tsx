@@ -32,5 +32,3 @@ export const BoxGroup = styled(Wrapper)`
 BoxGroup.defaultProps = {
   spacing: 2,
 };
-
-export default BoxGroup;

@@ -103,5 +103,3 @@ ButtonOutline.defaultProps = {
     borderRadius: 2,
     borderColor: "transparent",
 };
-
-export default ButtonOutline;

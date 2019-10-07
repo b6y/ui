@@ -12,7 +12,7 @@ import { CustomOption } from "../SelectInput/option";
 import { styles } from "./styles";
 import { MultiSelectInputProps, State } from "./types";
 
-const NewBaseMultiSelectInput = (props: MultiSelectInputProps) => {
+export const MultiSelectInput = (props: MultiSelectInputProps) => {
   const isMounted = useRef(false);
   const theme = useTheme<Theme>();
 
@@ -91,7 +91,7 @@ const NewBaseMultiSelectInput = (props: MultiSelectInputProps) => {
   return (
     <AsyncSelect
       // menuIsOpen={true}
-      components={{ 
+      components={{
         Option: CustomOption,
         SingleValue: CustomDisplayOption,
         MenuList: CustomMenuList,
@@ -117,8 +117,3 @@ const NewBaseMultiSelectInput = (props: MultiSelectInputProps) => {
 
 export * from "./types";
 export * from "../SelectInput/adapter";
-
-// export const SelectInput = withTheme(BaseSelectInput);
-export const MultiSelectInput = NewBaseMultiSelectInput;
-
-export default MultiSelectInput;

@@ -110,5 +110,3 @@ TextAreaInput.defaultProps = {
   borderRadius: 2,
   borderColor: "gray",
 };
-
-export default TextAreaInput;

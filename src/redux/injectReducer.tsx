@@ -2,15 +2,15 @@ import hoistNonReactStatics from "hoist-non-react-statics";
 import React from "react";
 import { ReactReduxContext } from "react-redux";
 
-import getInjectors from "./reducerInjectors";
+import { getReducerInjectors } from "./reducerInjectors";
 import { Reducer } from "./store";
 
-interface InjectReducer {
+export interface InjectReducer {
   key: string;
   reducer: Reducer;
 }
 
-export default ({ key, reducer }: InjectReducer) =>
+export const injectReducer = ({ key, reducer }: InjectReducer) =>
   <TProps extends unknown>(WrappedComponent: React.ComponentType<TProps>) => {
   const ReducerInjector = class extends React.PureComponent<TProps> {
     public static WrappedComponent = WrappedComponent;
@@ -26,7 +26,7 @@ export default ({ key, reducer }: InjectReducer) =>
     constructor(props: TProps, context: any) {
       super(props, context);
 
-      getInjectors(context.store)
+      getReducerInjectors(context.store)
         .injectReducer(key, reducer);
     }
 

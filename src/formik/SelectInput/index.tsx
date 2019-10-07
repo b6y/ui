@@ -5,10 +5,13 @@ import * as R from "ramda";
 import React from "react";
 import { injectIntl, MessageDescriptor, WrappedComponentProps } from "react-intl";
 
-import Label from "../../core/Label";
-import BaseSelectInput, { SelectInputProps as BaseSelectInputProps } from "../../core/SelectInput";
+import { Label } from "../../core/Label";
+import {
+  SelectInput as BaseSelectInput,
+  SelectInputProps as BaseSelectInputProps,
+} from "../../core/SelectInput";
 import { genid } from "../commons";
-import ErrorBag from "../ErrorBag";
+import { ErrorBag } from "../ErrorBag";
 
 export type SelectInputProps = BaseSelectInputProps & FieldProps & WrappedComponentProps & {
   fieldId: number;
@@ -20,7 +23,7 @@ export type SelectInputProps = BaseSelectInputProps & FieldProps & WrappedCompon
 
 interface State {}
 
-class SelectInput extends React.PureComponent<SelectInputProps, State> {
+class SelectInputWrapper extends React.PureComponent<SelectInputProps, State> {
   public static defaultProps = {
     isClearable: true,
   };
@@ -69,4 +72,4 @@ class SelectInput extends React.PureComponent<SelectInputProps, State> {
   }
 }
 
-export default injectIntl(SelectInput);
+export const SelectInput = injectIntl(SelectInputWrapper);

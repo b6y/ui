@@ -2,10 +2,10 @@ import hoistNonReactStatic from "hoist-non-react-statics";
 import React from "react";
 
 import { DocumentNode } from "graphql";
-import ApplicationContext from "../../core/Application/context";
+import { DefinitionContext } from "../../core/Application/context";
 import { Adapter, OptionType } from "../../core/SelectInput/adapter";
 import { Definition } from "../../definition";
-import clientCreator from "../client";
+import { clientCreator } from "../client";
 
 interface GraphQLParams {
   headers: { [key: string]: string };
@@ -186,9 +186,9 @@ export const withGraphQLAdapter = <K extends string, P, S>(
   options: GraphQLAdapterOptions,
 ): React.ComponentClass<Pick<P, Exclude<keyof P, K>>> => {
   class Enhance extends React.PureComponent<Pick<P, Exclude<keyof P, K>>> {
-    public static contextType = ApplicationContext;
+    public static contextType = DefinitionContext;
 
-    public context!: React.ContextType<typeof ApplicationContext>;
+    public context!: React.ContextType<typeof DefinitionContext>;
 
     public render() {
       if (!this.context) {

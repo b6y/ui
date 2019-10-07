@@ -5,13 +5,13 @@ import { createSelector } from "reselect";
 
 import { makeSelectLocale } from "./selectors";
 
-interface IProps {
+interface LanguageProviderProps {
   locale: string;
   messages: any;
   children: React.ReactNode;
 }
 
-export class LanguageProvider extends React.PureComponent<IProps> {
+class BaseLanguageProvider extends React.PureComponent<LanguageProviderProps> {
   public render() {
     const { locale, messages, children } = this.props;
 
@@ -28,4 +28,4 @@ const mapStateToProps = createSelector(
   (locale) => ({ locale }),
 );
 
-export default connect(mapStateToProps)(LanguageProvider);
+export const LanguageProvider = connect(mapStateToProps)(BaseLanguageProvider);

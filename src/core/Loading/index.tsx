@@ -3,10 +3,10 @@ import React from "react";
 import { connect } from "react-redux";
 import { compose, Dispatch } from "redux";
 
-import LoadingIndicator from "../../core/LoadingIndicator";
-import injectReducer from "../../redux/injectReducer";
+import { LoadingIndicator } from "../../core/LoadingIndicator";
+import { injectReducer } from "../../redux/injectReducer";
 import * as actions from "./actions";
-import reducer from "./reducer";
+import { coreLoadingReducer } from "./reducer";
 
 interface LoadingProps {
   loading?: any;
@@ -30,7 +30,10 @@ const BaseLoading = (props: LoadingProps) => {
   return children();
 };
 
-const withReducer = injectReducer({ key: "@b6y/components/core/Loading", reducer });
+const withReducer = injectReducer({
+  key: "@b6y/components/core/Loading",
+  reducer: coreLoadingReducer,
+});
 
 export function mapDispatchToProps(dispatch: Dispatch) {
   return {
@@ -56,5 +59,3 @@ export const Loading = compose<typeof BaseLoading>(
 
 export * from "./actions";
 export * from "./selectors";
-
-export default Loading;

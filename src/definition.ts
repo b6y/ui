@@ -1,7 +1,7 @@
-import { History, createMemoryHistory } from "history";
+import { createMemoryHistory, History } from "history";
 import { AnyAction, Reducer, Store } from "redux";
 
-import configureStore from "./redux/configureStore";
+import { configureStore } from "./redux/configureStore";
 import { Theme } from "./styled";
 
 export const initialState = {};
@@ -51,6 +51,6 @@ export class Definition {
   }
 }
 
-export default function createApplicationDefinition(definition: DefinitionParams): Definition {
+export function createDefinition(definition: DefinitionParams): Definition {
   return new Definition(definition);
 }

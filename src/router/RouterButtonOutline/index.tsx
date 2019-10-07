@@ -1,9 +1,9 @@
 import React from "react";
 
-import ButtonOutline, {ButtonOutlineProps} from "../../core/ButtonOutline";
+import {ButtonOutline, ButtonOutlineProps} from "../../core/ButtonOutline";
 import {BaseRouterLink, RouterLinkProps} from "../RouterLink";
 
-const RouterButtonOutline = ButtonOutline
+export const RouterButtonOutline = ButtonOutline
     .withComponent(BaseRouterLink) as React.FunctionComponent<ButtonOutlineProps & RouterLinkProps>;
 
 RouterButtonOutline.defaultProps = {
@@ -13,5 +13,3 @@ RouterButtonOutline.defaultProps = {
     borderRadius: 2,
     borderColor: "transparent",
 };
-
-export default RouterButtonOutline;

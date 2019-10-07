@@ -1,5 +1,5 @@
 import React from "react";
 
-import { FocusStealContext } from "./types";
+import { FocusStealContext as FocusStealContextType } from "./types";
 
-export default React.createContext<FocusStealContext>({});
+export const FocusStealContext = React.createContext<FocusStealContextType>({});

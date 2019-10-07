@@ -5,7 +5,7 @@ import { withInfo } from "@storybook/addon-info";
 import { withKnobs } from "@storybook/addon-knobs";
 import { addDecorator, addParameters, configure } from "@storybook/react";
 
-import theme from "./theme";
+import { theme } from "./theme";
 
 addParameters({
     options: {

@@ -6,12 +6,12 @@ import { History } from "history";
 import { applyMiddleware, compose, createStore, Reducer } from "redux";
 import createSagaMiddleware from "redux-saga";
 
-import reducerCreatorFactory from "./reducerCreatorFactory";
+import { reducerCreatorFactory } from "./reducerCreatorFactory";
 import { Reducers, Store } from "./store";
 
 const sagaMiddleware = createSagaMiddleware();
 
-export default function configureStore(initialState = {}, history: History, reducers: Reducers) {
+export function configureStore(initialState = {}, history: History, reducers: Reducers) {
   // Create the store with two middlewares
   // 1. sagaMiddleware: Makes redux-sagas work
   // 2. routerMiddleware: Syncs the location/URL path to the state

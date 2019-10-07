@@ -602,4 +602,4 @@ const GlobalCSS = css`
   }
 `;
 
-export default GlobalCSS;
+export { GlobalCSS };

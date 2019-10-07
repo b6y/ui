@@ -10,7 +10,7 @@ export interface InnerFormProps extends BaseFormProps {
 
 export interface FormProps extends BaseFormProps {}
 
-class FormikForm extends React.PureComponent<InnerFormProps> {
+class BaseFormikForm extends React.PureComponent<InnerFormProps> {
   constructor(props: InnerFormProps) {
     super(props);
 
@@ -39,4 +39,4 @@ class FormikForm extends React.PureComponent<InnerFormProps> {
   }
 }
 
-export default connect<FormProps>(FormikForm);
+export const FormikForm = connect<FormProps>(BaseFormikForm);
