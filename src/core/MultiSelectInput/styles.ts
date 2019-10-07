@@ -1,3 +1,4 @@
+import memo from "memoize-one";
 import * as R from "ramda";
 import { Styles as ReactSelectStyles } from "react-select/src/styles";
 
@@ -7,7 +8,9 @@ import {
     getFgColor,
     getFontSize,
     getOutlineColor,
+    getRadii,
     getSize,
+    getSpace,
     getValue,
     Padding,
     Theme,
@@ -20,6 +23,7 @@ const defaultSize = R.defaultTo(2);
 const iconMargin = getSize(1);
 const getRectangularPaddings = themed<MultiSelectInputProps, Padding[]>("rectangularPaddings");
 const getFontSizes = themed<MultiSelectInputProps, number[]>("fontSizes");
+const memoTranslateSize = memo((size) => translateSize(defaultSize(size)));
 
 export const controlHeight = (props: MultiSelectInputProps) => {
     const size = translateSize(defaultSize(props.inputSize));
@@ -35,7 +39,7 @@ export const controlHeight = (props: MultiSelectInputProps) => {
             fontSize: `${fontSize}rem`,
             // TODO: ???
             lineHeight: `1.5`,
-            padding: `${padding.y/2}rem ${padding.x/2}rem`,
+            padding: `0`,
             minHeight: "0px",
         };
     } else {
@@ -61,8 +65,60 @@ export const valueHeight = (props: MultiSelectInputProps) => {
             fontSize: `${fontSize}rem`,
             // TODO: ???
             lineHeight: `1.5`,
-            padding: `${padding.y/2}rem ${padding.x/2}rem`,
+            padding: `${padding.y / 2}rem ${padding.x / 2}rem`,
+            margin: `${padding.y / 2}rem ${padding.x / 2}rem`,
             minHeight: "0px",
+        };
+    } else {
+        return {
+            // TODO: ???
+            lineHeight: `1.5`,
+            minHeight: "0px",
+        };
+    }
+};
+
+export const placeholderHeight = (props: MultiSelectInputProps) => {
+    const size = memoTranslateSize(props.inputSize);
+
+    const paddings = getRectangularPaddings(props);
+    const fontSizes = getFontSizes(props);
+
+    if (paddings && fontSizes) {
+        const padding: Padding = paddings[size];
+        const fontSize: number = fontSizes[size];
+
+        return {
+            fontSize: `${fontSize}rem`,
+            // TODO: ???
+            lineHeight: `1.5`,
+            padding: `${padding.y}rem ${padding.x}rem`,
+            minHeight: "0px",
+        };
+    } else {
+        return {
+            // TODO: ???
+            lineHeight: `1.5`,
+            minHeight: "0px",
+        };
+    }
+};
+
+export const placeholderWrapperHeight = (props: MultiSelectInputProps) => {
+    const size = memoTranslateSize(props.inputSize);
+
+    const paddings = getRectangularPaddings(props);
+
+    if (paddings) {
+        const padding: Padding = paddings[size];
+
+        return {
+            // TODO: ???
+            lineHeight: `1.5`,
+            padding: `${padding.y / 2}rem 0`,
+            margin: `${padding.y / 2}rem 0`,
+            minHeight: "0px",
+            width: 0,
         };
     } else {
         return {
@@ -100,12 +156,28 @@ export const styles = (inputProps: MultiSelectInputProps, theme: Theme): ReactSe
     }
 
     const inputState = state;
+    const padding: Padding = (() => {
+        let padding: Padding | undefined;
+
+        const paddings = getRectangularPaddings(props);
+
+        if (paddings) {
+            padding = paddings[memoTranslateSize(props.inputSize)];
+        }
+
+        if (!padding) {
+            return { x: 0, y: 0 };
+        }
+
+        return padding;
+    })();
 
     return ({
         input: (base) => ({
             ...base,
             label: "input",
             margin: 0,
+            padding: `${padding.y}rem ${padding.x}rem`,
             paddingTop: 0,
             paddingBottom: 0,
             background: "transparent",
@@ -126,8 +198,8 @@ export const styles = (inputProps: MultiSelectInputProps, theme: Theme): ReactSe
             ...controlHeight(props),
             "label": "control",
             "border": state.isFocused
-                ? `1px solid ${getBorderColor(outline)(props)}`
-                : `1px solid ${getBorderColor(outline)(props)}`,
+                ? `1px solid ${getBorderColor(inputState)(props)}`
+                : `1px solid ${getBorderColor(inputState)(props)}`,
             "boxShadow": state.isFocused ? `0px 0px 0px 3px ${getOutlineColor(outline, "alphadark")(props)}` : "none",
             "borderRadius": getValue(theme.radii)(2),
             "background": state.isDisabled ? getBgColor("light", "alphadark")(props) : getBgColor("white")(props),
@@ -163,10 +235,11 @@ export const styles = (inputProps: MultiSelectInputProps, theme: Theme): ReactSe
         indicatorsContainer: (base) => ({
             ...base,
             label: "indicatorsContainer",
-            position: "absolute",
-            right: 4,
-            top: "50%",
-            transform: "translateY(-50%)",
+            paddingRight: getSpace(translateSize(props.inputSize || "md"))(props),
+            // position: "absolute",
+            // right: 4,
+            // top: "50%",
+            // transform: "translateY(-50%)",
             color: getBorderColor(state)(props),
         }),
         groupHeading: (base) => ({
@@ -177,7 +250,7 @@ export const styles = (inputProps: MultiSelectInputProps, theme: Theme): ReactSe
             ...base,
             "label": "dropdownIndicator",
             "padding": 0,
-            "paddingLeft": 4,
+            "paddingLeft": 0,
             "paddingRight": 0,
             "margin": 0,
             "color": getBorderColor(state)(props),
@@ -189,8 +262,8 @@ export const styles = (inputProps: MultiSelectInputProps, theme: Theme): ReactSe
             ...base,
             "label": "clearIndicator",
             "padding": 0,
-            "paddingLeft": 0,
-            "paddingRight": 4,
+            "paddingLeft": 4,
+            "paddingRight": 0,
             "margin": 0,
             "color": getBorderColor(state)(props),
             ":hover": {
@@ -202,7 +275,8 @@ export const styles = (inputProps: MultiSelectInputProps, theme: Theme): ReactSe
             label: "multiValue",
             padding: 0,
             margin: 0,
-            marginRight: 2,
+            marginRight: 0,
+            borderRadius: getRadii(2)(props),
             ...valueHeight(props),
         }),
         multiValueLabel: (base) => ({
@@ -214,6 +288,7 @@ export const styles = (inputProps: MultiSelectInputProps, theme: Theme): ReactSe
         multiValueRemove: (base) => ({
             ...base,
             label: "multiValueRemove",
+            marginLeft: 4,
         }),
         noOptionsMessage: (base) => ({
             ...base,
@@ -232,11 +307,11 @@ export const styles = (inputProps: MultiSelectInputProps, theme: Theme): ReactSe
         },
         placeholder: (base) => ({
             ...base,
+            wrapper: {
+                ...placeholderWrapperHeight(props),
+            },
             label: "placeholder",
-            position: "relative",
-            top: "0",
-            transform: "none",
-            ...valueHeight(props),
+            ...placeholderHeight(props),
         }),
         singleValue: (base) => ({
             ...base,

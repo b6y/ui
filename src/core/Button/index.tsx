@@ -91,6 +91,9 @@ export const Button = styled(Wrapper)(
         border: `1px solid ${getBorderColor(props.state, "dark")(props)}`,
         boxShadow: `0px 0px 0px 3px ${getOutlineColor(props.state, "alphadark")(props)}`,
       },
+      "&:active": {
+        boxShadow: `0px 0px 0px 6px ${getOutlineColor(props.state, "alphadark")(props)}`,
+      },
       "&[disabled]:hover": {
         backgroundColor: getBgColor(props.state, "alphadark")(props),
       },

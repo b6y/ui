@@ -2,17 +2,16 @@ import React from "react";
 import styled from "@emotion/styled";
 import PropTypes from "prop-types";
 
-import { Box, BoxProps } from "../../styled";
-import { getSpace } from "../../styled/system";
+import { getSpace, Flex, FlexProps } from "../../styled";
 
-export interface BoxGroupProps extends BoxProps {
+export interface BoxGroupProps extends FlexProps {
   spacing: number;
 }
 
 const Wrapper = React.forwardRef((props: BoxGroupProps, ref: React.Ref<HTMLDivElement>) => {
   const { spacing, ...otherProps } = props;
 
-  return <Box ref={ref} {...otherProps} />;
+  return <Flex ref={ref} {...otherProps} />;
 });
 
 /**

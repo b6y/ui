@@ -5,7 +5,7 @@ import * as gentypes from "./generatedTypes";
 import * as types from "./types";
 
 interface EnsureWithTheme {
-  theme: types.Theme; 
+  theme: types.Theme;
 }
 
 // utils
@@ -46,6 +46,12 @@ export const rem = (n: any): string | undefined => is(n) ? (num(n) ? `${n}rem` :
 export const units: { [key: string]: (value: any) => string | undefined } = { px, em, rem };
 
 export const get = <T>(obj: any, ...paths: string[]): T | null => R.pathOr<T | null>(null, paths, obj);
+
+export const getOr = <T>(
+    obj: any,
+    defaultValue: T,
+    ...paths: string[]
+): T => R.pathOr<T>(defaultValue, paths, obj);
 
 export const themeGet = <T>(paths: string[], fallback: T | null) => (props: EnsureWithTheme): T | null =>
   get<T>(props.theme, ...paths) || fallback;
@@ -127,12 +133,24 @@ export const style = ({ cssProperty, prop, getter, transformValue, key, scale: d
     if (!is(val)) { return null; }
 
     const scale = key !== undefined ? get(props.theme, key) : defaultScale;
-    const style = (n: any) =>
-      is(n)
-        ? {
-          [css]: transform(get(scale, n) || n),
+
+    const style = (n: any) => {
+        if (!is(scale)) {
+            return { [css]: transform(n) };
         }
-        : null;
+
+        if (is(n)) {
+            const value = get(scale, n);
+
+            if (!is(value)) {
+                return { [css]: transform(n) };
+            }
+
+            return { [css]: transform(value) };
+        }
+
+        return null;
+    }
 
     if (!Array.isArray(val)) {
       return style(val);
@@ -212,12 +230,19 @@ export const getValue = (scale: number[], unit = "rem") => (n: any): string | nu
   if (!num(n)) {
     return units[unit](scale[n] || n);
   }
+
   const abs = Math.abs(n);
   const neg = isNegative(n);
-  const value = scale[abs] || abs;
+  let value = scale[abs];
+
+  if (!is(value)) {
+      value = abs;
+  }
+
   if (!num(value)) {
     return neg ? `-${value}` : value;
   }
+
   return units[unit](value * (neg ? -1 : 1));
 };
 
@@ -340,8 +365,10 @@ export const getSpace = (n: any) => ensureWithTheme((theme) => {
 });
 
 export const getRadii = (n: any) => (props: EnsureWithTheme) => {
-  const scale = props.theme ? (get<number[]>(props.theme, "radii") || defaultRadii) : defaultRadii;
+  const scale = props.theme ? (getOr<number[]>(props.theme, defaultRadii, "radii")) : defaultRadii;
   const getStyle = getValue(scale, "rem");
+
+  console.log(n, scale)
 
   return getStyle(n);
 };
@@ -362,7 +389,7 @@ export const getFontSize = (n: any) => (props: EnsureWithTheme) => {
 };
 
 export const hasTransition = ensureWithTheme((theme) => {
-  return { transition: "all 100ms" };
+  return { transition: "all 150ms ease-out" };
 });
 
 // space props

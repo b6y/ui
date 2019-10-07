@@ -9,6 +9,7 @@ import { OptionType } from "./adapter";
 import { CustomDisplayOption } from "./displayOption";
 import { CustomMenuList } from "./menuList";
 import { CustomOption } from "./option";
+import { CustomPlaceholder } from "./placeholder";
 import { styles } from "./styles";
 import { SelectInputProps, State } from "./types";
 
@@ -95,6 +96,7 @@ export const SelectInput = (props: SelectInputProps) => {
         Option: CustomOption,
         SingleValue: CustomDisplayOption,
         MenuList: CustomMenuList,
+        Placeholder: CustomPlaceholder,
       }}
       loadOptions={(text: any) => options.search(text, props)}
       defaultOptions={true}

@@ -1,23 +1,27 @@
+import styled from "@emotion/styled";
 import * as emotion from "@emotion/core";
 import React from "react";
 
 import { SingleValueProps } from "react-select/src/components/SingleValue";
+import { css } from "../../styled";
+
+const CustomDisplayOptionWrapper = styled.div(css);
 
 export const CustomDisplayOption = (props: SingleValueProps<any>) => {
     const { children, className, cx, getStyles, isDisabled, innerProps } = props;
     return (
-        <div
-            className={cx(
-                emotion.css(getStyles("singleValue", props)).styles,
+        <CustomDisplayOptionWrapper
+            css={getStyles("singleValue", props)}
+            className={(cx as any)(
                 {
                     "single-value": true,
                     "single-value--is-disabled": isDisabled,
                 },
                 className,
-            ) as string}
+            )}
             {...innerProps}
         >
             {children}
-        </div>
+        </CustomDisplayOptionWrapper>
     );
 };

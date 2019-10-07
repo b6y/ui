@@ -11,6 +11,7 @@ import { CustomMenuList } from "../SelectInput/menuList";
 import { CustomOption } from "../SelectInput/option";
 import { styles } from "./styles";
 import { MultiSelectInputProps, State } from "./types";
+import { CustomPlaceholder } from "../SelectInput/placeholder";
 
 export const MultiSelectInput = (props: MultiSelectInputProps) => {
   const isMounted = useRef(false);
@@ -95,6 +96,7 @@ export const MultiSelectInput = (props: MultiSelectInputProps) => {
         Option: CustomOption,
         SingleValue: CustomDisplayOption,
         MenuList: CustomMenuList,
+        Placeholder: CustomPlaceholder,
       }}
       isMulti={true}
       loadOptions={(text: any) => options.search(text, props)}
@@ -104,7 +106,7 @@ export const MultiSelectInput = (props: MultiSelectInputProps) => {
       onChange={onChange}
       onBlur={onBlur}
       onFocus={onFocus}
-      value={state.loading ? [] : state.options}
+      value={state.options}
       isClearable={isClearable}
       isSearchable={!state.loading}
       menuPortalTarget={portalDOM}

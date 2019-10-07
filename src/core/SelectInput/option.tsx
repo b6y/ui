@@ -3,6 +3,7 @@ import React from "react";
 
 import { OptionProps } from "react-select/src/components/Option";
 import { css } from "../../styled";
+
 const CustomOptionWrapper = styled.div(css);
 
 export const CustomOption = (props: OptionProps<any>) => {

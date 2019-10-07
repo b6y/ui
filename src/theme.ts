@@ -10,18 +10,24 @@ interface BaseColor {
   color: string;
   variants: VariantFn[];
 }
-
-type VariantFn = (name: string, color: string) => { [key: string]: string };
+interface VariantFn {
+    (name: string, color: string): { [key: string]: string };
+    variantName: string;
+}
 
 const darkVariant = (name: string, color: string) => ({
   [`dark${name}`]: darken(baseDarken, color),
   [`alphadark${name}`]: transparentize(baseAlpha, darken(baseDarken, color)),
 });
 
+darkVariant.variantName = "dark";
+
 const lightVariant = (name: string, color: string) => ({
   [`light${name}`]: lighten(baseLighten, color),
   [`alphalight${name}`]: transparentize(baseAlpha, lighten(baseLighten, color)),
 });
+
+lightVariant.variantName = "light";
 
 const color = (color: string, variants: VariantFn[] = []) => ({ color, variants });
 
@@ -29,13 +35,13 @@ interface BaseColors {
   [key: string]: BaseColor;
 }
 
-const baseColors: BaseColors = {
+export const baseColors: BaseColors = {
   brand: color("#00406A", [darkVariant, lightVariant]),
   black: color("#000", [darkVariant, lightVariant]),
   white: color("#fff", [darkVariant, lightVariant]),
-  darker: color("#3b3b3b"),
-  darken: color("rgba(0, 0, 0, 0.25)"),
-  light: color("#eee"),
+  darker: color("#3b3b3b", [darkVariant, lightVariant]),
+  darken: color("rgba(0, 0, 0, 0.25)", [darkVariant, lightVariant]),
+  light: color("#eee", [darkVariant, lightVariant]),
 
   grayer: color(darken(0.1, "#bbb"), [darkVariant, lightVariant]),
   gray: color("#bbb", [darkVariant, lightVariant]),
@@ -66,11 +72,18 @@ const colors = Object.entries(baseColors)
     return result;
   }, {} as Colors);
 
+export const colorsMeta = Object.entries(baseColors)
+.map(([key, value]) => {
+  console.log([key, value]);
+
+  return [];
+});
+
 export const sizes = [0, 0.4, 0.6, 0.8, 1, 1.2, 1.4, 1.6, 1.8, 2, 2.2, 2.4];
 
 export const space = [0, 0.25, 0.5, 1, 2, 4, 8];
 
-export const fontSizes = [0.6, 0.75, 0.8, 1, 1.2, 1.4, 1.6, 1.8, 2, 2.2, 2.4];
+export const fontSizes = [0.6, 0.75, 0.85, 1, 1.2, 1.4, 1.6, 1.8, 2, 2.2, 2.4];
 
 export const squarePaddings = [
   { x: .125, y: .125 },
@@ -149,8 +162,8 @@ export const defaults = {
     muted: "darker",
   },
   fg: {
-    black: "black",
-    white: "white",
+    black: "white",
+    white: "black",
     brand: "white",
     default: "black",
     primary: "white",
@@ -161,7 +174,7 @@ export const defaults = {
     info: "white",
     light: "black",
     dark: "white",
-    muted: "black",
+    muted: "light",
   },
   outline: {
     black: "black",
