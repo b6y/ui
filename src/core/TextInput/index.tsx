@@ -4,11 +4,9 @@ import React, { HTMLAttributes } from "react";
 import { injectIntl, MessageDescriptor, WrappedComponentProps } from "react-intl";
 
 import {
-  Color,
+  ColorAlias,
   getBgColor,
-  getBorderColor,
   getFgColor,
-  getOutlineColor,
   getSize,
   hasTransition,
   Input,
@@ -21,9 +19,9 @@ import {
 import { SvgIcon } from "../Icon";
 
 export interface TextInputProps extends InputProps {
-  state?: Color;
+  state?: ColorAlias;
   inputSize?: string;
-  defaultOutlineColor?: Color;
+  defaultOutlineColor?: ColorAlias;
 }
 
 const defaultSize = R.defaultTo(2);
@@ -80,15 +78,15 @@ export const TextInput = styled(Wrapped)(
 
     return {
       "background": props.disabled ? getBgColor("light", "alphadark")(props) : getBgColor("white")(props),
-      "color": props.disabled ? getFgColor("black", "alpha")(props) : getFgColor("black")(props),
-      "border": `1px solid ${getBorderColor(state)(props)}`,
+      "color": props.disabled ? getFgColor("white", "alpha")(props) : getFgColor("white")(props),
+      "border": `1px solid ${getBgColor(state)(props)}`,
       "&:hover": {
-        border: `1px solid ${getBorderColor(outline, "dark")(props)}`,
-        boxShadow: `0px 0px 0px 3px ${getOutlineColor(outline, "alpha")(props)}`,
+        border: `1px solid ${getBgColor(outline, "dark")(props)}`,
+        boxShadow: `0px 0px 0px 3px ${getBgColor(outline, "alpha")(props)}`,
       },
       "&:focus": {
-        border: `1px solid ${getBorderColor(outline, "dark")(props)}`,
-        boxShadow: `0px 0px 0px 3px ${getOutlineColor(outline, "alphadark")(props)}`,
+        border: `1px solid ${getBgColor(outline, "dark")(props)}`,
+        boxShadow: `0px 0px 0px 3px ${getBgColor(outline, "alphadark")(props)}`,
       },
       "&[disabled]:hover": {
       },

@@ -8,7 +8,7 @@ import { css, themed, WithStyled } from "../../styled";
 
 import {
   BaseProps,
-  getOutlineColor,
+  getBgColor,
   getRadii,
   getSpace,
   HasTextProps,
@@ -56,7 +56,7 @@ export const RouterLink = styled(BaseRouterLink)(
       right: getSpace(-1)(props),
       bottom: getSpace(-1)(props),
       display: "block",
-      boxShadow: `0px 0px 0px 3px ${getOutlineColor("primary", "alpha")(props)}`,
+      boxShadow: `0px 0px 0px 3px ${getBgColor("primary", "alpha")(props)}`,
       borderRadius: getRadii(1)(props),
     },
   }),

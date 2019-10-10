@@ -254,96 +254,50 @@ const defaultFontSizes = [0.8, 1, 1.2, 1.4, 1.6, 1.8, 2, 2.2, 2.4, 2.6];
 
 const defaultRadii = [0, .15, .3];
 
-export const getColor = (color: string) => (props: any): string | null => {
-  const colors = get(props.theme, "colors") || {};
-  return get<string>(colors, color);
-};
+const getBg = (color: types.ColorInfo | undefined): string | undefined => color ? color.bg : undefined;
+const getFg = (color: types.ColorInfo | undefined): string | undefined => color ? color.fg : undefined;
+
+export const getColor = <T extends EnsureWithTheme>(
+    color: string,
+  ) => (props: T): types.ColorInfo | undefined => {
+    if (props && props.theme) {
+      return props.theme.colors[color] || undefined;
+    } else {
+      return undefined;
+    }
+  };
 
 export const getBgColor = (
-  color: types.Color,
-  modifier?: types.Modifier,
-) => (props: EnsureWithTheme): string | undefined => {
-  if (props && props.theme) {
-    const colors = props.theme.colors;
-    const targetColor = props.theme.defaults.bg[color];
+    color: types.ColorAlias,
+    modifier?: types.ColorModifier,
+  ) => (props: EnsureWithTheme): string | undefined => {
+    if (props && props.theme) {
+      const colors = props.theme.colors;
+      const targetColor = props.theme.defaults[color];
 
-    if (modifier) {
-      return colors[modifier + targetColor] || undefined;
+      if (modifier) {
+        return getBg(colors[modifier + targetColor]);
+      }
+
+      return getBg(colors[targetColor]);
+    } else {
+      return undefined;
     }
-
-    return colors[targetColor];
-  } else {
-    return undefined;
-  }
-};
-
-export const getBorderColor = (
-  color: types.Color,
-  modifier?: types.Modifier,
-) => <P>(props: P & EnsureWithTheme): string | undefined => {
-  if (props && props.theme) {
-    const colors = props.theme.colors;
-    const targetColor = props.theme.defaults.border[color];
-
-    if (modifier) {
-      return colors[modifier + targetColor] || undefined;
-    }
-
-    return colors[targetColor];
-  } else {
-    return undefined;
-  }
-};
-
-export const getOutlineColor = (
-  color: types.Color,
-  modifier?: types.Modifier,
-) => (props: EnsureWithTheme): string | undefined => {
-  if (props && props.theme) {
-    const colors = props.theme.colors;
-    const targetColor = props.theme.defaults.outline[color];
-
-    if (modifier) {
-      return colors[modifier + targetColor] || undefined;
-    }
-
-    return colors[targetColor];
-  } else {
-    return undefined;
-  }
-};
+  };
 
 export const getFgColor = (
-  color: types.Color,
-  modifier?: types.Modifier,
+  color: types.ColorAlias,
+  modifier?: types.ColorModifier,
 ) => (props: EnsureWithTheme): string | undefined => {
   if (props && props.theme) {
     const colors = props.theme.colors;
-    const targetColor = props.theme.defaults.fg[color];
+    const targetColor = props.theme.defaults[color];
 
     if (modifier) {
-      return colors[modifier + targetColor] || undefined;
+      return getFg(colors[modifier + targetColor]);
     }
 
-    return colors[targetColor];
-  } else {
-    return undefined;
-  }
-};
-
-export const getFontColor = (
-  color: types.Color,
-  modifier?: types.Modifier,
-) => (props: EnsureWithTheme): string | undefined => {
-  if (props && props.theme) {
-    const colors = props.theme.colors;
-    const targetColor = props.theme.defaults.font[color];
-
-    if (modifier) {
-      return colors[modifier + targetColor] || undefined;
-    }
-
-    return colors[targetColor];
+    return getFg(colors[targetColor]);
   } else {
     return undefined;
   }

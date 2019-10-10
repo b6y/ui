@@ -1,4 +1,4 @@
-import { Color } from "../../styled";
+import { ColorAlias } from "../../styled";
 import { Adapter, OptionType } from "./adapter";
 
 export interface SelectInputProps {
@@ -6,7 +6,7 @@ export interface SelectInputProps {
     options: Adapter;
     isClearable?: boolean;
     value?: any;
-    state?: Color;
+    state?: ColorAlias;
     inputSize?: string;
     onChange?: (value: any, option: OptionType | undefined) => void;
     onBlur?: (event: React.SyntheticEvent) => void;

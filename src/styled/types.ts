@@ -1,10 +1,8 @@
 import { StyledComponent } from "@emotion/styled";
-import React from "react";
 
 import * as gentypes from "./generatedTypes";
-import { jsx } from "@emotion/core";
 
-export type Color =
+export type ColorAlias =
   | "brand"
   | "default"
   | "primary"
@@ -19,145 +17,142 @@ export type Color =
   | "black"
   | "white";
 
-export type Modifier =
+export type ColorModifier =
   | "dark"
   | "light"
   | "alpha"
   | "alphadark"
   | "alphalight";
 
-export interface Colors {
-  black: string;
-  alphablack: string;
-  white: string;
-  alphawhite: string;
-  darker: string;
-  alphadarker: string;
-  darken: string;
-  alphadarken: string;
-  grayer: string;
-  alphagrayer: string;
-  gray: string;
-  alphagray: string;
-  light: string;
-  alphalight: string;
-
-  blue: string;
-  alphablue: string;
-  darkblue: string;
-  lightblue: string;
-  alphalightblue: string;
-  alphadarkblue: string;
-
-  indigo: string;
-  alphaindigo: string;
-  darkindigo: string;
-  lightindigo: string;
-  alphalightindigo: string;
-  alphadarkindigo: string;
-
-  violet: string;
-  alphaviolet: string;
-  darkviolet: string;
-  lightviolet: string;
-  alphalightviolet: string;
-  alphadarkviolet: string;
-
-  fuchsia: string;
-  alphafuchsia: string;
-  darkfuchsia: string;
-  lightfuchsia: string;
-  alphalightfuchsia: string;
-  alphadarkfuchsia: string;
-
-  pink: string;
-  alphapink: string;
-  darkpink: string;
-  lightpink: string;
-  alphalightpink: string;
-  alphadarkpink: string;
-
-  red: string;
-  alphared: string;
-  darkred: string;
-  lightred: string;
-  alphalightred: string;
-  alphadarkred: string;
-
-  orange: string;
-  alphaorange: string;
-  darkorange: string;
-  lightorange: string;
-  alphalightorange: string;
-  alphadarkorange: string;
-
-  yellow: string;
-  alphayellow: string;
-  darkyellow: string;
-  lightyellow: string;
-  alphalightyellow: string;
-  alphadarkyellow: string;
-
-  lime: string;
-  alphalime: string;
-  darklime: string;
-  lightlime: string;
-  alphalightlime: string;
-  alphadarklime: string;
-
-  green: string;
-  alphagreen: string;
-  darkgreen: string;
-  lightgreen: string;
-  alphalightgreen: string;
-  alphadarkgreen: string;
-
-  teal: string;
-  alphateal: string;
-  darkteal: string;
-  lightteal: string;
-  alphalightteal: string;
-  alphadarkteal: string;
-
-  cyan: string;
-  alphacyan: string;
-  darkcyan: string;
-  lightcyan: string;
-  alphalightcyan: string;
-  alphadarkcyan: string;
-
-  brand: string;
-  alphabrand: string;
-  darkbrand: string;
-  lightbrand: string;
-  alphalightbrand: string;
-  alphadarkbrand: string;
-
-  [name: string]: string;
+export interface ColorInfo {
+    bg: string;
+    fg: string;
 }
 
-export interface DefaultColorSet {
-  default: keyof Colors;
-  black: keyof Colors;
-  white: keyof Colors;
-  brand: keyof Colors;
-  primary: keyof Colors;
-  secondary: keyof Colors;
-  success: keyof Colors;
-  danger: keyof Colors;
-  warning: keyof Colors;
-  info: keyof Colors;
-  light: keyof Colors;
-  dark: keyof Colors;
-  muted: keyof Colors;
+export interface Colors {
+  black: ColorInfo;
+  alphablack: ColorInfo;
+  white: ColorInfo;
+  alphawhite: ColorInfo;
+  darker: ColorInfo;
+  alphadarker: ColorInfo;
+  darken: ColorInfo;
+  alphadarken: ColorInfo;
+  grayer: ColorInfo;
+  alphagrayer: ColorInfo;
+  gray: ColorInfo;
+  alphagray: ColorInfo;
+  light: ColorInfo;
+  alphalight: ColorInfo;
+
+  blue: ColorInfo;
+  alphablue: ColorInfo;
+  darkblue: ColorInfo;
+  lightblue: ColorInfo;
+  alphalightblue: ColorInfo;
+  alphadarkblue: ColorInfo;
+
+  indigo: ColorInfo;
+  alphaindigo: ColorInfo;
+  darkindigo: ColorInfo;
+  lightindigo: ColorInfo;
+  alphalightindigo: ColorInfo;
+  alphadarkindigo: ColorInfo;
+
+  violet: ColorInfo;
+  alphaviolet: ColorInfo;
+  darkviolet: ColorInfo;
+  lightviolet: ColorInfo;
+  alphalightviolet: ColorInfo;
+  alphadarkviolet: ColorInfo;
+
+  fuchsia: ColorInfo;
+  alphafuchsia: ColorInfo;
+  darkfuchsia: ColorInfo;
+  lightfuchsia: ColorInfo;
+  alphalightfuchsia: ColorInfo;
+  alphadarkfuchsia: ColorInfo;
+
+  pink: ColorInfo;
+  alphapink: ColorInfo;
+  darkpink: ColorInfo;
+  lightpink: ColorInfo;
+  alphalightpink: ColorInfo;
+  alphadarkpink: ColorInfo;
+
+  red: ColorInfo;
+  alphared: ColorInfo;
+  darkred: ColorInfo;
+  lightred: ColorInfo;
+  alphalightred: ColorInfo;
+  alphadarkred: ColorInfo;
+
+  orange: ColorInfo;
+  alphaorange: ColorInfo;
+  darkorange: ColorInfo;
+  lightorange: ColorInfo;
+  alphalightorange: ColorInfo;
+  alphadarkorange: ColorInfo;
+
+  yellow: ColorInfo;
+  alphayellow: ColorInfo;
+  darkyellow: ColorInfo;
+  lightyellow: ColorInfo;
+  alphalightyellow: ColorInfo;
+  alphadarkyellow: ColorInfo;
+
+  lime: ColorInfo;
+  alphalime: ColorInfo;
+  darklime: ColorInfo;
+  lightlime: ColorInfo;
+  alphalightlime: ColorInfo;
+  alphadarklime: ColorInfo;
+
+  green: ColorInfo;
+  alphagreen: ColorInfo;
+  darkgreen: ColorInfo;
+  lightgreen: ColorInfo;
+  alphalightgreen: ColorInfo;
+  alphadarkgreen: ColorInfo;
+
+  teal: ColorInfo;
+  alphateal: ColorInfo;
+  darkteal: ColorInfo;
+  lightteal: ColorInfo;
+  alphalightteal: ColorInfo;
+  alphadarkteal: ColorInfo;
+
+  cyan: ColorInfo;
+  alphacyan: ColorInfo;
+  darkcyan: ColorInfo;
+  lightcyan: ColorInfo;
+  alphalightcyan: ColorInfo;
+  alphadarkcyan: ColorInfo;
+
+  brand: ColorInfo;
+  alphabrand: ColorInfo;
+  darkbrand: ColorInfo;
+  lightbrand: ColorInfo;
+  alphalightbrand: ColorInfo;
+  alphadarkbrand: ColorInfo;
+
+  [name: string]: ColorInfo;
 }
 
 export interface Defaults {
-  fg: DefaultColorSet;
-  bg: DefaultColorSet;
-  border: DefaultColorSet;
-  outline: DefaultColorSet;
-  font: DefaultColorSet;
+    default: keyof Colors;
+    black: keyof Colors;
+    white: keyof Colors;
+    brand: keyof Colors;
+    primary: keyof Colors;
+    secondary: keyof Colors;
+    success: keyof Colors;
+    danger: keyof Colors;
+    warning: keyof Colors;
+    info: keyof Colors;
+    light: keyof Colors;
+    dark: keyof Colors;
+    muted: keyof Colors;
 }
 
 export interface FontWeights {
