@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import React from "react";
-import { Color, getBgColor, getColor, getFgColor, WithStyled } from "../../styled";
+import { ColorAlias, getBgColor, getColor, getFgColor, WithStyled } from "../../styled";
 
 export interface SvgIconProps extends
   WithStyled,
@@ -31,7 +31,7 @@ export const SvgIcon = styled(SvgIconWrapper)(
   }),
   (props) => {
     if (props.color) {
-      return { color: getBgColor(props.color as Color)(props) };
+      return { color: getBgColor(props.color as ColorAlias)(props) };
     }
 
     return {};

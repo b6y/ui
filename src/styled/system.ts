@@ -322,8 +322,6 @@ export const getRadii = (n: any) => (props: EnsureWithTheme) => {
   const scale = props.theme ? (getOr<number[]>(props.theme, defaultRadii, "radii")) : defaultRadii;
   const getStyle = getValue(scale, "rem");
 
-  console.log(n, scale)
-
   return getStyle(n);
 };
 
@@ -457,6 +455,7 @@ export const textColorProps: Array<keyof gentypes.WithTextColor> = ["color"];
 export const textColor = style({
   prop: "color",
   key: "colors",
+  transformValue: (value) => value.fg,
 });
 // --
 
@@ -467,6 +466,7 @@ export const bgColor = style({
   prop: "bg",
   cssProperty: "backgroundColor",
   key: "colors",
+  transformValue: (value) => value.bg,
 });
 // --
 

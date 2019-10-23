@@ -1,7 +1,8 @@
+import styled from "@emotion/styled";
 import { select } from "@storybook/addon-knobs";
 import React, { useMemo, useState } from "react";
-import styled from "@emotion/styled";
 
+import { useTheme } from "emotion-theming";
 import { BoxGroup } from "../src/core/BoxGroup";
 import { Button } from "../src/core/Button";
 import { ButtonOutline } from "../src/core/ButtonOutline";
@@ -11,7 +12,7 @@ import { MultiSelectInput } from "../src/core/MultiSelectInput";
 import { ArrayAdapter, SelectInput } from "../src/core/SelectInput";
 import { TextAreaInput } from "../src/core/TextAreaInput";
 import { TextInput } from "../src/core/TextInput";
-import { Box } from "../src/styled";
+import { Box, Text, Theme } from "../src/styled";
 import { wrap } from "./context";
 
 const defaultOptions = [
@@ -27,7 +28,7 @@ const defaultOptions = [
   { label: "Value 10", value: 10 },
 ];
 
-const BoxLabel = styled(Box)`
+const BoxLabel = styled(Text)`
   flex: 0 0 auto;
   display: flex;
   align-items: center;
@@ -38,14 +39,16 @@ const BoxLabel = styled(Box)`
 const Section = (props: React.PropsWithChildren<{ spacing: number }>) => {
   return (
     <Box bg="black" p={props.spacing} mb={3}>
-      <Box bg="alphalight" py={props.spacing}>
+      <Box bg="gray" py={props.spacing}>
         {props.children}
       </Box>
     </Box>
-  )
-}
+  );
+};
 
 export const simple = wrap(() => {
+  const theme = useTheme<Theme>();
+
   const [selectValue, setSelectValue] = useState(2);
   const [multiSelectValue, setMultiSelectValue] = useState([]);
   const [textInputValue, setTextInputValue] = useState(null);
@@ -55,7 +58,7 @@ export const simple = wrap(() => {
   const spacing = select("spacing", [0, 1, 2, 3, 4, 5, 6], 2);
   const size = select("size", ["xs", "sm", "md", "lg", "xlg", "xxlg", "xxxlg"], "md");
   const state = select("state", ["brand", "default", "primary", "secondary", "success", "danger", "warning", "info", "light", "dark", "muted", "black", "white"], "primary");
-  const background = select("background", ["black", "alphablack", "white", "alphawhite", "darker", "alphadarker", "darken", "alphadarken", "grayer", "alphagrayer", "gray", "alphagray", "light", "alphalight", "blue", "alphablue", "darkblue", "lightblue", "alphalightblue", "alphadarkblue", "indigo", "alphaindigo", "darkindigo", "lightindigo", "alphalightindigo", "alphadarkindigo", "violet", "alphaviolet", "darkviolet", "lightviolet", "alphalightviolet", "alphadarkviolet", "fuchsia", "alphafuchsia", "darkfuchsia", "lightfuchsia", "alphalightfuchsia", "alphadarkfuchsia", "pink", "alphapink", "darkpink", "lightpink", "alphalightpink", "alphadarkpink", "red", "alphared", "darkred", "lightred", "alphalightred", "alphadarkred", "orange", "alphaorange", "darkorange", "lightorange", "alphalightorange", "alphadarkorange", "yellow", "alphayellow", "darkyellow", "lightyellow", "alphalightyellow", "alphadarkyellow", "lime", "alphalime", "darklime", "lightlime", "alphalightlime", "alphadarklime", "green", "alphagreen", "darkgreen", "lightgreen", "alphalightgreen", "alphadarkgreen", "teal", "alphateal", "darkteal", "lightteal", "alphalightteal", "alphadarkteal", "cyan", "alphacyan", "darkcyan", "lightcyan", "alphalightcyan", "alphadarkcyan", "brand", "alphabrand", "darkbrand", "lightbrand", "alphalightbrand", "alphadarkbrand"], "light");
+  const background = select("background", Object.keys(theme.colors), "alphawhite");
 
   const options = useMemo(() => {
     return new ArrayAdapter(defaultOptions);
@@ -72,12 +75,12 @@ export const simple = wrap(() => {
   );
 
   return (
-    <Box css={{ maxWidth: "600px" }}>
+    <Box css={{ maxWidth: "800px" }}>
       <Section spacing={spacing}>
         <BoxGroup spacing={spacing}>
-          <BoxLabel bg={background}>
+          <BoxLabel bg={background} color={background}>
             SelectInput
-            </BoxLabel>
+          </BoxLabel>
           <Box bg={background} width={1}>
             {input}
           </Box>
@@ -96,9 +99,9 @@ export const simple = wrap(() => {
       </Section>
       <Section spacing={spacing}>
         <BoxGroup spacing={spacing}>
-          <BoxLabel bg={background}>
+          <BoxLabel bg={background} color={background}>
             MultiSelectInput
-            </BoxLabel>
+          </BoxLabel>
           <Box bg={background} width={1}>
             {input}
           </Box>
@@ -118,9 +121,9 @@ export const simple = wrap(() => {
       </Section>
       <Section spacing={spacing}>
         <BoxGroup spacing={spacing}>
-          <BoxLabel bg={background}>
+          <BoxLabel bg={background} color={background}>
             DatePickerInput
-            </BoxLabel>
+          </BoxLabel>
           <Box bg={background} width={1}>
             {input}
           </Box>
@@ -138,9 +141,9 @@ export const simple = wrap(() => {
       </Section>
       <Section spacing={spacing}>
         <BoxGroup spacing={spacing}>
-          <BoxLabel bg={background}>
+          <BoxLabel bg={background} color={background}>
             TextAreaInput
-            </BoxLabel>
+          </BoxLabel>
           <Box bg={background} width={1}>
             {input}
           </Box>
@@ -159,9 +162,9 @@ export const simple = wrap(() => {
       </Section>
       <Section spacing={spacing}>
         <BoxGroup spacing={spacing}>
-          <BoxLabel bg={background}>
+          <BoxLabel bg={background} color={background}>
             Button
-            </BoxLabel>
+          </BoxLabel>
           <Box bg={background} width={1}>
             {input}
           </Box>
@@ -173,9 +176,9 @@ export const simple = wrap(() => {
       </Section>
       <Section spacing={spacing}>
         <BoxGroup spacing={spacing}>
-          <BoxLabel bg={background}>
+          <BoxLabel bg={background} color={background}>
             ButtonOutline
-            </BoxLabel>
+          </BoxLabel>
           <Box bg={background} width={1}>
             {input}
           </Box>
@@ -187,9 +190,9 @@ export const simple = wrap(() => {
       </Section>
       <Section spacing={spacing}>
         <BoxGroup spacing={spacing}>
-          <BoxLabel bg={background}>
+          <BoxLabel bg={background} color={background}>
             ButtonTransparent
-            </BoxLabel>
+          </BoxLabel>
           <Box bg={background} width={1}>
             {input}
           </Box>

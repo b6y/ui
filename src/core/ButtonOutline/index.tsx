@@ -5,9 +5,8 @@ import React from "react";
 import {
     Button as BaseButton,
     ButtonProps as BaseButtonProps,
-    Color,
-    getBorderColor,
-    getOutlineColor,
+    ColorAlias,
+    getBgColor,
     getSize,
     hasTransition,
     Padding,
@@ -18,7 +17,7 @@ import {
 import {SvgIcon} from "../Icon";
 
 export interface ButtonOutlineProps extends BaseButtonProps {
-    state: Color;
+    state: ColorAlias;
     size: string;
 }
 
@@ -66,24 +65,27 @@ export const ButtonOutline = styled(Wrapper)(
         display: "inline-flex",
         alignItems: "center",
         outline: "none",
-        color: getBorderColor(props.state)(props),
+        color: getBgColor(props.state)(props),
     }),
     (props) => ({
-        "border": `1px solid ${getBorderColor(props.state)(props)}`,
+        "border": `1px solid ${getBgColor(props.state)(props)}`,
 
         "&[disabled]": {
             cursor: "not-allowed",
             // backgroundColor: getBgColor(props.state, "alpha")(props),
         },
         "&:hover": {
-            color: getBorderColor(props.state, "dark")(props),
-            border: `1px solid ${getBorderColor(props.state, "dark")(props)}`,
-            boxShadow: `0px 0px 0px 3px ${getOutlineColor(props.state, "alpha")(props)}`,
+            color: getBgColor(props.state, "dark")(props),
+            border: `1px solid ${getBgColor(props.state, "darker")(props)}`,
+            boxShadow: `0px 0px 0px 3px ${getBgColor(props.state, "alpha")(props)}`,
         },
         "&:focus": {
-            color: getBorderColor(props.state, "dark")(props),
-            border: `1px solid ${getBorderColor(props.state, "dark")(props)}`,
-            boxShadow: `0px 0px 0px 3px ${getOutlineColor(props.state, "alphadark")(props)}`,
+            color: getBgColor(props.state, "dark")(props),
+            border: `1px solid ${getBgColor(props.state, "darker")(props)}`,
+            boxShadow: `0px 0px 0px 3px ${getBgColor(props.state, "alphadark")(props)}`,
+        },
+        "&:active": {
+            boxShadow: `0px 0px 0px 6px ${getBgColor(props.state, "alphadark")(props)}`,
         },
         "&[disabled]:hover": {
             // backgroundColor: getBgColor(props.state, "alphadark")(props),

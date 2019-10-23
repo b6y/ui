@@ -7,7 +7,7 @@ import { wrap } from "./context";
 export const simple = wrap(() => {
   return (
     <>
-      <Tooltip text={<b><i>html</i> test</b>}>
+      <Tooltip state="brand" text={<b><i>html</i> test</b>}>
         <span>Teste</span>
       </Tooltip>
     </>

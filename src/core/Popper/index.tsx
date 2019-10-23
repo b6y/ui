@@ -111,6 +111,8 @@ export const Popper = React.forwardRef(function Popper<TContentProps, TRef>(
       style={{
         // Prevents scroll issue, waiting for Popper.js to add this style once initiated.
         position: "fixed",
+        left: "-99999999999px",
+        top: "-99999999999px",
         zIndex: 9999,
       }}
       {...other}

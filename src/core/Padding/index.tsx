@@ -17,7 +17,7 @@ const Wrapper = React.forwardRef((props: PaddingProps, ref: React.Ref<HTMLDivEle
 export const Padding = styled(Wrapper)`
   display: flex;
   flex-direction: ${(props) => props.inverse ? "row-reverse" : "row"};
-  & > * {
+  & > *:not(:last-of-type) {
     ${(props) => props.inverse ? "margin-left" : "margin-right"}: ${(props) => getSpace(props.spacing)(props)};
   }
 `;

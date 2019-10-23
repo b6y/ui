@@ -54,8 +54,8 @@ const themeHeight = (props: TextInputProps) => {
 };
 
 const Wrapped = React.forwardRef((props: TextInputProps, ref: React.Ref<HTMLInputElement>) => {
-  const { state, inputSize, defaultOutlineColor, ...rest } = props;
-  return <Input ref={ref} {...rest} />;
+  const { state, inputSize, defaultOutlineColor, value, ...rest } = props;
+  return <Input ref={ref} value={value || ""} {...rest} />;
 });
 
 export const TextInput = styled(Wrapped)(

@@ -1,6 +1,6 @@
-import { darken, lighten, transparentize, readableColor } from "polished";
+import { darken, lighten, readableColor, transparentize } from "polished";
 
-import { Colors, ColorModifier, NumberOrStringProp, Theme } from "./styled/system";
+import { ColorModifier, Colors, NumberOrStringProp, Theme } from "./styled/system";
 
 const baseAlpha = 0.5;
 const baseDarken = 0.1;
@@ -22,9 +22,17 @@ const variants: Variants = {
         name: "light",
         transform: (color: string) => lighten(baseLighten, color),
     },
+    lighter: {
+        name: "lighter",
+        transform: (color: string) => lighten(baseLighten * 2, color),
+    },
     alphalight: {
         name: "alphalight",
         transform: (color: string) => transparentize(baseAlpha, lighten(baseLighten, color)),
+    },
+    alphalighter: {
+        name: "alphalighter",
+        transform: (color: string) => transparentize(baseAlpha, lighten(baseLighten * 2, color)),
     },
     alpha: {
         name: "alpha",
@@ -34,9 +42,17 @@ const variants: Variants = {
         name: "alphadark",
         transform: (color: string) => transparentize(baseAlpha, darken(baseDarken, color)),
     },
+    alphadarker: {
+        name: "alphadarker",
+        transform: (color: string) => transparentize(baseAlpha, darken(baseDarken * 2, color)),
+    },
     dark: {
         name: "dark",
         transform: (color: string) => darken(baseDarken, color),
+    },
+    darker: {
+        name: "darker",
+        transform: (color: string) => darken(baseDarken * 2, color),
     },
 };
 
@@ -59,11 +75,8 @@ export const baseColors: BaseColors = {
   brand: color("#00406A"),
   black: color("#000"),
   white: color("#fff"),
-  darker: color("#3b3b3b"),
-  darken: color("rgba(0, 0, 0, 0.25)"),
-  light: color("#eee"),
-  grayer: color(darken(0.1, "#bbb")),
   gray: color("#bbb"),
+  grayer: color(darken(0.1, "#bbb")),
   blue: color("#03a9f3"),
   indigo: color("#6610f2"),
   violet: color("#ab8ce4"),
@@ -90,7 +103,7 @@ const colors = Object.entries(baseColors)
                 const c = b.transform(value.color);
                 res[b.name + key] = {
                     bg: c,
-                    fg: readableColor(value.color),
+                    fg: readableColor(c),
                 };
                 return res;
             },
@@ -177,7 +190,7 @@ export const defaults = {
     info: "cyan",
     light: "white",
     dark: "black",
-    muted: "darker",
+    muted: "grayer",
 };
 
 export interface Breakpoints {

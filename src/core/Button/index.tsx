@@ -5,22 +5,20 @@ import React from "react";
 import {
   Button as BaseButton,
   ButtonProps as BaseButtonProps,
-  Color,
+  ColorAlias,
   getBgColor,
-  getBorderColor,
   getFgColor,
-  getOutlineColor,
   getSize,
+  hasTransition,
   Padding,
   themed,
   translateSize,
-  hasTransition,
 } from "../../styled";
 
 import { SvgIcon } from "../Icon";
 
 export interface ButtonProps extends BaseButtonProps {
-  state: Color;
+  state: ColorAlias;
   size: string;
 }
 
@@ -70,7 +68,7 @@ export const Button = styled(Wrapper)(
     alignItems: "center",
 
     outline: "none",
-    border: `1px solid ${getBorderColor(props.state)(props)}`,
+    border: `1px solid ${getBgColor(props.state)(props)}`,
     color: getFgColor(props.state)(props),
   }),
   (props) => {
@@ -82,17 +80,17 @@ export const Button = styled(Wrapper)(
       "&:hover": {
         color: getFgColor(props.state, "dark")(props),
         backgroundColor: getBgColor(props.state, "dark")(props),
-        border: `1px solid ${getBorderColor(props.state, "dark")(props)}`,
-        boxShadow: `0px 0px 0px 3px ${getOutlineColor(props.state, "alpha")(props)}`,
+        border: `1px solid ${getBgColor(props.state, "darker")(props)}`,
+        boxShadow: `0px 0px 0px 3px ${getBgColor(props.state, "alpha")(props)}`,
       },
       "&:focus": {
         color: getFgColor(props.state, "dark")(props),
         backgroundColor: getBgColor(props.state, "dark")(props),
-        border: `1px solid ${getBorderColor(props.state, "dark")(props)}`,
-        boxShadow: `0px 0px 0px 3px ${getOutlineColor(props.state, "alphadark")(props)}`,
+        border: `1px solid ${getBgColor(props.state, "darker")(props)}`,
+        boxShadow: `0px 0px 0px 3px ${getBgColor(props.state, "alphadark")(props)}`,
       },
       "&:active": {
-        boxShadow: `0px 0px 0px 6px ${getOutlineColor(props.state, "alphadark")(props)}`,
+        boxShadow: `0px 0px 0px 6px ${getBgColor(props.state, "alphadark")(props)}`,
       },
       "&[disabled]:hover": {
         backgroundColor: getBgColor(props.state, "alphadark")(props),

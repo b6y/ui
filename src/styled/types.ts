@@ -18,11 +18,15 @@ export type ColorAlias =
   | "white";
 
 export type ColorModifier =
+  | "darker"
   | "dark"
   | "light"
+  | "lighter"
   | "alpha"
   | "alphadark"
-  | "alphalight";
+  | "alphadarker"
+  | "alphalight"
+  | "alphalighter";
 
 export interface ColorInfo {
     bg: string;
@@ -30,111 +34,192 @@ export interface ColorInfo {
 }
 
 export interface Colors {
+  brand: ColorInfo;
+  lightbrand: ColorInfo;
+  lighterbrand: ColorInfo;
+  alphalightbrand: ColorInfo;
+  alphalighterbrand: ColorInfo;
+  alphabrand: ColorInfo;
+  alphadarkbrand: ColorInfo;
+  alphadarkerbrand: ColorInfo;
+  darkbrand: ColorInfo;
+  darkerbrand: ColorInfo;
+
   black: ColorInfo;
+  lightblack: ColorInfo;
+  lighterblack: ColorInfo;
+  alphalightblack: ColorInfo;
+  alphalighterblack: ColorInfo;
   alphablack: ColorInfo;
+  alphadarkblack: ColorInfo;
+  alphadarkerblack: ColorInfo;
+  darkblack: ColorInfo;
+  darkerblack: ColorInfo;
+  
   white: ColorInfo;
+  lightwhite: ColorInfo;
+  lighterwhite: ColorInfo;
+  alphalightwhite: ColorInfo;
+  alphalighterwhite: ColorInfo;
   alphawhite: ColorInfo;
-  darker: ColorInfo;
-  alphadarker: ColorInfo;
-  darken: ColorInfo;
-  alphadarken: ColorInfo;
-  grayer: ColorInfo;
-  alphagrayer: ColorInfo;
+  alphadarkwhite: ColorInfo;
+  alphadarkerwhite: ColorInfo;
+  darkwhite: ColorInfo;
+  darkerwhite: ColorInfo;
+
   gray: ColorInfo;
+  lightgray: ColorInfo;
+  lightergray: ColorInfo;
+  alphalightgray: ColorInfo;
+  alphalightergray: ColorInfo;
   alphagray: ColorInfo;
-  light: ColorInfo;
-  alphalight: ColorInfo;
+  alphadarkgray: ColorInfo;
+  alphadarkergray: ColorInfo;
+  darkgray: ColorInfo;
+  darkergray: ColorInfo;
+
+  grayer: ColorInfo;
+  lightgrayer: ColorInfo;
+  lightergrayer: ColorInfo;
+  alphalightgrayer: ColorInfo;
+  alphalightergrayer: ColorInfo;
+  alphagrayer: ColorInfo;
+  alphadarkgrayer: ColorInfo;
+  alphadarkergrayer: ColorInfo;
+  darkgrayer: ColorInfo;
+  darkergrayer: ColorInfo;
 
   blue: ColorInfo;
-  alphablue: ColorInfo;
-  darkblue: ColorInfo;
   lightblue: ColorInfo;
+  lighterblue: ColorInfo;
   alphalightblue: ColorInfo;
+  alphalighterblue: ColorInfo;
+  alphablue: ColorInfo;
   alphadarkblue: ColorInfo;
+  alphadarkerblue: ColorInfo;
+  darkblue: ColorInfo;
+  darkerblue: ColorInfo;
 
   indigo: ColorInfo;
-  alphaindigo: ColorInfo;
-  darkindigo: ColorInfo;
   lightindigo: ColorInfo;
+  lighterindigo: ColorInfo;
   alphalightindigo: ColorInfo;
+  alphalighterindigo: ColorInfo;
+  alphaindigo: ColorInfo;
   alphadarkindigo: ColorInfo;
+  alphadarkerindigo: ColorInfo;
+  darkindigo: ColorInfo;
+  darkerindigo: ColorInfo;
 
   violet: ColorInfo;
-  alphaviolet: ColorInfo;
-  darkviolet: ColorInfo;
   lightviolet: ColorInfo;
+  lighterviolet: ColorInfo;
   alphalightviolet: ColorInfo;
+  alphalighterviolet: ColorInfo;
+  alphaviolet: ColorInfo;
   alphadarkviolet: ColorInfo;
+  alphadarkerviolet: ColorInfo;
+  darkviolet: ColorInfo;
+  darkerviolet: ColorInfo;
 
   fuchsia: ColorInfo;
-  alphafuchsia: ColorInfo;
-  darkfuchsia: ColorInfo;
   lightfuchsia: ColorInfo;
+  lighterfuchsia: ColorInfo;
   alphalightfuchsia: ColorInfo;
+  alphalighterfuchsia: ColorInfo;
+  alphafuchsia: ColorInfo;
   alphadarkfuchsia: ColorInfo;
+  alphadarkerfuchsia: ColorInfo;
+  darkfuchsia: ColorInfo;
+  darkerfuchsia: ColorInfo;
 
   pink: ColorInfo;
-  alphapink: ColorInfo;
-  darkpink: ColorInfo;
   lightpink: ColorInfo;
+  lighterpink: ColorInfo;
   alphalightpink: ColorInfo;
+  alphalighterpink: ColorInfo;
+  alphapink: ColorInfo;
   alphadarkpink: ColorInfo;
+  alphadarkerpink: ColorInfo;
+  darkpink: ColorInfo;
+  darkerpink: ColorInfo;
 
   red: ColorInfo;
-  alphared: ColorInfo;
-  darkred: ColorInfo;
   lightred: ColorInfo;
+  lighterred: ColorInfo;
   alphalightred: ColorInfo;
+  alphalighterred: ColorInfo;
+  alphared: ColorInfo;
   alphadarkred: ColorInfo;
+  alphadarkerred: ColorInfo;
+  darkred: ColorInfo;
+  darkerred: ColorInfo;
 
   orange: ColorInfo;
-  alphaorange: ColorInfo;
-  darkorange: ColorInfo;
   lightorange: ColorInfo;
+  lighterorange: ColorInfo;
   alphalightorange: ColorInfo;
+  alphalighterorange: ColorInfo;
+  alphaorange: ColorInfo;
   alphadarkorange: ColorInfo;
+  alphadarkerorange: ColorInfo;
+  darkorange: ColorInfo;
+  darkerorange: ColorInfo;
 
   yellow: ColorInfo;
-  alphayellow: ColorInfo;
-  darkyellow: ColorInfo;
   lightyellow: ColorInfo;
+  lighteryellow: ColorInfo;
   alphalightyellow: ColorInfo;
+  alphalighteryellow: ColorInfo;
+  alphayellow: ColorInfo;
   alphadarkyellow: ColorInfo;
+  alphadarkeryellow: ColorInfo;
+  darkyellow: ColorInfo;
+  darkeryellow: ColorInfo;
 
   lime: ColorInfo;
-  alphalime: ColorInfo;
-  darklime: ColorInfo;
   lightlime: ColorInfo;
+  lighterlime: ColorInfo;
   alphalightlime: ColorInfo;
+  alphalighterlime: ColorInfo;
+  alphalime: ColorInfo;
   alphadarklime: ColorInfo;
+  alphadarkerlime: ColorInfo;
+  darklime: ColorInfo;
+  darkerlime: ColorInfo;
 
   green: ColorInfo;
-  alphagreen: ColorInfo;
-  darkgreen: ColorInfo;
   lightgreen: ColorInfo;
+  lightergreen: ColorInfo;
   alphalightgreen: ColorInfo;
+  alphalightergreen: ColorInfo;
+  alphagreen: ColorInfo;
   alphadarkgreen: ColorInfo;
+  alphadarkergreen: ColorInfo;
+  darkgreen: ColorInfo;
+  darkergreen: ColorInfo;
 
   teal: ColorInfo;
-  alphateal: ColorInfo;
-  darkteal: ColorInfo;
   lightteal: ColorInfo;
+  lighterteal: ColorInfo;
   alphalightteal: ColorInfo;
+  alphalighterteal: ColorInfo;
+  alphateal: ColorInfo;
   alphadarkteal: ColorInfo;
+  alphadarkerteal: ColorInfo;
+  darkteal: ColorInfo;
+  darkerteal: ColorInfo;
 
   cyan: ColorInfo;
-  alphacyan: ColorInfo;
-  darkcyan: ColorInfo;
   lightcyan: ColorInfo;
+  lightercyan: ColorInfo;
   alphalightcyan: ColorInfo;
+  alphalightercyan: ColorInfo;
+  alphacyan: ColorInfo;
   alphadarkcyan: ColorInfo;
-
-  brand: ColorInfo;
-  alphabrand: ColorInfo;
-  darkbrand: ColorInfo;
-  lightbrand: ColorInfo;
-  alphalightbrand: ColorInfo;
-  alphadarkbrand: ColorInfo;
+  alphadarkercyan: ColorInfo;
+  darkcyan: ColorInfo;
+  darkercyan: ColorInfo;
 
   [name: string]: ColorInfo;
 }

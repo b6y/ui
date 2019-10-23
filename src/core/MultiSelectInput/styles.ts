@@ -4,10 +4,8 @@ import { Styles as ReactSelectStyles } from "react-select/src/styles";
 
 import {
     getBgColor,
-    getBorderColor,
     getFgColor,
     getFontSize,
-    getOutlineColor,
     getRadii,
     getSize,
     getSpace,
@@ -198,14 +196,14 @@ export const styles = (inputProps: MultiSelectInputProps, theme: Theme): ReactSe
             ...controlHeight(props),
             "label": "control",
             "border": state.isFocused
-                ? `1px solid ${getBorderColor(inputState)(props)}`
-                : `1px solid ${getBorderColor(inputState)(props)}`,
-            "boxShadow": state.isFocused ? `0px 0px 0px 3px ${getOutlineColor(outline, "alphadark")(props)}` : "none",
+                ? `1px solid ${getBgColor(inputState)(props)}`
+                : `1px solid ${getBgColor(inputState)(props)}`,
+            "boxShadow": state.isFocused ? `0px 0px 0px 3px ${getBgColor(outline, "alphadark")(props)}` : "none",
             "borderRadius": getValue(theme.radii)(2),
             "background": state.isDisabled ? getBgColor("light", "alphadark")(props) : getBgColor("white")(props),
             ":hover": {
-                border: `1px solid ${getBorderColor(outline, "dark")(props)}`,
-                boxShadow: state.isFocused ? undefined : `0px 0px 0px 3px ${getOutlineColor(outline, "alpha")(props)}`,
+                border: `1px solid ${getBgColor(outline, "dark")(props)}`,
+                boxShadow: state.isFocused ? undefined : `0px 0px 0px 3px ${getBgColor(outline, "alpha")(props)}`,
             },
         }),
         menuList: (base) => ({
@@ -240,7 +238,7 @@ export const styles = (inputProps: MultiSelectInputProps, theme: Theme): ReactSe
             // right: 4,
             // top: "50%",
             // transform: "translateY(-50%)",
-            color: getBorderColor(state)(props),
+            color: getBgColor(state)(props),
         }),
         groupHeading: (base) => ({
             ...base,
@@ -253,9 +251,9 @@ export const styles = (inputProps: MultiSelectInputProps, theme: Theme): ReactSe
             "paddingLeft": 0,
             "paddingRight": 0,
             "margin": 0,
-            "color": getBorderColor(state)(props),
+            "color": getBgColor(state)(props),
             ":hover": {
-                color: getBorderColor(state, "dark")(props),
+                color: getBgColor(state, "dark")(props),
             },
         }),
         clearIndicator: (base) => ({
@@ -265,9 +263,9 @@ export const styles = (inputProps: MultiSelectInputProps, theme: Theme): ReactSe
             "paddingLeft": 4,
             "paddingRight": 0,
             "margin": 0,
-            "color": getBorderColor(state)(props),
+            "color": getBgColor(state)(props),
             ":hover": {
-                color: getBorderColor(state, "dark")(props),
+                color: getBgColor(state, "dark")(props),
             },
         }),
         multiValue: (base) => ({

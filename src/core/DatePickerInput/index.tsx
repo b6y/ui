@@ -7,7 +7,7 @@ import React from "react";
 import { injectIntl, MessageDescriptor, WrappedComponentProps } from "react-intl";
 
 import { DayPickerSingleDateController } from "react-dates";
-import { Box, Color } from "../../styled";
+import { Box, ColorAlias } from "../../styled";
 import { FocusStealEvent } from "../FocusSteal/types";
 import { Popper } from "../Popper";
 import { TextInput } from "../TextInput";
@@ -19,7 +19,7 @@ export interface DatePickerInputProps extends WrappedComponentProps {
   onFocus?: (event: React.SyntheticEvent) => void;
   visibleMonths?: number;
   value?: any;
-  state?: Color;
+  state?: ColorAlias;
   disabled?: boolean;
   inputSize?: string;
 }
@@ -137,7 +137,6 @@ class BaseDatePickerInput extends React.Component<DatePickerInputProps, State> {
   }
 
   public inputKeyDown(evt: React.KeyboardEvent) {
-    console.log(evt.which);
     if (evt.which === 8) {
       this.pickerChanged(null);
     }

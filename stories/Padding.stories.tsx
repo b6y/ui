@@ -10,7 +10,7 @@ export const simple = wrap(() => {
 
   return (
     <Box bg="black" p={spacing}>
-      <Box bg="darker" py={spacing}>
+      <Box bg="lightblack" py={spacing}>
         <Padding spacing={spacing}>
           <Box bg="red" width={1}>Box1</Box>
           <Box bg="blue" width={1}>Box2</Box>

@@ -1,4 +1,4 @@
-import { Color } from "../../styled";
+import { ColorAlias } from "../../styled";
 import { Adapter, OptionType } from "../SelectInput/adapter";
 
 export interface MultiSelectInputProps {
@@ -6,7 +6,7 @@ export interface MultiSelectInputProps {
     options: Adapter;
     isClearable?: boolean;
     values?: any[];
-    state?: Color;
+    state?: ColorAlias;
     inputSize?: string;
     onChange?: (values: any[], options: OptionType[] | undefined) => void;
     onBlur?: (event: React.SyntheticEvent) => void;

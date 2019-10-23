@@ -2,20 +2,25 @@ import styled from "@emotion/styled";
 import * as R from "ramda";
 import React, { ReactElement } from "react";
 
-import { Box, Span } from "../../styled";
+import { Box, ColorAlias, getBgColor, getFgColor, Span, Theme, BoxProps } from "../../styled";
 import { Popper, PopperPlacement } from "../Popper";
 
 export interface Props {
   children: React.ReactNode;
   placement?: PopperPlacement;
   text: React.ReactNode;
+  state?: ColorAlias;
 }
 
 export interface State {
   visible: boolean;
 }
 
-const TooltipElement = styled((props) => {
+export interface TooltipElementProps extends BoxProps {
+  state: ColorAlias
+}
+
+const TooltipElement = styled((props: TooltipElementProps) => {
   const newProps = R.omit(
     [
       "visible",
@@ -32,9 +37,11 @@ const TooltipElement = styled((props) => {
   border-radius: 6px;
   padding: 5px 10px;
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+  background-color: ${(props) => getBgColor(props.state)(props)};
+  color: ${(props) => getFgColor(props.state)(props)};
 `;
 
-export const Tooltip = React.forwardRef(function Tooltip(props: Props, ref) {
+const BaseTooltip = React.forwardRef(function Tooltip(props: Props, ref) {
   const anchorRef: React.MutableRefObject<HTMLElement | undefined> = React.useRef();
   const [visible, setVisible] = React.useState(false);
 
@@ -95,12 +102,15 @@ export const Tooltip = React.forwardRef(function Tooltip(props: Props, ref) {
   return <>
     {React.cloneElement(child, childProps)}
     <Popper flip={true} placement={placement} anchorEl={anchorRef} open={visible}>
-      <TooltipElement
-        bg="black"
-        color="white"
-      >
+      <TooltipElement state={props.state || "black"}>
         {text}
       </TooltipElement>
     </Popper>
   </>;
 });
+
+export const Tooltip = styled(BaseTooltip)();
+
+Tooltip.defaultProps = {
+  state: "black",
+};

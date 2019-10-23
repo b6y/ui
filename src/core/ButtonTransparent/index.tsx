@@ -5,22 +5,19 @@ import React from "react";
 import {
   Button as BaseButton,
   ButtonProps as BaseButtonProps,
-  Color,
-  getBorderColor,
-  getFontColor,
-  getOutlineColor,
+  ColorAlias,
+  getBgColor,
   getSize,
+  hasTransition,
   Padding,
   themed,
   translateSize,
-  WithStyled,
-  hasTransition,
 } from "../../styled";
 
 import { SvgIcon } from "../Icon";
 
 export interface ButtonTransparentProps extends BaseButtonProps {
-  state: Color;
+  state: ColorAlias;
   size: string;
 }
 
@@ -70,7 +67,7 @@ export const ButtonTransparent = styled(Wrapper)(
     outline: "none",
     border: `1px solid transparent`,
     background: "transparent",
-    color: getFontColor(props.state)(props),
+    color: getBgColor(props.state)(props),
   }),
   (props) => {
     return {
@@ -78,12 +75,15 @@ export const ButtonTransparent = styled(Wrapper)(
         cursor: "not-allowed",
       },
       "&:hover": {
-        border: `1px solid ${getBorderColor(props.state, "dark")(props)}`,
-        boxShadow: `0px 0px 0px 3px ${getOutlineColor(props.state, "alpha")(props)}`,
+        border: `1px solid ${getBgColor(props.state, "darker")(props)}`,
+        boxShadow: `0px 0px 0px 3px ${getBgColor(props.state, "alpha")(props)}`,
       },
       "&:focus": {
-        border: `1px solid ${getBorderColor(props.state, "dark")(props)}`,
-        boxShadow: `0px 0px 0px 3px ${getOutlineColor(props.state, "alphadark")(props)}`,
+        border: `1px solid ${getBgColor(props.state, "darker")(props)}`,
+        boxShadow: `0px 0px 0px 3px ${getBgColor(props.state, "alphadark")(props)}`,
+      },
+      "&:active": {
+        boxShadow: `0px 0px 0px 6px ${getBgColor(props.state, "alphadark")(props)}`,
       },
       "&[disabled]:hover": {
       },
