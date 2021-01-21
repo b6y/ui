@@ -46,7 +46,7 @@
     "formik": "^1.5.8",
     "graphql": "^14.5.7",
     "graphql-tag": "^2.10.1",
-    "immer": "^4.0.0",
+    "immer": "^8.0.1",
     "lodash": "^4.17.15",
     "memoize-one": "^5.1.1",
     "moment": "^2.24.0",
